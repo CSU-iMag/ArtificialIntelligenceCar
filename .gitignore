@@ -1,6 +1,7 @@
 *.dep
 *.lnp
 *.lst
+*.map
 .vscode
 Objects/
 
