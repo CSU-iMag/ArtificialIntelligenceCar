@@ -1,3 +1,9 @@
+*.dep
+*.lnp
+*.lst
+.vscode
+Objects/
+
 # Prerequisites
 *.d
 
@@ -24,7 +30,6 @@
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
