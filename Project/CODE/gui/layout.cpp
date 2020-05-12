@@ -72,11 +72,29 @@ void NoticeLayout::Show() {
 ////////////////////////////////////////////////////////////////////////////////
 #pragma region MenuLayout
 
-void MenuLayout::Show() {}
+void MenuLayout::Show() {
+    SGUI_Menu_Repaint(&CarOLED, &MenuObject);
+}
 
 MenuLayout::MenuLayout(TreeNode *tree, SGUI_INT cnt, SGUI_ITEMS_ITEM *its)
     : LayoutBase(tree) {
-    SGUI_Menu_Initialize(&MenuObject, &GUI_FONT12x, &screen_full, its, cnt);
+    SGUI_RECT layout = {
+        .iX = 38,
+        .iY = 6,
+        .iWidth = 52,
+        .iHeight = 52
+    };
+    SGUI_Menu_Initialize(&MenuObject, &GUI_FONT12x, &layout, its, cnt);
+}
+
+void MenuLayout::KeyDownPush() {
+    if (MenuObject.stItems.iSelection < MenuObject.stItems.iCount - 1)
+        ++MenuObject.stItems.iSelection;
+}
+
+void MenuLayout::KeyUpPush() {
+    if (MenuObject.stItems.iSelection > 0)
+        --MenuObject.stItems.iSelection;
 }
 
 #pragma endregion
@@ -127,7 +145,7 @@ void ListLayout::ListItem::UpdateValue(std::string value) {
 
 #pragma endregion
 ////////////////////////////////////////////////////////////////////////////////
-#pragma region NewLayout
+#pragma region CurvelLayout
 
 CurveLayout::CurveLayout(struct TreeNode *tree, std::string title,
                          SGUI_RTGRAPH_CONTROL ctrl)

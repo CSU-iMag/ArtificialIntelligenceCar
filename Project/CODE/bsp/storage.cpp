@@ -53,7 +53,7 @@ void storage_load(uint32 sector, uint32 page) {
         dynamic_cast<MagSensorPGA *>(Car.MagList[i])->Gain = store.data.Gain[i];
     for (int i(0); i < ADC_CNT; ++i)
         Car.MagList[i]->MaxRawData = store.data.MagMax[i];
-    // Car.TargetSpeed = store.data.TargetSpeed;
+    Car.TargetSpeed = store.data.TargetSpeed;
     Car.Steer3010.steerOffset = store.data.SteerOffset;
     Car.Steer3010.steerCtrl.SetPID(store.data.SteerCoeff.Kp,
                                    store.data.SteerCoeff.Ki,
@@ -67,6 +67,7 @@ void storage_load(uint32 sector, uint32 page) {
     CRITICAL_REGION_EXIT();
 
     gui_reloadVal();
+    DEBUG_LOG("\n======Load Parameters from Flash======\n");
     DEBUG_LOG("target speed=%f\n", Car.TargetSpeed);
     DEBUG_LOG("steer offset=%f\n", Car.Steer3010.steerOffset);
     DEBUG_LOG("steer pid: %f %f %f\n", Car.Steer3010.steerCtrl.instance.Kp,
@@ -75,10 +76,11 @@ void storage_load(uint32 sector, uint32 page) {
     DEBUG_LOG("speed pid: %f %f %f\n", Car.MotorL.speedCtrl.instance.Kp,
               Car.MotorL.speedCtrl.instance.Ki,
               Car.MotorL.speedCtrl.instance.Kd);
-              PRINTF("\nPGA:");
-              for (int i(0); i < PGA_CNT; ++i)
-                PRINTF(" %d", dynamic_cast<MagSensorPGA *>(Car.MagList[i])->Gain);
-                PRINTF("\n\nRawMax:");
-                 for (int i(0); i < ADC_CNT; ++i)
-       PRINTF(" %d", Car.MagList[i]->MaxRawData);
+    DEBUG_LOG("Risisters:");
+    for (int i(0); i < PGA_CNT; ++i)
+        DEBUG_LOG(" %d", dynamic_cast<MagSensorPGA *>(Car.MagList[i])->Gain);
+    DEBUG_LOG("\nRawMax:");
+    for (int i(0); i < ADC_CNT; ++i)
+        DEBUG_LOG(" %d", Car.MagList[i]->MaxRawData);
+    DEBUG_LOG("\n==========================\n");
 }

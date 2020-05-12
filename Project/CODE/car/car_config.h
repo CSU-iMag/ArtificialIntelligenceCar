@@ -100,12 +100,12 @@
 
 // </h> ////////////////////////////////
 
-// <h>Motor Configuration
+// <h> 后轮电机配置
 
 // <c>Auto Stop
-//  <i> 失控自动停车
 #define AUTO_STOP
 // </c>
+// <i> 失控自动停车
 
 // <o>Motor Freq<13000-17000>
 //  <i> 电机PWM频率(Hz)

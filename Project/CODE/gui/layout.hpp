@@ -54,10 +54,13 @@ struct NoticeLayout : LayoutBase {
 
 struct MenuLayout : LayoutBase {
     MenuLayout(struct TreeNode *tree, SGUI_INT cnt, SGUI_ITEMS_ITEM *its);
-    virtual void Show();
 
   protected:
     SGUI_MENU_STRUCT MenuObject = {0x0};
+    
+    virtual void Show();
+    virtual void KeyDownPush();
+    virtual void KeyUpPush();
 };
 
 struct ListLayout : LayoutBase {

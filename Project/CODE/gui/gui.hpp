@@ -7,6 +7,7 @@
 #include "common.h"
 #include "layout.hpp"
 #include "screen.h"
+#include "timer.hpp"
 #include "tree.hpp"
 
 #include <string>
@@ -18,6 +19,7 @@ extern struct SteeringConfig gui_steering;
 extern struct Resistance gui_resistance;
 extern struct ControlPanel gui_control;
 extern struct MagadcDat gui_magadcDat;
+extern struct MotorConfig gui_motor;
 
 struct BackGround : BasicLayout {
     BackGround();
@@ -36,7 +38,7 @@ struct HomePage : ListLayout {
     HomePage();
 
   private:
-    static const int ChildrenCnt = 7;
+    static const int ChildrenCnt = 10;
     struct TreeNode tree = {.Parent = &gui_background};
     SGUI_ITEMS_ITEM its[ChildrenCnt];
 
@@ -144,7 +146,8 @@ struct SteeringConfig : ListLayout {
 
     SteeringConfig()
         : ListLayout(&tree, its, "-方向控制",
-                     {"Kp: ", "Ki: ", "Kd: ", "软件调零：", "高电平时间：", "ctrl mode: "}),
+                     {"Kp: ", "Ki: ", "Kd: ", "软件调零：", "高电平时间：",
+                      "ctrl mode: "}),
           err_curve(&err_tree, " Steering PID ErrNow",
                     (SGUI_RTGRAPH_CONTROL){20, -20, SGUI_TRUE, 1, 0}) {}
 
@@ -174,6 +177,49 @@ struct ControlPanel : ListLayout {
     static const uint8_t item_cnt = 7;
     struct TreeNode tree = {.Parent = &gui_home},
                     bat_tree = {.Parent = &gui_control};
+    SGUI_ITEMS_ITEM its[item_cnt];
+
+    virtual void KeyEnterPush();
+};
+
+struct ComEnable : ListLayout {
+    ComEnable()
+        : ListLayout(&tree, its, "-上位机通信使能",
+                     {"发送AI包：", "逐飞示波器："}) {}
+
+  private:
+    static const uint8_t item_cnt = 2;
+    struct TreeNode tree = {.Parent = &gui_home};
+    SGUI_ITEMS_ITEM its[item_cnt];
+
+    virtual void KeyEnterPush();
+};
+
+struct MotorConfig : ListLayout {
+    static SoftTimer upd_tmr;
+
+    MotorConfig()
+        : ListLayout(&tree, its, "-后轮电机配置",
+                     {"目标速度：", "左轮速度：", "右轮速度：", "左轮距离：",
+                      "右轮距离：", "清空距离"}) {}
+    static void UpdateValue(sched_event_data_t);
+
+  private:
+    static const uint8_t item_cnt = 6;
+    struct TreeNode tree = {.Parent = &gui_home};
+    SGUI_ITEMS_ITEM its[item_cnt];
+
+    virtual void KeyEnterPush();
+    virtual void KeyLeftPush();
+    virtual void KeyRightPush();
+};
+
+struct ModelSelect : MenuLayout {
+    ModelSelect();
+
+  private:
+    static const uint8_t item_cnt = 3;
+    struct TreeNode tree = {.Parent = &gui_home};
     SGUI_ITEMS_ITEM its[item_cnt];
 
     virtual void KeyEnterPush();

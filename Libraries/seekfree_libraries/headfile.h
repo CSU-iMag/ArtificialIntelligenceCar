@@ -33,15 +33,8 @@
 #include "clock_config.h"
 #include "fsl_cache.h"
 #include "common.h"
-#include "zf_vector.h"
-
-//------文件系统相关头文件
-// #include "ff.h"
-// #include "diskio.h"
-// #include "fsl_sd_disk.h"
 
 #include "SEEKFREE_PRINTF.h"
-
 
 //------逐飞科技单片机外设驱动头文件
 #include "zf_gpio.h"
@@ -55,32 +48,14 @@
 #include "zf_adc.h"
 #include "zf_iic.h"
 #include "zf_flash.h"
-// #include "zf_camera.h"
-// #include "zf_csi.h"
 #include "zf_rom_api.h"
-// #include "zf_usb_cdc.h"
-#include "zf_sdcard.h"
 
 //------逐飞科技产品驱动头文件
-#include "SEEKFREE_FONT.h"
-// #include "SEEKFREE_18TFT.h"
-// #include "SEEKFREE_IPS114_SPI.h"
-// #include "SEEKFREE_IPS200_PARALLEL8.h"
 #include "SEEKFREE_IIC.h"
 #include "SEEKFREE_VIRSCO.h"
 #include "SEEKFREE_FUN.h"
 #include "SEEKFREE_MPU6050.h"
 #include "SEEKFREE_OLED.h"
-#include "SEEKFREE_NRF24L01.h"
-// #include "SEEKFREE_MMA8451.h"
-// #include "SEEKFREE_L3G4200D.h"
-// #include "SEEKFREE_ICM20602.h"
-// #include "SEEKFREE_MT9V03X.h"
-// #include "SEEKFREE_WIRELESS.h"
-// #include "SEEKFREE_MT9V03X_CSI.h"
-// #include "SEEKFREE_W25QXXJV.h"
-// #include "SEEKFREE_SCC8660_CSI.h"
-// #include "SEEKFREE_SCC8660.h"
 
 #endif
 

@@ -1,8 +1,7 @@
 #include "pack.hpp"
 #include "car.hpp"
 #include "peripherals.h"
-#include <algorithm> // std::for_each
-// CRC校验还没有弄，在包头head后加了个size
+#include <algorithm>
 
 Direction_PackData Dir_PD;
 Speed_PackData Speed_PD;
@@ -69,6 +68,31 @@ __STATIC_INLINE uint8_t XorParity(uint8_t *buf, uint8_t cnt) {
     uint8_t ret = 0;
     std::for_each(buf, buf + cnt, [&ret](uint8_t d) { ret ^= d; });
     return ret;
+}
+
+/**
+ * @brief 将buf[0]~buf[cnt-1]进行crc32校验计算，得parity
+ * @param[in]  buf        需要进行crc32校验的字节数组的首地址
+ * @param[in]  cnt        需要进行crc32校验的字节数
+ * @param[out]  parity    放置crc32校验结果的首地址
+ */
+void Crc32Parity(uint8_t *buf, uint8_t cnt, uint8_t *parity) {
+    status_t status;
+    size_t outLength = 4;
+
+    /* Expected CRC-32 for the message.
+     * CRC-32 params:
+     * width=32 poly=0x04c11db7 init=0xffffffff refin=false refout=false
+     * xorout=0x00000000 http://reveng.sourceforge.net/crc-catalogue/
+     */
+    memset(parity, 0, outLength);
+
+    /************************ CRC-32 **************************/
+    status = DCP_HASH(DCP, const_cast<dcp_handle_t *>(&DCP_handle_0),
+                      kDCP_Crc32, buf, cnt, parity, &outLength);
+    DEBUG_LOG("CRC-32 status=%d,output:%d,%d,%d,%d\n", status, parity[0],
+              parity[1], parity[2], parity[3]);
+    CAR_ERROR_CHECK(kStatus_Success == status);
 }
 
 /**

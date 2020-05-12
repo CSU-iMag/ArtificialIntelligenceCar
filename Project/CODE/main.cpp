@@ -6,8 +6,8 @@
  * @author     		iMag
  * @version    		v1.0
  * @target		    RT1064DVL6A
- * @date       		2020-03-25
- * @github          https://github.com/volatile-static/iMag
+ * @date       		2020-05-12
+ * @github          https://github.com/CSU-iMag
  ********************************************************************************************************************/
 
 //打开新的工程或者工程移动了位置务必执行以下操作

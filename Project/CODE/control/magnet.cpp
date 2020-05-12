@@ -39,8 +39,8 @@ MagSensor::MagSensor(const ADCCH_enum &adc)
 void MagSensor::Init() { adc_init(MAGNET_ADC, Channel, MAG_SAMPLE_RESOLUTION); }
 
 void MagSensor::Sample() {
-    RawData = adc_mean_filter(MAGNET_ADC, Channel, 10);
-    // RawData = filter_RawData.filter_movingAverage(RawData);
+    RawData = adc_mean_filter(MAGNET_ADC, Channel, 6);
+    RawData = filter_RawData.Moving(RawData);
     if (SaveMaxEnabled)
         MaxRawData = std::max(MaxRawData, RawData);
 }
@@ -97,37 +97,25 @@ static __inline void DerailProtect(void) {
     }
 }
 
+void UpdateGUI() {
+    static int cnt;
+    if (++cnt %= 6) // 6分频
+        return;
+    gui_steering.err_curve.AppendValue(MagErrorForPID * 9);
+    gui_magadcDat.UpdateValue();
+}
+
 void mag_sample_sched(sched_event_data_t dat) {
-    uint8 i = 0;
-    for (; i < 9; i++) {
+    for (int i = 0; i < ADC_CNT; ++i) {
         Car.MagList[i]->Sample();
-        Car.MagList[i]->NormalizeForAI();
-    }
-    for (; i < ADC_CNT; i++) {
-        Car.MagList[i]->Sample();
-        Car.MagList[i]->NormalizeForPID();
+        if (i > 8)
+            Car.MagList[i]->NormalizeForPID();
+        else
+            Car.MagList[i]->NormalizeForAI();
     }
     DerailProtect();
 
-    float sL, sR;
-    arm_sqrt_f32(Car.MagList[MagL_FRONT]->GetNormalized(), &sL);
-    arm_sqrt_f32(Car.MagList[MagR_FRONT]->GetNormalized(), &sR);
-
     CRITICAL_REGION_ENTER();
-    //    sL += Car.Steer3010.steerOffset;
-    //    sR -= Car.Steer3010.steerOffset;
-
-    //前瞻左右电感间距12cm，距离地面高度15cm
-    // first 原本的，先试试有木有错，我怕了我自己
-    // MagErrorForPID = 1000 * (sL - sR + Car.Steer3010.steerOffset) /
-    //                  (Car.MagList[MagL_FRONT]->GetNormalized() +
-    //                   Car.MagList[MagM_FRONT]->GetNormalized() +
-    //                   Car.MagList[MagR_FRONT]->GetNormalized())/
-    //                  (Car.MagList[MagM_FRONT]->GetNormalized());
-    // second
-    //距离小的时候给的err比first大，距离大的时候比first小，
-    //下一个公式同理，只是各种程度不同
-    //                     ↓这个参数可能需要稍微改下
     MagErrorForPID =
         10 *
         (Car.MagList[MagL_FRONT]->GetNormalized() -
@@ -135,20 +123,9 @@ void mag_sample_sched(sched_event_data_t dat) {
         (Car.MagList[MagL_FRONT]->GetNormalized() +
          Car.MagList[MagM_FRONT]->GetNormalized() +
          Car.MagList[MagR_FRONT]->GetNormalized());
-    // third
-    //    MagErrorForPID = 20 * (Car.MagList[MagL_FRONT]->GetNormalized() -
-    //		                  Car.MagList[MagR_FRONT]->GetNormalized() +
-    //											Car.Steer3010.steerOffset)
-    ///
-    //                     (Car.MagList[MagL_FRONT]->GetNormalized() +
-    //                      Car.MagList[MagM_FRONT]->GetNormalized() +
-    //                      Car.MagList[MagR_FRONT]->GetNormalized())/
-    //                     (Car.MagList[MagM_FRONT]->GetNormalized());
-
     CRITICAL_REGION_EXIT();
 
-    gui_steering.err_curve.AppendValue(MagErrorForPID * 9);
-    gui_magadcDat.UpdateValue();
+    UpdateGUI();
 }
 
 static SoftTimer mag_sample_tim(mag_sample_sched);

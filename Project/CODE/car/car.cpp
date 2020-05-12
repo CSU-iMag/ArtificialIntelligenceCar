@@ -4,6 +4,7 @@
 #include "SEEKFREE_MPU6050.h"
 #include "bat.hpp"
 #include "communication.hpp"
+#include "deep.hpp"
 #include "fsl_src.h"
 #include "gui.hpp"
 #include "pack.hpp"
@@ -12,7 +13,6 @@
 #include "timer.hpp"
 #include "usage.hpp"
 #include "util.h"
-#include "deep.hpp"
 #include "zf_flash.h"
 
 //! @warning å…¨å±€å”¯ä¸€
@@ -28,14 +28,15 @@ void iMagCar::Startup() {
     oled_init(); //!< after key
     simiic_init();
     // mpu6050_init();
-    EncoderL.Init();
-    EncoderR.Init();
+    // EncoderL.Init();
+    // EncoderR.Init();
     MotorL.Init();
     MotorR.Init();
     Steer3010.Init();
     Hc06.Init();
     beep0.Init();
     ActiveLayout->Repaint(); //!< after oled
+    tmr_init();
     bat_init();
     com_init();
     rit_init();
@@ -48,22 +49,9 @@ void iMagCar::Startup() {
     storage_load(SLN_DEBUG_SECTOR, SLN_DEBUG_PAGE); //!< after MCP4452
     gpio_init(MOTOR_EN_PIN, GPO, 1, GPIO_PIN_CONFIG);
 
-    dcp_config_t dcpConfig;
-//    /* Init hardware 例程里有 不知道是否一定需要*/
-//    BOARD_InitPins();
-//    /* Data cache must be temporarily disabled to be able to use sdram 干啥的*/
-//    SCB_DisableDCache();
-    /* Initialize DCP */
-    DCP_GetDefaultConfig(&dcpConfig);
-//#if DCP_TEST_USE_OTP_KEY
-//    /* Set OTP key type in IOMUX registers before initializing DCP. */
-//    /* Software reset of DCP must be issued after changing the OTP key type. */
-//    DCP_OTPKeySelect(kDCP_OTPMKKeyLow);
-//#endif
-    /* Reset and initialize DCP */
-    DCP_Init(DCP, &dcpConfig);
-
+    
     EnableGlobalIRQ(0);
+    gui_motor.upd_tmr.Start(62);
     beep0.Mute();
     DEBUG_LOG("Startup Successfully!\n");
 }
@@ -82,7 +70,7 @@ void iMagCar::Pause() {
     Car.MotorL.Stop();
     Car.MotorR.Stop();
     pit_close(MOTOR_CHANNEL);
-//    pit_close(STEER_CHANNEL);
+    pit_close(STEER_CHANNEL);
 }
 
 iMagCar::~iMagCar() {
@@ -91,11 +79,12 @@ iMagCar::~iMagCar() {
 }
 
 void LaunchDelaySchedule(sched_event_data_t dat) {
-    static uint8_t cnt;
-    Car.beep0.BeepFreq(beep_musicFreq[++cnt + 3]);
-    if (cnt < 3)
-        return;
-    Car.beep0.BeepFreqDelay(beep_musicFreq[6], 666);
-    cnt = 0;
+    // static uint8_t cnt;
+    // Car.beep0.BeepFreq(++cnt * 1000);
+    // if (cnt < 3)
+    //     return;
+    // SongOfJoy.Start();
+    // cnt = 0;
+    Car.beep0.Mute();
     Car.Machine.Start();
 }

@@ -51,7 +51,7 @@ void com_callback(LPUART_Type *base, lpuart_handle_t *handle, status_t status,
  */
 void Send_Direction_PackData_sched(sched_event_data_t dat) {
     Dir_PD.steerDutyforAI = Car.Steer3010.steerDutyforAI;
-    Dir_PD.steerPID_Input = Car.Steer3010.steerPID_Input;
+//    Dir_PD.steerPID_Input = Car.Steer3010.steerPID_Input;
     Dir_PD.magL_Row1_fValue = Car.MagList[9]->GetNormalized();
     Dir_PD.magM_Row1_fValue = Car.MagList[10]->GetNormalized();
     Dir_PD.magR_Row1_fValue = Car.MagList[11]->GetNormalized();
@@ -64,10 +64,10 @@ void Send_Direction_PackData_sched(sched_event_data_t dat) {
 }
 
 void Send_Speed_PackData_sched(sched_event_data_t dat) {
-    Speed_PD.speedLeft_H = ((int16_t)Car.EncoderL.speed >> 8) & (0x0FF);
-    Speed_PD.speedLeft_L = ((int16_t)Car.EncoderL.speed) & (0x0FF);
-    Speed_PD.speedRight_H = ((int16_t)Car.EncoderR.speed >> 8) & (0x0FF);
-    Speed_PD.speedRight_L = ((int16_t)Car.EncoderR.speed) & (0x0FF);
+    Speed_PD.speedLeft_H = ((int16_t)Car.EncoderL.GetSpeed() >> 8) & (0x0FF);
+    Speed_PD.speedLeft_L = ((int16_t)Car.EncoderL.GetSpeed()) & (0x0FF);
+    Speed_PD.speedRight_H = ((int16_t)Car.EncoderR.GetSpeed() >> 8) & (0x0FF);
+    Speed_PD.speedRight_L = ((int16_t)Car.EncoderR.GetSpeed()) & (0x0FF);
     Speed_PD.dutyLeft = (uint8_t)Car.MotorL.duty;
     Speed_PD.dutyRight = (uint8_t)Car.MotorR.duty;
     Speed_PD.parity = AccParity((uint8_t *)&Speed_PD + 2, Speed_PD.size);
@@ -87,7 +87,7 @@ void Send_AI_PackData_sched(sched_event_data_t dat) {
     AI_PD.MagR_Row2 = (uint8_t)Car.MagList[MagR_ROW2]->GetNormalized();
     AI_PD.MagL_Row3 = (uint8_t)Car.MagList[MagL_ROW3]->GetNormalized();
     AI_PD.MagR_Row3 = (uint8_t)Car.MagList[MagR_ROW3]->GetNormalized();
-    Crc32Parity((uint8_t *)&AI_PD + 2,AI_PD.size,(uint8_t *)&AI_PD.CRC0);
+    Crc32Parity((uint8_t *)&AI_PD + 2, AI_PD.size, (uint8_t *)&AI_PD.CRC0);
     memcpy(communicate_txBuffer, (uint8 *)&AI_PD, AI_PD.size + 7);
     communicate_txBuffer[AI_PD.size + 7] = '\n';
     LPUART_TransferSendNonBlocking(
@@ -98,11 +98,11 @@ void Send_AI_PackData_sched(sched_event_data_t dat) {
 /**
  * @brief 上行包的定时发送softtimer对象的声明
  */
-static SoftTimer Send_Direction_PackData_tim(Send_Direction_PackData_sched);
-static SoftTimer Send_Speed_PackData_tim(Send_Speed_PackData_sched);
-static SoftTimer Send_AI_PackData_tim(Send_AI_PackData_sched);
+SoftTimer Send_Direction_PackData_tim(Send_Direction_PackData_sched);
+SoftTimer Send_Speed_PackData_tim(Send_Speed_PackData_sched);
+SoftTimer Send_AI_PackData_tim(Send_AI_PackData_sched);
 
-static SoftTimer VisualScopeTmr(com_send);
+SoftTimer VisualScopeTmr(com_send);
 
 void com_init() {
     IOMUXC_SetPinMux(IOMUXC_GPIO_B1_12_LPUART5_TX, /* GPIO_B1_12 is configured
@@ -116,10 +116,4 @@ void com_init() {
     LPUART_TransferReceiveNonBlocking(
         COMMUNICATE_PERIPHERAL, &communicate_handle,
         (lpuart_transfer_t *)&communicate_rxTransfer, NULL);
-
-    // VisualScopeTmr.Start(6);
-    Send_AI_PackData_tim.Start(STEER_PERIOD);
-    // Send_Direction_PackData_tim.Start(DIR_PD_PERIOD);
-//     Send_Speed_PackData_tim.Start(SPEED_PD_PERIOD);
-    // Send_AI_PackData_tim.Start(AI_PD_PERIOD);
 }

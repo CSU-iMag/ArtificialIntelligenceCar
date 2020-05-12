@@ -10,10 +10,11 @@
  * Included files
  **********************************************************************************************************************/
 #include "fsl_common.h"
+#include "fsl_dcp.h"
 #include "fsl_gpt.h"
 #include "fsl_clock.h"
-#include "fsl_tempmon.h"
 #include "fsl_qtmr.h"
+#include "fsl_tempmon.h"
 #include "fsl_lpuart.h"
 
 #if defined(__cplusplus)
@@ -25,6 +26,8 @@ extern "C" {
  **********************************************************************************************************************/
 /* Definitions for BOARD_InitPeripherals functional group */
 /* Definition of peripheral ID */
+#define DCP_PERIPHERAL DCP
+/* Definition of peripheral ID */
 #define GPT2_PERIPHERAL GPT2
 /* Definition of the clock source frequency */
 #define GPT2_CLOCK_SOURCE 75000000UL
@@ -34,6 +37,16 @@ extern "C" {
 #define GPT2_GPT_IRQ_PRIORITY 6
 /* GPT2 interrupt handler identifier. */
 #define GPT2_GPT_IRQHANDLER GPT2_IRQHandler
+/* Definition of peripheral ID */
+#define PULSEENCODER_PERIPHERAL TMR1
+/* Definition of the timer channel Channel_0. */
+#define PULSEENCODER_CHANNEL_0_CHANNEL kQTMR_Channel_0
+/* Definition of the timer channel Channel_2. */
+#define PULSEENCODER_CHANNEL_2_CHANNEL kQTMR_Channel_2
+/* Definition of the timer channel Channel_0 clock source frequency. */
+#define PULSEENCODER_CHANNEL_0_CLOCK_SOURCE 1UL
+/* Definition of the timer channel Channel_2 clock source frequency. */
+#define PULSEENCODER_CHANNEL_2_CLOCK_SOURCE 10UL
 /* Definition of peripheral ID */
 #define TEMPMON_PERIPHERAL TEMPMON
 /* Definition of peripheral ID */
@@ -54,7 +67,13 @@ extern "C" {
 /***********************************************************************************************************************
  * Global variables
  **********************************************************************************************************************/
+/* Common initialization settings */
+extern const dcp_config_t DCP_config;
+/* User DCP handler */
+extern const dcp_handle_t DCP_handle_0;
 extern const gpt_config_t GPT2_config;
+extern const qtmr_config_t PulseEncoder_Channel_0_config;
+extern const qtmr_config_t PulseEncoder_Channel_2_config;
 extern const tempmon_config_t TEMPMON_config;
 extern const qtmr_config_t TMR2_Channel_3_config;
 extern const lpuart_config_t communicate_config;

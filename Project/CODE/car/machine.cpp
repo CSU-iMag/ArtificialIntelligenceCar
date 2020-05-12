@@ -47,7 +47,7 @@ void CarMachine::Steady() {
         EVENT_IGNORED,   // ST_Brake
         CANNOT_HAPPEN,   // ST_Recover
         EVENT_IGNORED,   // ST_Exception
-    END_TRANSITION_MAP(NULL)
+        END_TRANSITION_MAP(NULL)
 }
 
 void CarMachine::Pause() {
@@ -64,19 +64,28 @@ void CarMachine::Pause() {
 void CarMachine::DetectException() {
     BEGIN_TRANSITION_MAP // - Current State -
         EVENT_IGNORED,   // ST_Idle
-        ST_BRAKE,        // ST_Launch
-        ST_BRAKE,        // ST_Running
-        EVENT_IGNORED,   // ST_Brake
-        ST_IDLE,         // ST_Recover
-        CANNOT_HAPPEN,   // ST_Exception
+#ifdef AUTO_STOP
+        ST_BRAKE, // ST_Launch
+        ST_BRAKE, // ST_Running
+#else
+        EVENT_IGNORED, // ST_Launch
+        EVENT_IGNORED, // ST_Running
+#endif
+        EVENT_IGNORED, // ST_Brake
+        ST_IDLE,       // ST_Recover
+        CANNOT_HAPPEN, // ST_Exception
         END_TRANSITION_MAP(NULL)
 }
 
 void CarMachine::Stopped() {
     BEGIN_TRANSITION_MAP // - Current State -
         EVENT_IGNORED,   // ST_Idle
-        ST_EXCEPTION,    // ST_Launch
+        EVENT_IGNORED,    // ST_Launch
+#ifdef AUTO_STOP
         ST_EXCEPTION,    // ST_Running
+#else
+        EVENT_IGNORED, // ST_Running
+#endif
         ST_RECOVER,      // ST_Brake
         EVENT_IGNORED,   // ST_Recover
         ST_RECOVER,      // ST_Exception

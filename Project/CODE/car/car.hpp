@@ -5,9 +5,11 @@
 #include "machine.hpp"
 #include "magnet.hpp"
 #include "motor.hpp"
+#include "peripherals.h"
 #include "pid.hpp"
 #include "steer.hpp"
 #include "timer.hpp"
+#include "deep.hpp"
 #pragma region bsp
 #include "beep.hpp"
 #include "bluetooth.hpp"
@@ -51,6 +53,7 @@ enum class ControlMode { PID, AI };
 
 class iMagCar { // 什么时候该用friend？什么时候public？
   public:
+    const unsigned char *Model = model1;
     ControlMode CtrlMode;
 
     //! @brief
@@ -86,13 +89,13 @@ class iMagCar { // 什么时候该用friend？什么时候public？
     iMagCar()
         : TargetSpeed(TARGET_SPEED), MotorL(MOTOR_L, MOTOR_MIN, MOTOR_MAX),
           MotorR(MOTOR_R, MOTOR_MIN, MOTOR_MAX),
-          EncoderL(encoderL_QTIMER, encoderL_LSB_QTIMER, encoderL_DIR_QTIMER),
-          EncoderR(encoderR_QTIMER, encoderR_LSB_QTIMER, encoderR_DIR_QTIMER),
+          EncoderL(PULSEENCODER_CHANNEL_0_CHANNEL),
+          EncoderR(PULSEENCODER_CHANNEL_2_CHANNEL),
           Steer3010(S3010_PWM, STEER_MIN - STEER_CENTER,
                     STEER_MAX - STEER_CENTER),
           ledGreen(LED_PWM1), ledBlue(LED_PIN3), ledWhite(LED_PWM2),
           ledCore(LED_PIN0), Hc06(HC06_UART, HC06_TX, HC06_RX),
-          LaunchTimer(LaunchDelaySchedule, 3) {}
+          LaunchTimer(LaunchDelaySchedule, 1) {}
     ~iMagCar();
 
     //! @brief 开机

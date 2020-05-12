@@ -1,4 +1,5 @@
 #include "StateMachine.hpp"
+#include "util.h"
 #include <assert.h>
 
 StateMachine::StateMachine(unsigned char maxStates)
@@ -15,11 +16,11 @@ void StateMachine::ExternalEvent(unsigned char newState, EventData *pData) {
             delete pData;
     } else {
         // TODO - capture software lock here for thread-safety if necessary
-
+        CRITICAL_REGION_ENTER();
         // generate the event and execute the state engine
         InternalEvent(newState, pData);
         StateEngine();
-
+        CRITICAL_REGION_EXIT();
         // TODO - release software lock here
     }
 }

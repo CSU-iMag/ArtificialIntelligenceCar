@@ -1,20 +1,6 @@
 GUI in OLED
 ===========
 define your menu topology in gui.cpp
-
-子菜单树形图
-============
-- **BackGround**      *BasicLayout*
-  - **HomePage**      *ListLayout*
-    - **Debug**       *ListLayout*
-    - **Steering**    *NoticeLayout*
-    - **Attitude**    *ListLayout*
-    - **Resistance**  *ListLayout*
-    - **Speed**       *MenuLayout*
-      - **Left**      *GraphLayout*
-      - **Right**     *GraphLayout*
-    - **ADC raw**     *ListLayout*
-    - **PID**         *ListLayout*
   
 规范
 ============
@@ -27,7 +13,7 @@ define your menu topology in gui.cpp
    virtual void KeyLeftPush(sched_event_data_t dat) {}
    virtual void KeyRightPush(sched_event_data_t dat) {}
 ```
-
+> :warning:给列表添加新项记得增加类里的常量！
 - *void UpdateValue* 从别的地方调用来更改要显示的数据
 - **ListLayout** 树的子结点顺序要与 *SGUI_ITEMS_ITEM its[ChildrenCnt]* 相对应
 - 有些 *Show()* 在第二层子类中定义，有些在第三层
@@ -35,171 +21,171 @@ define your menu topology in gui.cpp
   
 
 
-MDK常见错误详解集合
+#MDK常见错误详解集合
 错误代码及错误信息 错误释义 
-error 1: Out of memory 内存溢出 
-error 2: Identifier expected 缺标识符 
-error 3: Unknown identifier 未定义的标识符 
-error 4: Duplicate identifier 重复定义的标识符 
-error 5: Syntax error 语法错误 
-error 6: Error in real constant 实型常量错误 
-error 7: Error in integer constant 整型常量错误 
-error 8: String constant exceeds line 字符串常量超过一行 
-error 10: Unexpected end of file 文件非正常结束 
-error 11: Line too long 行太长 
-error 12: Type identifier expected 未定义的类型标识符 
-error 13: Too many open files 打开文件太多 
-error 14: Invalid file name 无效的文件名 
-error 15: File not found 文件未找到 
-error 16: Disk full 磁盘满 
-error 17: Invalid compiler directive 无效的编译命令 
-error 18: Too many files 文件太多 
-error 19: Undefined type in pointer def 指针定义中未定义类型 
-error 20: Variable identifier expected 缺变量标识符 
-error 21: Error in type 类型错误 
-error 22: Structure too large 结构类型太长 
-error 23: Set base type out of range 集合基类型越界 
-error 24: File components may not be files or objectsfile分量不能是文件或对象 
-error 25: Invalid string length 无效的字符串长度 
+- error 1: Out of memory 内存溢出 
+- error 2: Identifier expected 缺标识符 
+- error 3: Unknown identifier 未定义的标识符 
+- error 4: Duplicate identifier 重复定义的标识符 
+- error 5: Syntax error 语法错误 
+- error 6: Error in real constant 实型常量错误 
+- error 7: Error in integer constant 整型常量错误 
+- error 8: String constant exceeds line 字符串常量超过一行 
+- error 10: Unexpected end of file 文件非正常结束 
+- error 11: Line too long 行太长 
+- error 12: Type identifier expected 未定义的类型标识符 
+- error 13: Too many open files 打开文件太多 
+- error 14: Invalid file name 无效的文件名 
+- error 15: File not found 文件未找到 
+- error 16: Disk full 磁盘满 
+- error 17: Invalid compiler directive 无效的编译命令 
+- error 18: Too many files 文件太多 
+- error 19: Undefined type in pointer def 指针定义中未定义类型 
+- error 20: Variable identifier expected 缺变量标识符 
+- error 21: Error in type 类型错误 
+- error 22: Structure too large 结构类型太长 
+- error 23: Set base type out of range 集合基类型越界 
+- error 24: File components may not be files or objectsfile分量不能是文件或对象 
+- error 25: Invalid string length 无效的字符串长度 
 
-error 26: Type mismatch 类型不匹配 
-error 27：error 27：Invalid subrange base type 无效的子界基类型 
-error 28：Lower bound greater than upper bound 下界超过上界 
-error 29：Ordinal type expected 缺有序类型 
-error 30：Integer constant expected 缺整型常量 
-error 31：Constant expected 缺常量 
-error 32：Integer or real constant expected 缺整型或实型常量 
-error 33：Pointer Type identifier expected 缺指针类型标识符 
-error 34：Invalid function result type 无效的函数结果类型 
-error 35：Label identifier expected 缺标号标识符 
-error 36：BEGIN expected 缺BEGIN 
-error 37：END expected 缺END 
-error 38：Integer expression expected 缺整型表达式 
-error 39：Ordinal expression expected 缺有序类型表达式 
-error 40：Boolean expression expected 缺布尔表达式 
-error 41：Operand types do not match 操作数类型不匹配 
-error 42：Error in expression 表达式错误 
-error 43：Illegal assignment 非法赋值 
-error 44：Field identifier expected 缺域标识符 
-error 45：Object file too large 目标文件太大 
-error 46：Undefined external 未定义的外部过程与函数 
-error 47：Invalid object file record 无效的OBJ文件格式 
-error 48：Code segment too large 代码段太长 
-error 49：Data segment too large 数据段太长 
-error 50：DO expected 缺DO 
+- error 26: Type mismatch 类型不匹配 
+- error 27：error 27：Invalid subrange base type 无效的子界基类型 
+- error 28：Lower bound greater than upper bound 下界超过上界 
+- error 29：Ordinal type expected 缺有序类型 
+- error 30：Integer constant expected 缺整型常量 
+- error 31：Constant expected 缺常量 
+- error 32：Integer or real constant expected 缺整型或实型常量 
+- error 33：Pointer Type identifier expected 缺指针类型标识符 
+- error 34：Invalid function result type 无效的函数结果类型 
+- error 35：Label identifier expected 缺标号标识符 
+- error 36：BEGIN expected 缺BEGIN 
+- error 37：END expected 缺END 
+- error 38：Integer expression expected 缺整型表达式 
+- error 39：Ordinal expression expected 缺有序类型表达式 
+- error 40：Boolean expression expected 缺布尔表达式 
+- error 41：Operand types do not match 操作数类型不匹配 
+- error 42：Error in expression 表达式错误 
+- error 43：Illegal assignment 非法赋值 
+- error 44：Field identifier expected 缺域标识符 
+- error 45：Object file too large 目标文件太大 
+- error 46：Undefined external 未定义的外部过程与函数 
+- error 47：Invalid object file record 无效的OBJ文件格式 
+- error 48：Code segment too large 代码段太长 
+- error 49：Data segment too large 数据段太长 
+- error 50：DO expected 缺DO 
 
-error 51：Invalid PUBLIC definition 无效的PUBLIC定义 
-error 52：Invalid EXTRN definition 无效的EXTRN定义 
-error 53: Too many EXTRN definitions 太多的EXTRN定义 
-error 54：OF expected 缺OF 
-error 55：INTERFACE expected 缺INTERFACE 
-error 56：Invalid relocatable reference 无效的可重定位引用 
-error 57：THEN expected 缺THEN 
-error 58：TO or DOWNTO expected 缺TO或DOWNTO 
-error 59：Undefined forward 提前引用未经定义的说明 
-error 61：Invalid typecast 无效的类型转换 
-error 62：Division by zero 被零除 
-error 63：Invalid file type 无效的文件类型 
-error 64：Cannot read or write variables of this type 不能读写此类型变量 
-error 65：Pointer variable expected 缺指针类型变量 
-error 66：String variable expected 缺字符串变量 
-error 67：String expression expected 缺字符串表达式 
-error 68：Circular unit reference 单元UNIT部件循环引用 
-error 69：Unit name mismatch 单元名不匹配 
-error 70：Unit version mismatch 单元版本不匹配 
-error 71：Internal stack overflow 内部堆栈溢出 
-error 72：Unit file format error 单元文件格式错误 
-error 73：IMPLEMENTATION expected 缺IMPLEMENTATION 
-error 74：Constant and case types do not match 常量和CASE类型不匹配 
-error 75：Record or object variable expected 缺记录或对象变量 
+- error 51：Invalid PUBLIC definition 无效的PUBLIC定义 
+- error 52：Invalid EXTRN definition 无效的EXTRN定义 
+- error 53: Too many EXTRN definitions 太多的EXTRN定义 
+- error 54：OF expected 缺OF 
+- error 55：INTERFACE expected 缺INTERFACE 
+- error 56：Invalid relocatable reference 无效的可重定位引用 
+- error 57：THEN expected 缺THEN 
+- error 58：TO or DOWNTO expected 缺TO或DOWNTO 
+- error 59：Undefined forward 提前引用未经定义的说明 
+- error 61：Invalid typecast 无效的类型转换 
+- error 62：Division by zero 被零除 
+- error 63：Invalid file type 无效的文件类型 
+- error 64：Cannot read or write variables of this type 不能读写此类型变量 
+- error 65：Pointer variable expected 缺指针类型变量 
+- error 66：String variable expected 缺字符串变量 
+- error 67：String expression expected 缺字符串表达式 
+- error 68：Circular unit reference 单元UNIT部件循环引用 
+- error 69：Unit name mismatch 单元名不匹配 
+- error 70：Unit version mismatch 单元版本不匹配 
+- error 71：Internal stack overflow 内部堆栈溢出 
+- error 72：Unit file format error 单元文件格式错误 
+- error 73：IMPLEMENTATION expected 缺IMPLEMENTATION 
+- error 74：Constant and case types do not match 常量和CASE类型不匹配 
+- error 75：Record or object variable expected 缺记录或对象变量 
 
-error 76：Constant out of range 常量越界 
-error 77：File variable expected 缺文件变量 
-error 78：Pointer expression expected 缺指针表达式 
-error 79：Integer or real expression expected 缺整型或实型表达式 
-error 80：Label not within current block 标号不在当前块内 
-error 81：Label already defined 标号已定义 
-error 82：Undefined label in preceding statement part 在前面未定义标号 
-error 83：Invalid @ argument 无效的@参数 
-error 84：UNIT expected 缺UNIT 
-error 85: ";" expected 缺“；” 
-error 86： ":" expected 缺“：” 
-error 87： "," expected 缺“，” 
-error 88： "(" expected 缺“（” 
-error 89： ")" expected 缺“）” 
-error 90： "=" expected 缺“=” 
-error 91： ":=" expected 缺“:=” 
-error 92： "[" or "(." Expected 缺“[”或“（.” 
-error 93: "]" or ".)" expected 缺“］”或“.）” 
-error 94： "." expected 缺“.” 
-error 95: ".." expected 缺“..” 
-error 96：Too many variables 变量太多 
-error 97：Invalid FOR control variable 无效的FOR循环控制变量 
-error 98：Integer variable expected 缺整型变量 
-error 99：Files and procedure types are not allowed here 该处不允许文件和过程类型 
-error 100：String length mismatch 字符串长度不匹配 
+- error 76：Constant out of range 常量越界 
+- error 77：File variable expected 缺文件变量 
+- error 78：Pointer expression expected 缺指针表达式 
+- error 79：Integer or real expression expected 缺整型或实型表达式 
+- error 80：Label not within current block 标号不在当前块内 
+- error 81：Label already defined 标号已定义 
+- error 82：Undefined label in preceding statement part 在前面未定义标号 
+- error 83：Invalid @ argument 无效的@参数 
+- error 84：UNIT expected 缺UNIT 
+- error 85: ";" expected 缺“；” 
+- error 86： ":" expected 缺“：” 
+- error 87： "," expected 缺“，” 
+- error 88： "(" expected 缺“（” 
+- error 89： ")" expected 缺“）” 
+- error 90： "=" expected 缺“=” 
+- error 91： ":=" expected 缺“:=” 
+- error 92： "[" or "(." Expected 缺“[”或“（.” 
+- error 93: "]" or ".)" expected 缺“］”或“.）” 
+- error 94： "." expected 缺“.” 
+- error 95: ".." expected 缺“..” 
+- error 96：Too many variables 变量太多 
+- error 97：Invalid FOR control variable 无效的FOR循环控制变量 
+- error 98：Integer variable expected 缺整型变量 
+- error 99：Files and procedure types are not allowed here 该处不允许文件和过程类型 
+- error 100：String length mismatch 字符串长度不匹配 
 
-error 101：Invalid ordering of fields 无效域顺序 
-error 102：String constant expected 缺字符串常量 
-error 103：Integer or real variable expected 缺整型或实型变量 
-error 104：Ordinal variable expected 缺有序类型变量 
-error 105：INLINE error INLINE错误 
-error 106：Character expression expected 缺字符表达式 
-error 107：Too many relocation items 重定位项太多 
-error 108：Overflow in arithmetic operation 算术运算溢出 
-error 112：CASE constant out of range CASE常量越界 
-error 113：Error in statement 表达式错误 
-error 114：Cannot call an interrupt procedure 不能调用中断过程 
-error 116：Must be in 8087 mode to compile this 必须在8087模式编译 
-error 117：Target address not found 找不到目标地址 
-error 118：Include files are not allowed here 该处不允许INCLUDE文件 
-error 119：No inherited methods are accessible here 该处继承方法不可访问 
-error 121：Invalid qualifier 无效的限定符 
-error 122：Invalid variable reference 无效的变量引用 
-error 123：Too many symbols 符号太多 
-error 124：Statement part too large 语句体太长 
+- error 101：Invalid ordering of fields 无效域顺序 
+- error 102：String constant expected 缺字符串常量 
+- error 103：Integer or real variable expected 缺整型或实型变量 
+- error 104：Ordinal variable expected 缺有序类型变量 
+- error 105：INLINE error INLINE错误 
+- error 106：Character expression expected 缺字符表达式 
+- error 107：Too many relocation items 重定位项太多 
+- error 108：Overflow in arithmetic operation 算术运算溢出 
+- error 112：CASE constant out of range CASE常量越界 
+- error 113：Error in statement 表达式错误 
+- error 114：Cannot call an interrupt procedure 不能调用中断过程 
+- error 116：Must be in 8087 mode to compile this 必须在8087模式编译 
+- error 117：Target address not found 找不到目标地址 
+- error 118：Include files are not allowed here 该处不允许INCLUDE文件 
+- error 119：No inherited methods are accessible here 该处继承方法不可访问 
+- error 121：Invalid qualifier 无效的限定符 
+- error 122：Invalid variable reference 无效的变量引用 
+- error 123：Too many symbols 符号太多 
+- error 124：Statement part too large 语句体太长 
 
-error 126：Files must be var parameters 文件必须是变量形参 
-error 127：Too many conditional symbols 条件符号太多 
-error 128：Misplaced conditional directive 条件指令错位 
-error 129：ENDIF directive missing 缺ENDIF指令 
-error 130：Error in initial conditional defines 初始条件定义错误 
-error 131：Header does not match previous definition 和前面定义的过程或函数不匹配 
-error 133：Cannot evaluate this expression 不能计算该表达式 
-error 134：Expression incorrectly terminated 表达式错误结束 
-error 135：Invalid format specifier 无效格式说明符 
-error 136：Invalid indirect reference 无效的间接引用 
-error 137：Structured variables are not allowed here 该处不允许结构变量 
-error 138：Cannot evaluate without System unit 没有System单元不能计算 
-error 139：Cannot access this symbol 不能存取符号 
-error 140：Invalid floating point operation 无效的符号运算 
-error 141：Cannot compile overlays to memory 不能编译覆盖模块至内存 
-error 142：Pointer or procedural variable expected 缺指针或过程变量 
-error 143：Invalid procedure or function reference 无效的过程或函数调用 
-error 144：Cannot overlay this unit 不能覆盖该单元 
-error 146：File access denied 不允许文件访问 
-error 147：Object type expected 缺对象类型 
-error 148：Local object types are not allowed 不允许局部对象类型 
-error 149：VIRTUAL expected 缺VIRTUAL 
-error 150: Method identifier expected 缺方法标识符 
+- error 126：Files must be var parameters 文件必须是变量形参 
+- error 127：Too many conditional symbols 条件符号太多 
+- error 128：Misplaced conditional directive 条件指令错位 
+- error 129：ENDIF directive missing 缺ENDIF指令 
+- error 130：Error in initial conditional defines 初始条件定义错误 
+- error 131：Header does not match previous definition 和前面定义的过程或函数不匹配 
+- error 133：Cannot evaluate this expression 不能计算该表达式 
+- error 134：Expression incorrectly terminated 表达式错误结束 
+- error 135：Invalid format specifier 无效格式说明符 
+- error 136：Invalid indirect reference 无效的间接引用 
+- error 137：Structured variables are not allowed here 该处不允许结构变量 
+- error 138：Cannot evaluate without System unit 没有System单元不能计算 
+- error 139：Cannot access this symbol 不能存取符号 
+- error 140：Invalid floating point operation 无效的符号运算 
+- error 141：Cannot compile overlays to memory 不能编译覆盖模块至内存 
+- error 142：Pointer or procedural variable expected 缺指针或过程变量 
+- error 143：Invalid procedure or function reference 无效的过程或函数调用 
+- error 144：Cannot overlay this unit 不能覆盖该单元 
+- error 146：File access denied 不允许文件访问 
+- error 147：Object type expected 缺对象类型 
+- error 148：Local object types are not allowed 不允许局部对象类型 
+- error 149：VIRTUAL expected 缺VIRTUAL 
+- error 150: Method identifier expected 缺方法标识符 
 
-error 151：Virtual constructors are not allowed 不允许虚构造函数 
-error 152：Constructor identifier expected 缺构造函数标识符 
-error 153：Destructor identifier expected 缺析构函数标识符 
-error 154：Fail only allowed within constructors 只能在构造函数内使用Fail标准过程 
-error 155：Invalid combination of opcode and operands 操作数与操作符无效组合 
-error 156：Memory reference expected 缺内存引用指针 
-error 157：Cannot add or subtract relocatable symbols 不能加减可重定位符号 
-error 158：Invalid register combination 无效寄存器组合 
-error 159：286/287 instructions are not enabled 未激活286/287指令 
-error 160：Invalid symbol reference 无效符号指针 
-error 161：Code generation error 代码生成错误 
-error 162：ASM expected 缺ASM 
-error 166：Procedure or function identifier expected 缺过程或函数标识符 
-error 167：Cannot export this symbol 不能输出该符号 
-error 168：Duplicate export name 外部文件名重复 
-error 169：Executable file header too large 可执行文件头太长 
-error 170：Too many segments 段太多 
+- error 151：Virtual constructors are not allowed 不允许虚构造函数 
+- error 152：Constructor identifier expected 缺构造函数标识符 
+- error 153：Destructor identifier expected 缺析构函数标识符 
+- error 154：Fail only allowed within constructors 只能在构造函数内使用Fail标准过程 
+- error 155：Invalid combination of opcode and operands 操作数与操作符无效组合 
+- error 156：Memory reference expected 缺内存引用指针 
+- error 157：Cannot add or subtract relocatable symbols 不能加减可重定位符号 
+- error 158：Invalid register combination 无效寄存器组合 
+- error 159：286/287 instructions are not enabled 未激活286/287指令 
+- error 160：Invalid symbol reference 无效符号指针 
+- error 161：Code generation error 代码生成错误 
+- error 162：ASM expected 缺ASM 
+- error 166：Procedure or function identifier expected 缺过程或函数标识符 
+- error 167：Cannot export this symbol 不能输出该符号 
+- error 168：Duplicate export name 外部文件名重复 
+- error 169：Executable file header too large 可执行文件头太长 
+- error 170：Too many segments 段太多 
 
 
 
@@ -208,52 +194,52 @@ error 170：Too many segments 段太多
 
 错误代码及错误信息 错误释义 
 
-error 1：Invalid function number 无效函数号 
-error 2：File not found 文件未找到 
-error 3：Path not found 找不到路径 
-error 4：Too many open files 打开文件太多 
-error 5：File access denied 文件不允许访问 
-error 6：Invalid file handle 无效文件句柄 
-error 12：Invalid file access code 无效文件存取代码 
-error 15：Invalid drive number 无效驱动器号 
-error 16：Cannot remove current directory 不能删除当前目录 
-error 17：Cannot rename across drives 不能跨驱动器改名 
-error 18：No more files 没有文件了 
-error 100：Disk read error 读磁盘错 
-error 101：Disk write error 写磁盘错 
-error 102：File not assigned 文件变量未赋值 
-error 103：File not open 文件未打开 
-error 104：File not open for input 文件未打开为写方式 
-error 105：File not open for output 文件未打开为读方式 
-error 106：Invalid numeric format 无效数值格式 
-error 150：Disk is write-protected 磁盘写保护 
-error 151：Bad drive request struct length 错误的驱动器请求结构长度 
-error 152：Drive not ready 驱动器未准备好 
-error 154：CRC error in data 数据CRC校验错 
-error 156：Disk seek error 磁盘定位错 
-error 157：Unknown media type 未知的介质类型 
-error 158：Sector Not Found 找不到扇区 
-error 159：Printer out of paper 打印机缺纸 
-error 160：Device write fault 设备写错误 
-error 161：Device read fault 设备读错误 
-error 162：Hardware failure 硬件故障 
-error 200：Division by zero 被零除 
-error 201：Range check error 范围检查出错 
-error 202：Stack overflow error 栈溢出 
-error 203：Heap overflow error 堆溢出 
-error 204：Invalid pointer operation 无效的指针操作 
-error 205：Floating point overflow 浮点运算上溢 
-error 206：Floating point underflow 浮点运算下溢 
-error 207：Invalid floating point operation 无效的浮点运算 
-error 208：Overlay manager not installed 未安装覆盖管理程序 
-error 209：Overlay file read error 读覆盖文件错误 
-error 210：Object not initialized 对象未初始化 
-error 211：Call to abstract method 调用抽象方法 
-error 212：Stream registration error 流注_册错误 
-error 213：Collection index out of range 集合下标越界 
-error 214：Collection overflow error 集合上溢 
-error 215：Arithmetic overflow error 算术运算上溢 
-error 216：General Protection fault 一般保护性错误
+- error 1：Invalid function number 无效函数号 
+- error 2：File not found 文件未找到 
+- error 3：Path not found 找不到路径 
+- error 4：Too many open files 打开文件太多 
+- error 5：File access denied 文件不允许访问 
+- error 6：Invalid file handle 无效文件句柄 
+- error 12：Invalid file access code 无效文件存取代码 
+- error 15：Invalid drive number 无效驱动器号 
+- error 16：Cannot remove current directory 不能删除当前目录 
+- error 17：Cannot rename across drives 不能跨驱动器改名 
+- error 18：No more files 没有文件了 
+- error 100：Disk read error 读磁盘错 
+- error 101：Disk write error 写磁盘错 
+- error 102：File not assigned 文件变量未赋值 
+- error 103：File not open 文件未打开 
+- error 104：File not open for input 文件未打开为写方式 
+- error 105：File not open for output 文件未打开为读方式 
+- error 106：Invalid numeric format 无效数值格式 
+- error 150：Disk is write-protected 磁盘写保护 
+- error 151：Bad drive request struct length 错误的驱动器请求结构长度 
+- error 152：Drive not ready 驱动器未准备好 
+- error 154：CRC error in data 数据CRC校验错 
+- error 156：Disk seek error 磁盘定位错 
+- error 157：Unknown media type 未知的介质类型 
+- error 158：Sector Not Found 找不到扇区 
+- error 159：Printer out of paper 打印机缺纸 
+- error 160：Device write fault 设备写错误 
+- error 161：Device read fault 设备读错误 
+- error 162：Hardware failure 硬件故障 
+- error 200：Division by zero 被零除 
+- error 201：Range check error 范围检查出错 
+- error 202：Stack overflow error 栈溢出 
+- error 203：Heap overflow error 堆溢出 
+- error 204：Invalid pointer operation 无效的指针操作 
+- error 205：Floating point overflow 浮点运算上溢 
+- error 206：Floating point underflow 浮点运算下溢 
+- error 207：Invalid floating point operation 无效的浮点运算 
+- error 208：Overlay manager not installed 未安装覆盖管理程序 
+- error 209：Overlay file read error 读覆盖文件错误 
+- error 210：Object not initialized 对象未初始化 
+- error 211：Call to abstract method 调用抽象方法 
+- error 212：Stream registration error 流注_册错误 
+- error 213：Collection index out of range 集合下标越界 
+- error 214：Collection overflow error 集合上溢 
+- error 215：Arithmetic overflow error 算术运算上溢 
+- error 216：General Protection fault 一般保护性错误
 
 keil c编译器错误与解决方法 
 

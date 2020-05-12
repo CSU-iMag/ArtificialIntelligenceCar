@@ -7,7 +7,7 @@
 #include "fsl_pwm.h"
 
 //! @brief 从QTIMER读到的脉冲数转换成车速cm/s
-#define PULSE_TO_CM_S(rawSpeed) (rawSpeed * 9 / 1024 / ENCODER_PERIOD * 1000)
+#define PULSE_TO_CM_S(rawSpeed) ((float)rawSpeed * 9 / 1024 / ENCODER_PERIOD * 1000)
 
 //! @brief 浮点数百分比转定时器Compare
 #define PERCENT_TO_TICKS(percent) ((uint32)(percent * PWM_DUTY_MAX / 100))

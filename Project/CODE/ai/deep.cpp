@@ -10,7 +10,7 @@ static const CI_OutMetricInfo *pOM;
 
 void deep_init() {
     pOM = CI_GetOutMetricInfo(0);
-    CI_GetModelInfoXIP(model1, &info);
+    CI_GetModelInfoXIP(Car.Model, &info);
     DEBUG_LOG("model info: %d , %s\n", info.quantBits, info.pszString);
 }
 
@@ -27,7 +27,7 @@ __STATIC_INLINE void GetData() {
 void RunModel(sched_event_data_t dat) {
     GetData();
     int16_t temp;
-    CI_RunModelXIP(model1, cie_data, &temp); //调用模型计算转角
+    CI_RunModelXIP(Car.Model, cie_data, &temp); //调用模型计算转角
 
     //根据获取到的模型参数对计算结果进行右移位
     int16_t g_servoValue;
@@ -38,8 +38,8 @@ void RunModel(sched_event_data_t dat) {
     }
 
     float steering =
-        RESCALE_VALUE((float)g_servoValue + 127, STEER_MAX - STEER_MIN, 255) +
-        STEER_MIN;
+        RESCALE_VALUE((float)g_servoValue, STEER_MAX - STEER_MIN, 255) +
+        STEER_CENTER;
     Car.Steer3010.WidthSet(steering);
 }
 

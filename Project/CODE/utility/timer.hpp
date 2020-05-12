@@ -20,6 +20,8 @@ struct SoftTimer {
                sched_event_data_t context = {});
     //! @brief 暂停定时器，重启后只能单次触发
     void Stop();
+    //! @note 暂停后重新开始，而不是继续！
+    void Restart();
 
     bool operator<(const SoftTimer &rhs) {
         return timeout < rhs.timeout;
@@ -27,14 +29,13 @@ struct SoftTimer {
 
   private:
     uint32_t timeout; //!< 还有多久触发事件
-    uint8_t repeat;   //!< 还需要触发几次事件 @note 0为无限循环
+    uint16_t repeat, repeat_cnt;   //!< 还需要触发几次事件 @note 0为无限循环
     sched_event_handler_t handler; //!< 要触发的事件
     sched_event_data_t context;    //!< 给事件传参数
     uint32_t period;               //!< 事件触发间隔
 
     //! @brief 调度事件
     void Expire();
-    void Restart();
 };
 
 #endif

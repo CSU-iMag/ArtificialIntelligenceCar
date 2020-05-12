@@ -27,11 +27,13 @@ class filter_movAve_t {
      */
     __inline float Moving(float value) {
         if (buffer.empty())
-            return 0;
+            return 0.000001;
         header %= size;
         buffer[header++] = value;
-        float ret;
+        float ret, sum;
         arm_mean_f32(&buffer[0], size, &ret);
+        // sum = std::accumulate(buffer.begin(), buffer.end(), 0.0f);
+        // CAR_ERROR_CHECK(ret == sum / size);
         return ret;
     }
 };

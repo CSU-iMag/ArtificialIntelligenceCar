@@ -35,13 +35,12 @@ void Steer::DutySet(float duty) {
 void steer_schedule() {
     if (Car.CtrlMode != ControlMode::PID)
         return;
-    // CRITICAL_REGION_ENTER();
-    Car.Steer3010.steerPID_Input = MagErrorForPID;
+    CRITICAL_REGION_ENTER();
     auto steering =
         Car.Steer3010.steerCtrl.Realize(MagErrorForPID) + STEER_CENTER;
     LIMITING(steering, STEER_MIN, STEER_MAX);
     Car.Steer3010.steerDutyforAI =
-        (steering - STEER_MIN) * 255 / (STEER_MAX - STEER_MIN);
+        RESCALE_VALUE(steering - STEER_MIN, 255, STEER_MAX - STEER_MIN);
     Car.Steer3010.WidthSet(steering);
-    // CRITICAL_REGION_EXIT();
+    CRITICAL_REGION_EXIT();
 }

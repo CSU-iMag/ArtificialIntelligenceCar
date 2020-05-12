@@ -28,12 +28,12 @@ void Motor::Stop(void) {
 void motor_pid_schedule() {
     CRITICAL_REGION_ENTER();
     auto dutyL =
-        Car.MotorL.speedCtrl.Realize(Car.TargetSpeed - Car.EncoderL.speed);
+        Car.MotorL.speedCtrl.Realize(Car.TargetSpeed - Car.EncoderL.GetSpeed());
     auto dutyR =
-        Car.MotorR.speedCtrl.Realize(Car.TargetSpeed - Car.EncoderR.speed);
+        Car.MotorR.speedCtrl.Realize(Car.TargetSpeed - Car.EncoderR.GetSpeed());
     Car.MotorL.SetDuty(dutyL);
     Car.MotorR.SetDuty(dutyR);
-		Car.MotorL.duty = dutyL;
-		Car.MotorR.duty = dutyR;
+    Car.MotorL.duty = dutyL;
+    Car.MotorR.duty = dutyR;
     CRITICAL_REGION_EXIT();
 }

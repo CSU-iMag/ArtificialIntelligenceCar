@@ -243,6 +243,16 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_BEEP_SIGNAL                                         TIMER   /*!< TMR2 signal: TIMER */
 #define BOARD_INITPINS_BEEP_CHANNEL                                           3U   /*!< TMR2 TIMER channel: 3 */
 
+/* GPIO_B0_01 (coord E7), LCDIF_ENABLE */
+#define BOARD_INITPINS_DIR1_PERIPHERAL                                      TMR1   /*!< Device name: TMR1 */
+#define BOARD_INITPINS_DIR1_SIGNAL                                         TIMER   /*!< TMR1 signal: TIMER */
+#define BOARD_INITPINS_DIR1_CHANNEL                                           1U   /*!< TMR1 TIMER channel: 1 */
+
+/* GPIO_B1_08 (coord A12), ENET_TXD1 */
+#define BOARD_INITPINS_DIR2_PERIPHERAL                                      TMR1   /*!< Device name: TMR1 */
+#define BOARD_INITPINS_DIR2_SIGNAL                                         TIMER   /*!< TMR1 signal: TIMER */
+#define BOARD_INITPINS_DIR2_CHANNEL                                           3U   /*!< TMR1 TIMER channel: 3 */
+
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.

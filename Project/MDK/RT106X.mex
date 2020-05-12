@@ -26,6 +26,7 @@
             <power_domains/>
             <pin_labels>
                <pin_label pin_num="D7" pin_signal="GPIO_B0_00" label="LCDIF_CLK" identifier="LCDIF_CLK;LSB1"/>
+               <pin_label pin_num="E7" pin_signal="GPIO_B0_01" label="LCDIF_ENABLE" identifier="LCDIF_ENABLE;DIR1"/>
                <pin_label pin_num="E8" pin_signal="GPIO_B0_02" label="LCDIF_HSYNC" identifier="LCDIF_HSYNC;LSB2"/>
                <pin_label pin_num="A11" pin_signal="GPIO_B1_00" label="LCDIF_D12" identifier="LCDIF_D12;MOTOR_L"/>
                <pin_label pin_num="B11" pin_signal="GPIO_B1_01" label="LCDIF_D13" identifier="LCDIF_D13;MOTOR_R"/>
@@ -34,6 +35,7 @@
                <pin_label pin_num="E12" pin_signal="GPIO_B1_04" label="ENET_RXD0" identifier="ENET_RXD0;MOTOR_EN"/>
                <pin_label pin_num="D12" pin_signal="GPIO_B1_05" label="ENET_RXD1" identifier="ENET_RXD1;SW6;SW5;INT"/>
                <pin_label pin_num="B12" pin_signal="GPIO_B1_07" label="ENET_TXD0" identifier="ENET_TXD0;LED3"/>
+               <pin_label pin_num="A12" pin_signal="GPIO_B1_08" label="ENET_TXD1" identifier="ENET_TXD1;DIR2"/>
                <pin_label pin_num="A13" pin_signal="GPIO_B1_09" label="ENET_TXEN" identifier="ENET_TXEN;SW5;BEEP"/>
                <pin_label pin_num="C13" pin_signal="GPIO_B1_11" label="ENET_RXER" identifier="ENET_RXER;SW6"/>
                <pin_label pin_num="D13" pin_signal="GPIO_B1_12" label="SD_CD_SW" identifier="SD_CD_SW;UART5_TX"/>
@@ -381,6 +383,16 @@
                         <pin_feature name="identifier" value="BEEP"/>
                      </pin_features>
                   </pin>
+                  <pin peripheral="TMR1" signal="TIMER, 1" pin_num="E7" pin_signal="GPIO_B0_01">
+                     <pin_features>
+                        <pin_feature name="identifier" value="DIR1"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="TMR1" signal="TIMER, 3" pin_num="A12" pin_signal="GPIO_B1_08">
+                     <pin_features>
+                        <pin_feature name="identifier" value="DIR2"/>
+                     </pin_features>
+                  </pin>
                </pins>
             </function>
          </functions_list>
@@ -685,6 +697,16 @@
       </dcdx>
       <periphs name="Peripherals" version="7.0" enabled="true" update_project_code="true">
          <dependencies>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.dcp" description="在工具链/IDE 工程中未找到DCP Driver。该工程不会被编译！" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.dcp" description="该工具链/IDE 工程不支持DCP Driver版本。所需：${required_value}, 实际：${actual_value}. 工程编译可能不正确。" problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">2.1.0</data>
+               </feature>
+            </dependency>
             <dependency resourceType="SWComponent" resourceId="platform.drivers.gpt" description="在工具链/IDE 工程中未找到gpt。该工程不会被编译！" problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data type="Boolean">true</data>
@@ -705,22 +727,22 @@
                   <data type="Version">2.2.8</data>
                </feature>
             </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.tempmon" description="在工具链/IDE 工程中未找到TEMPMON Driver。该工程不会被编译！" problem_level="2" source="Peripherals">
-               <feature name="enabled" evaluation="equal">
-                  <data type="Boolean">true</data>
-               </feature>
-            </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.drivers.tempmon" description="该工具链/IDE 工程不支持TEMPMON Driver版本。所需：${required_value}, 实际：${actual_value}. 工程编译可能不正确。" problem_level="1" source="Peripherals">
-               <feature name="version" evaluation="equivalent">
-                  <data type="Version">2.0.0</data>
-               </feature>
-            </dependency>
             <dependency resourceType="SWComponent" resourceId="platform.drivers.qtmr" description="在工具链/IDE 工程中未找到QTMR Driver。该工程不会被编译！" problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data type="Boolean">true</data>
                </feature>
             </dependency>
             <dependency resourceType="SWComponent" resourceId="platform.drivers.qtmr" description="该工具链/IDE 工程不支持QTMR Driver版本。所需：${required_value}, 实际：${actual_value}. 工程编译可能不正确。" problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">2.0.0</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.tempmon" description="在工具链/IDE 工程中未找到TEMPMON Driver。该工程不会被编译！" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.tempmon" description="该工具链/IDE 工程不支持TEMPMON Driver版本。所需：${required_value}, 实际：${actual_value}. 工程编译可能不正确。" problem_level="1" source="Peripherals">
                <feature name="version" evaluation="equivalent">
                   <data type="Version">2.0.0</data>
                </feature>
@@ -741,6 +763,26 @@
                   <dependency resourceType="ClockOutput" resourceId="PERCLK_CLK_ROOT" description="PERCLK_CLK_ROOT is inactive.问题必须在其它工具中被解决。" problem_level="2" source="Peripherals:BOARD_InitPeripherals">
                      <feature name="frequency" evaluation="greaterThan">
                         <data type="Frequency" unit="Hz">0</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="TMR1.tmr_sec_in.0" description="Timer input 0 of peripheral TMR1 is not routed问题必须在其它工具中被解决。" problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="TMR1.tmr_sec_in.1" description="Timer input 1 of peripheral TMR1 is not routed问题必须在其它工具中被解决。" problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="TMR1.tmr_sec_in.2" description="Timer input 2 of peripheral TMR1 is not routed问题必须在其它工具中被解决。" problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="TMR1.tmr_sec_in.3" description="Timer input 3 of peripheral TMR1 is not routed问题必须在其它工具中被解决。" problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
                      </feature>
                   </dependency>
                   <dependency resourceType="ClockOutput" resourceId="CKIL_SYNC_CLK_ROOT" description="CKIL_SYNC_CLK_ROOT is inactive.问题必须在其它工具中被解决。" problem_level="2" source="Peripherals:BOARD_InitPeripherals">
@@ -823,6 +865,49 @@
                               <setting name="channelGroup" value="0"/>
                               <setting name="initializeChannel" value="true"/>
                               <setting name="enableInterruptOnConversionCompleted" value="false"/>
+                           </struct>
+                        </array>
+                     </config_set>
+                  </instance>
+                  <instance name="DCP" uuid="f1184a55-776d-460f-950d-5c745e1c3330" type="dcp" type_id="dcp_95a1068fdf77eaec189146622e54f5e0" mode="general" peripheral="DCP" enabled="true" comment="" custom_name_enabled="false">
+                     <config_set name="config_general">
+                        <struct name="settings_common">
+                           <setting name="setting_gatherResidualWrites" value="true"/>
+                           <setting name="setting_enableContextCaching" value="false"/>
+                           <setting name="setting_enableContextSwitching" value="true"/>
+                           <set name="setting_enableChannel">
+                              <selected>
+                                 <id>kDCP_ch0Enable</id>
+                              </selected>
+                           </set>
+                        </struct>
+                        <struct name="settings_interrupt">
+                           <set name="setting_enableChannelInterrupt">
+                              <selected/>
+                           </set>
+                           <struct name="setting_interrupt_channel0">
+                              <setting name="IRQn" value="DCP_VMI_IRQn"/>
+                              <setting name="enable_priority" value="false"/>
+                              <setting name="priority" value="0"/>
+                              <setting name="enable_custom_name" value="false"/>
+                           </struct>
+                           <struct name="setting_interrupt">
+                              <setting name="IRQn" value="DCP_IRQn"/>
+                              <setting name="enable_priority" value="false"/>
+                              <setting name="priority" value="0"/>
+                              <setting name="enable_custom_name" value="false"/>
+                           </struct>
+                        </struct>
+                     </config_set>
+                     <config_set name="config_handles">
+                        <array name="settings_handles">
+                           <struct name="0">
+                              <setting name="handlerId" value="handle_0"/>
+                              <setting name="channel" value="kDCP_Channel0"/>
+                              <setting name="keySlot" value="kDCP_KeySlot0"/>
+                              <set name="swapConfig">
+                                 <selected/>
+                              </set>
                            </struct>
                         </array>
                      </config_set>
@@ -1314,6 +1399,63 @@
                         </struct>
                      </config_set>
                   </instance>
+                  <instance name="PulseEncoder" uuid="f80f1b3c-0217-4e04-9ca1-6b31ed5000a0" type="qtmr" type_id="qtmr_460dd7aa3f3371843c2548acd54252b0" mode="general" peripheral="TMR1" enabled="true" comment="" custom_name_enabled="true">
+                     <config_set name="fsl_qtmr">
+                        <setting name="clockSource" value="BusInterfaceClock"/>
+                        <setting name="clockSourceFreq" value="BOARD_BootClockRUN"/>
+                        <array name="qtmr_channels">
+                           <struct name="0">
+                              <setting name="channel_prefix_id" value="Channel_0"/>
+                              <setting name="channel" value="kQTMR_Channel_0"/>
+                              <setting name="primarySource" value="kQTMR_ClockCounter0InputPin"/>
+                              <setting name="primarySourceFreq" value="1"/>
+                              <setting name="secondarySource" value="kQTMR_Counter1InputPin"/>
+                              <setting name="countingMode" value="kQTMR_PriSrcRiseEdgeSecDir"/>
+                              <setting name="enableMasterMode" value="false"/>
+                              <setting name="enableExternalForce" value="false"/>
+                              <setting name="faultFilterCount" value="3"/>
+                              <setting name="faultFilterPeriod" value="0"/>
+                              <setting name="debugMode" value="kQTMR_RunNormalInDebug"/>
+                              <setting name="timerModeInit" value="inputCapture"/>
+                              <struct name="inputCaptureMode">
+                                 <setting name="inputPolarity" value="false"/>
+                                 <setting name="reloadOnCapture" value="false"/>
+                                 <setting name="captureMode" value="kQTMR_NoCapture"/>
+                              </struct>
+                              <setting name="dmaIntMode" value="polling"/>
+                           </struct>
+                           <struct name="1">
+                              <setting name="channel_prefix_id" value="Channel_2"/>
+                              <setting name="channel" value="kQTMR_Channel_2"/>
+                              <setting name="primarySource" value="kQTMR_ClockCounter2InputPin"/>
+                              <setting name="primarySourceFreq" value="10"/>
+                              <setting name="secondarySource" value="kQTMR_Counter3InputPin"/>
+                              <setting name="countingMode" value="kQTMR_PriSrcRiseEdgeSecDir"/>
+                              <setting name="enableMasterMode" value="false"/>
+                              <setting name="enableExternalForce" value="false"/>
+                              <setting name="faultFilterCount" value="3"/>
+                              <setting name="faultFilterPeriod" value="0"/>
+                              <setting name="debugMode" value="kQTMR_RunNormalInDebug"/>
+                              <setting name="timerModeInit" value="inputCapture"/>
+                              <struct name="inputCaptureMode">
+                                 <setting name="inputPolarity" value="false"/>
+                                 <setting name="reloadOnCapture" value="false"/>
+                                 <setting name="captureMode" value="kQTMR_NoCapture"/>
+                              </struct>
+                              <setting name="dmaIntMode" value="polling"/>
+                           </struct>
+                        </array>
+                        <struct name="interruptVector">
+                           <setting name="enable_irq" value="false"/>
+                           <struct name="interrupt">
+                              <setting name="IRQn" value="TMR1_IRQn"/>
+                              <setting name="enable_priority" value="false"/>
+                              <setting name="priority" value="0"/>
+                              <setting name="enable_custom_name" value="false"/>
+                           </struct>
+                        </struct>
+                     </config_set>
+                  </instance>
                   <instance name="RTWDOG" uuid="71f9b5b4-51b7-4a82-9c1e-db473882f56d" type="rtwdog" type_id="rtwdog_04d8f6604a79500facf56c1a1d0a7215" mode="general" peripheral="RTWDOG" enabled="false" comment="" custom_name_enabled="false">
                      <config_set name="fsl_rtwdog">
                         <struct name="rtwdogConfig">
@@ -1378,40 +1520,6 @@
                         </struct>
                      </config_set>
                   </instance>
-                  <instance name="TMR1" uuid="f80f1b3c-0217-4e04-9ca1-6b31ed5000a0" type="qtmr" type_id="qtmr_460dd7aa3f3371843c2548acd54252b0" mode="general" peripheral="TMR1" enabled="false" comment="" custom_name_enabled="false">
-                     <config_set name="fsl_qtmr">
-                        <setting name="clockSource" value="BusInterfaceClock"/>
-                        <setting name="clockSourceFreq" value="BOARD_BootClockRUN"/>
-                        <array name="qtmr_channels">
-                           <struct name="0">
-                              <setting name="channel_prefix_id" value="Channel_0"/>
-                              <setting name="channel" value="kQTMR_Channel_0"/>
-                              <setting name="primarySource" value="kQTMR_ClockDivide_2"/>
-                              <setting name="secondarySource" value="kQTMR_Counter0InputPin"/>
-                              <setting name="countingMode" value="kQTMR_PriSrcRiseEdge"/>
-                              <setting name="enableMasterMode" value="false"/>
-                              <setting name="enableExternalForce" value="false"/>
-                              <setting name="faultFilterCount" value="3"/>
-                              <setting name="faultFilterPeriod" value="0"/>
-                              <setting name="debugMode" value="kQTMR_RunNormalInDebug"/>
-                              <setting name="timerModeInit" value="timer"/>
-                              <struct name="timerMode">
-                                 <setting name="freq_value_str" value="10"/>
-                              </struct>
-                              <setting name="dmaIntMode" value="polling"/>
-                           </struct>
-                        </array>
-                        <struct name="interruptVector">
-                           <setting name="enable_irq" value="false"/>
-                           <struct name="interrupt">
-                              <setting name="IRQn" value="TMR1_IRQn"/>
-                              <setting name="enable_priority" value="false"/>
-                              <setting name="priority" value="0"/>
-                              <setting name="enable_custom_name" value="false"/>
-                           </struct>
-                        </struct>
-                     </config_set>
-                  </instance>
                   <instance name="TMR2" uuid="536b7e79-0633-4e61-bcc7-7f54f87da5b6" type="qtmr" type_id="qtmr_460dd7aa3f3371843c2548acd54252b0" mode="general" peripheral="TMR2" enabled="true" comment="" custom_name_enabled="false">
                      <config_set name="fsl_qtmr">
                         <setting name="clockSource" value="BusInterfaceClock"/>
@@ -1453,7 +1561,7 @@
                         <struct name="lpuartConfig">
                            <setting name="clockSource" value="LpuartClock"/>
                            <setting name="lpuartSrcClkFreq" value="BOARD_BootClockRUN"/>
-                           <setting name="baudRate_Bps" value="115200"/>
+                           <setting name="baudRate_Bps" value="460800"/>
                            <setting name="parityMode" value="kLPUART_ParityDisabled"/>
                            <setting name="dataBitsCount" value="kLPUART_EightDataBits"/>
                            <setting name="isMsb" value="false"/>
@@ -1465,7 +1573,7 @@
                            <setting name="txCtsSource" value="kLPUART_CtsSourceMatchResult"/>
                            <setting name="txCtsConfig" value="kLPUART_CtsSampleAtStart"/>
                            <setting name="rxIdleType" value="kLPUART_IdleTypeStopBit"/>
-                           <setting name="rxIdleConfig" value="kLPUART_IdleCharacter8"/>
+                           <setting name="rxIdleConfig" value="kLPUART_IdleCharacter2"/>
                            <setting name="enableTx" value="true"/>
                            <setting name="enableRx" value="true"/>
                         </struct>
@@ -1478,7 +1586,7 @@
                            </struct>
                            <setting name="init_tx_transfer" value="true"/>
                            <struct name="tx_transfer">
-                              <setting name="data_size" value="4"/>
+                              <setting name="data_size" value="20"/>
                            </struct>
                            <setting name="init_callback" value="true"/>
                            <setting name="callback_fcn" value="com_callback"/>
@@ -1493,7 +1601,7 @@
             <component name="system" uuid="6b50af15-7910-4541-b2e1-3545329567a4" type_id="system_54b53072540eeeb8f8e9343e71f28176">
                <config_set_global name="global_system_definitions"/>
             </component>
-            <component name="msg" uuid="64df27a9-dfbb-46c8-ae20-710900d4cfe1" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
+            <component name="msg" uuid="37fa67ba-44ab-42dc-9bed-b0eeec048388" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
                <config_set_global name="global_messages"/>
             </component>
          </components>

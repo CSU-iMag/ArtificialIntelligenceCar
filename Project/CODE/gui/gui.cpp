@@ -1,7 +1,9 @@
 #include "gui.hpp"
 #include "SEEKFREE_MPU6050.h"
 #include "car.hpp"
+#include "communication.hpp"
 #include "fsl_gpt.h"
+#include "music.hpp"
 #include "storage.hpp"
 #include "timer.hpp"
 #include "usage.hpp"
@@ -16,6 +18,9 @@ SECTION_SDRAM MagadcDat gui_magadcDat;
 SECTION_SDRAM HC06AT gui_hc06;
 SECTION_SDRAM SteeringConfig gui_steering;
 SECTION_SDRAM ControlPanel gui_control;
+SECTION_SDRAM ComEnable gui_communication;
+SECTION_SDRAM MotorConfig gui_motor;
+SECTION_SDRAM ModelSelect gui_model;
 
 BackGround::BackGround() : BasicLayout(&tree) {
     tree.Children.push_back((LayoutBase *)&gui_home);
@@ -36,13 +41,7 @@ void BackGround::Show() {
                        &screen_innerPos, SGUI_DRAW_NORMAL);
     SGUI_ProcessBar_Repaint(&CarOLED, &battery);
 
-    // float temp = TEMPMON_GetCurrentTemperature(TEMPMON);
     pos.iX = 30;
-    pos.iY = 10;
-    // SGUI_Text_DrawText(&CarOLED, std::to_string(temp).c_str(),
-    //                    &SGUI_DEFAULT_FONT_16, &pos, &screen_innerPos,
-    //                    SGUI_DRAW_NORMAL);
-
     pos.iY = 36;
     SGUI_Text_DrawText(&CarOLED, std::to_string(cpu_usage_get()).c_str(),
                        &SGUI_DEFAULT_FONT_16, &pos, &screen_innerPos,
@@ -63,13 +62,18 @@ void BackGround::KeyDownPush() { Car.Pause(); }
 
 HomePage::HomePage()
     : ListLayout(&tree, its, " 主菜单",
-                 {"调试信息", "控制面板", "方向控制", "数字电位器", "ADC raw",
-                  " 姿态", "HC06"}) {
-    tree.Children = {
-        (LayoutBase *)&gui_debug,     (LayoutBase *)&gui_control,
-        (LayoutBase *)&gui_steering,  (LayoutBase *)&gui_resistance,
-        (LayoutBase *)&gui_magadcDat, (LayoutBase *)&gui_attitude,
-        (LayoutBase *)&gui_hc06}; //!< 注意顺序要与上面字符串相对应
+                 {"调试信息", "控制面板", "后轮电机", "方向控制", "通信使能",
+                  "模型选择", "数字电位器", "ADC raw", " 姿态", "HC06"}) {
+    tree.Children = {(LayoutBase *)&gui_debug,
+                     (LayoutBase *)&gui_control,
+                     (LayoutBase *)&gui_motor,
+                     (LayoutBase *)&gui_steering,
+                     (LayoutBase *)&gui_communication,
+                     (LayoutBase *)&gui_model,
+                     (LayoutBase *)&gui_resistance,
+                     (LayoutBase *)&gui_magadcDat,
+                     (LayoutBase *)&gui_attitude,
+                     (LayoutBase *)&gui_hc06}; //!< 注意顺序要与上面字符串相对应
 }
 
 //! @brief 打开子菜单
@@ -115,8 +119,8 @@ void Resistance::KeyEnterPush() {
 ///////////////////////////////////////////////////////////////////////////////
 
 void MagadcDat::UpdateValue() {
-    if (this != ActiveLayout)
-        return;
+   if (this != ActiveLayout)
+       return;
     for (int i(0); i < ADC_CNT; ++i)
         if (FigureMode) {
             Items[i + 1].UpdateValue(std::to_string(Car.MagList[i]->GetRaw()));
@@ -148,7 +152,7 @@ void MagadcDat::KeyEnterPush() {
                 Car.MagList[i]->MaxRawData = 0;
         }
         Items[0].UpdateValue(SaveMaxEnabled ? " ing..." : " ");
-        Car.beep0.BeepFreqDelay(beep_musicFreq[SaveMaxEnabled ? 0 : 6], 555);
+        Car.beep0.BeepFreqDelay(5555, SaveMaxEnabled ? 999 : 333);
     }
 }
 
@@ -313,8 +317,8 @@ ControlPanel::ControlPanel()
 void ControlPanel::KeyEnterPush() {
     switch (ListObject.stItems.iSelection) {
     case 0:
-        Car.beep0.BeepFreq(beep_musicFreq[3]);
-        Car.LaunchTimer.Start(500);
+        Car.beep0.BeepFreq(MUSIC_RE);
+        Car.LaunchTimer.Start(1200);
         ActiveLayout = &gui_background;
         break;
 
@@ -334,7 +338,6 @@ void ControlPanel::KeyEnterPush() {
         break;
 
     default:
-        CAR_ERROR_CHECK(ListObject.stItems.iSelection < item_cnt);
         break;
     }
 }
@@ -346,6 +349,89 @@ void ControlPanel::UpdateValue(uint8_t row, std::string val) {
         Items[row].UpdateValue(val);
     }
     Repaint();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void ComEnable::KeyEnterPush() {
+    static bool enabled[item_cnt];
+    const int &row(ListObject.stItems.iSelection);
+
+    CAR_ERROR_CHECK(item_cnt > row);
+    enabled[row] = !enabled[row];
+    Items[row].UpdateValue(enabled[row] ? "发送中…" : "已关闭");
+
+    if (enabled[0]) {
+        Send_AI_PackData_tim.Start(STEER_PERIOD);
+    } else {
+        Send_AI_PackData_tim.Stop();
+    }
+
+    if (enabled[1]) {
+        VisualScopeTmr.Start(6);
+    } else {
+        VisualScopeTmr.Stop();
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+SoftTimer MotorConfig::upd_tmr(MotorConfig::UpdateValue);
+
+void MotorConfig::UpdateValue(sched_event_data_t dat) {
+    if (ActiveLayout != &gui_motor)
+        return;
+    gui_motor.Items[0].UpdateValue(std::to_string(Car.TargetSpeed));
+    gui_motor.Items[1].UpdateValue(std::to_string(Car.EncoderL.GetSpeed()));
+    gui_motor.Items[2].UpdateValue(std::to_string(Car.EncoderR.GetSpeed()));
+    gui_motor.Items[3].UpdateValue(std::to_string(Car.EncoderL.GetDistance()));
+    gui_motor.Items[4].UpdateValue(std::to_string(Car.EncoderR.GetDistance()));
+    gui_motor.Repaint();
+}
+
+void MotorConfig::KeyEnterPush() {
+    if (ListObject.stItems.iSelection == 5) {
+        Car.EncoderL.ClearDistance();
+        Car.EncoderR.ClearDistance();
+    }
+}
+
+void MotorConfig::KeyRightPush() {
+    if (ListObject.stItems.iSelection == 0)
+        Car.TargetSpeed -= 10;
+}
+
+void MotorConfig::KeyLeftPush() {
+    if (ListObject.stItems.iSelection == 0)
+        Car.TargetSpeed += 10;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+ModelSelect::ModelSelect() : MenuLayout(&tree, item_cnt, its) {
+    its[0].cszLabelText = "model 0";
+    its[1].cszLabelText = "model 1";
+    its[2].cszLabelText = "model 2";
+}
+
+void ModelSelect::KeyEnterPush() {
+    switch (MenuObject.stItems.iSelection) {
+    case 0:
+        Car.Model = model1;
+        break;
+
+    case 1:
+        Car.Model = model2;
+        break;
+
+    case 2:
+        Car.Model = model3;
+        break;
+
+    default:
+        break;
+    }
+    deep_init();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -43,6 +43,65 @@ component:
  * BOARD_InitPeripherals functional group
  **********************************************************************************************************************/
 /***********************************************************************************************************************
+ * DCP initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'DCP'
+- type: 'dcp'
+- mode: 'general'
+- custom_name_enabled: 'false'
+- type_id: 'dcp_95a1068fdf77eaec189146622e54f5e0'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'DCP'
+- config_sets:
+  - config_general:
+    - settings_common:
+      - setting_gatherResidualWrites: 'true'
+      - setting_enableContextCaching: 'false'
+      - setting_enableContextSwitching: 'true'
+      - setting_enableChannel: 'kDCP_ch0Enable'
+    - settings_interrupt:
+      - setting_enableChannelInterrupt: ''
+      - setting_interrupt_channel0:
+        - IRQn: 'DCP_VMI_IRQn'
+        - enable_priority: 'false'
+        - priority: '0'
+        - enable_custom_name: 'false'
+      - setting_interrupt:
+        - IRQn: 'DCP_IRQn'
+        - enable_priority: 'false'
+        - priority: '0'
+        - enable_custom_name: 'false'
+  - config_handles:
+    - settings_handles:
+      - 0:
+        - handlerId: 'handle_0'
+        - channel: 'kDCP_Channel0'
+        - keySlot: 'kDCP_KeySlot0'
+        - swapConfig: ''
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+const dcp_config_t DCP_config = {
+  .gatherResidualWrites = true,
+  .enableContextCaching = false,
+  .enableContextSwitching = true,
+  .enableChannel = kDCP_ch0Enable,
+  .enableChannelInterrupt = kDCP_chIntDisable,
+};
+const dcp_handle_t DCP_handle_0 = {
+  .channel = kDCP_Channel0,
+  .keySlot = kDCP_KeySlot0,
+  .swapConfig = kDCP_NoSwap,
+};
+
+void DCP_init(void) {
+  /* Initialize DCP. */
+  DCP_Init(DCP_PERIPHERAL, &DCP_config);
+}
+
+/***********************************************************************************************************************
  * GPT2 initialization code
  **********************************************************************************************************************/
 /* clang-format off */
@@ -109,6 +168,103 @@ void GPT2_init(void) {
   EnableIRQ(GPT2_GPT_IRQN);
   /* Start the GPT timer */ 
   GPT_StartTimer(GPT2_PERIPHERAL);
+}
+
+/***********************************************************************************************************************
+ * PulseEncoder initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'PulseEncoder'
+- type: 'qtmr'
+- mode: 'general'
+- custom_name_enabled: 'true'
+- type_id: 'qtmr_460dd7aa3f3371843c2548acd54252b0'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'TMR1'
+- config_sets:
+  - fsl_qtmr:
+    - clockSource: 'BusInterfaceClock'
+    - clockSourceFreq: 'BOARD_BootClockRUN'
+    - qtmr_channels:
+      - 0:
+        - channel_prefix_id: 'Channel_0'
+        - channel: 'kQTMR_Channel_0'
+        - primarySource: 'kQTMR_ClockCounter0InputPin'
+        - primarySourceFreq: '1'
+        - secondarySource: 'kQTMR_Counter1InputPin'
+        - countingMode: 'kQTMR_PriSrcRiseEdgeSecDir'
+        - enableMasterMode: 'false'
+        - enableExternalForce: 'false'
+        - faultFilterCount: '3'
+        - faultFilterPeriod: '0'
+        - debugMode: 'kQTMR_RunNormalInDebug'
+        - timerModeInit: 'inputCapture'
+        - inputCaptureMode:
+          - inputPolarity: 'false'
+          - reloadOnCapture: 'false'
+          - captureMode: 'kQTMR_NoCapture'
+        - dmaIntMode: 'polling'
+      - 1:
+        - channel_prefix_id: 'Channel_2'
+        - channel: 'kQTMR_Channel_2'
+        - primarySource: 'kQTMR_ClockCounter2InputPin'
+        - primarySourceFreq: '10'
+        - secondarySource: 'kQTMR_Counter3InputPin'
+        - countingMode: 'kQTMR_PriSrcRiseEdgeSecDir'
+        - enableMasterMode: 'false'
+        - enableExternalForce: 'false'
+        - faultFilterCount: '3'
+        - faultFilterPeriod: '0'
+        - debugMode: 'kQTMR_RunNormalInDebug'
+        - timerModeInit: 'inputCapture'
+        - inputCaptureMode:
+          - inputPolarity: 'false'
+          - reloadOnCapture: 'false'
+          - captureMode: 'kQTMR_NoCapture'
+        - dmaIntMode: 'polling'
+    - interruptVector:
+      - enable_irq: 'false'
+      - interrupt:
+        - IRQn: 'TMR1_IRQn'
+        - enable_priority: 'false'
+        - priority: '0'
+        - enable_custom_name: 'false'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+const qtmr_config_t PulseEncoder_Channel_0_config = {
+  .primarySource = kQTMR_ClockCounter0InputPin,
+  .secondarySource = kQTMR_Counter1InputPin,
+  .enableMasterMode = false,
+  .enableExternalForce = false,
+  .faultFilterCount = 0,
+  .faultFilterPeriod = 0,
+  .debugMode = kQTMR_RunNormalInDebug
+};
+const qtmr_config_t PulseEncoder_Channel_2_config = {
+  .primarySource = kQTMR_ClockCounter2InputPin,
+  .secondarySource = kQTMR_Counter3InputPin,
+  .enableMasterMode = false,
+  .enableExternalForce = false,
+  .faultFilterCount = 0,
+  .faultFilterPeriod = 0,
+  .debugMode = kQTMR_RunNormalInDebug
+};
+
+void PulseEncoder_init(void) {
+  /* Quad timer channel Channel_0 peripheral initialization */
+  QTMR_Init(PULSEENCODER_PERIPHERAL, PULSEENCODER_CHANNEL_0_CHANNEL, &PulseEncoder_Channel_0_config);
+  /* Setup the Input capture mode of the timer channel */
+  QTMR_SetupInputCapture(PULSEENCODER_PERIPHERAL, PULSEENCODER_CHANNEL_0_CHANNEL, kQTMR_Counter1InputPin, false, false, kQTMR_NoCapture);
+  /* Quad timer channel Channel_2 peripheral initialization */
+  QTMR_Init(PULSEENCODER_PERIPHERAL, PULSEENCODER_CHANNEL_2_CHANNEL, &PulseEncoder_Channel_2_config);
+  /* Setup the Input capture mode of the timer channel */
+  QTMR_SetupInputCapture(PULSEENCODER_PERIPHERAL, PULSEENCODER_CHANNEL_2_CHANNEL, kQTMR_Counter3InputPin, false, false, kQTMR_NoCapture);
+  /* Start the timer - select the timer counting mode */
+  QTMR_StartTimer(PULSEENCODER_PERIPHERAL, PULSEENCODER_CHANNEL_0_CHANNEL, kQTMR_PriSrcRiseEdgeSecDir);
+  /* Start the timer - select the timer counting mode */
+  QTMR_StartTimer(PULSEENCODER_PERIPHERAL, PULSEENCODER_CHANNEL_2_CHANNEL, kQTMR_PriSrcRiseEdgeSecDir);
 }
 
 /***********************************************************************************************************************
@@ -246,7 +402,7 @@ instance:
     - lpuartConfig:
       - clockSource: 'LpuartClock'
       - lpuartSrcClkFreq: 'BOARD_BootClockRUN'
-      - baudRate_Bps: '115200'
+      - baudRate_Bps: '460800'
       - parityMode: 'kLPUART_ParityDisabled'
       - dataBitsCount: 'kLPUART_EightDataBits'
       - isMsb: 'false'
@@ -258,7 +414,7 @@ instance:
       - txCtsSource: 'kLPUART_CtsSourceMatchResult'
       - txCtsConfig: 'kLPUART_CtsSampleAtStart'
       - rxIdleType: 'kLPUART_IdleTypeStopBit'
-      - rxIdleConfig: 'kLPUART_IdleCharacter8'
+      - rxIdleConfig: 'kLPUART_IdleCharacter2'
       - enableTx: 'true'
       - enableRx: 'true'
   - transferCfg:
@@ -268,7 +424,7 @@ instance:
         - data_size: '20'
       - init_tx_transfer: 'true'
       - tx_transfer:
-        - data_size: '4'
+        - data_size: '20'
       - init_callback: 'true'
       - callback_fcn: 'com_callback'
       - user_data: ''
@@ -287,7 +443,7 @@ const lpuart_config_t communicate_config = {
   .txCtsSource = kLPUART_CtsSourceMatchResult,
   .txCtsConfig = kLPUART_CtsSampleAtStart,
   .rxIdleType = kLPUART_IdleTypeStopBit,
-  .rxIdleConfig = kLPUART_IdleCharacter8,
+  .rxIdleConfig = kLPUART_IdleCharacter2,
   .enableTx = true,
   .enableRx = true
 };
@@ -314,7 +470,9 @@ void communicate_init(void) {
 void BOARD_InitPeripherals(void)
 {
   /* Initialize components */
+  DCP_init();
   GPT2_init();
+  PulseEncoder_init();
   TEMPMON_init();
   TMR2_init();
   communicate_init();
