@@ -1,5 +1,6 @@
 #include "key.hpp"
 #include "car.hpp"
+#include "communication.hpp"
 #include "layout.hpp"
 #include "timer.hpp"
 
@@ -102,7 +103,7 @@ void Button::evt_handle() {
 //////////////////////////////////////////////////////////////////////
 
 static void btnUpHandler(key_action sta) {
-    DEBUG_LOG("up %d\n", sta);
+    com_log("up " + std::to_string((int)sta) + "\n", LogBlack);
     if (sta == key_action::key_down)
         ActiveLayout->OnKeyEvent(LayoutBase::KeyEvts::Up);
     if (sta == key_action::key_longPush) {
@@ -113,7 +114,7 @@ static void btnUpHandler(key_action sta) {
 }
 
 static void btnDownHandler(key_action sta) {
-    DEBUG_LOG("down %d\n", sta);
+    com_log("down " + std::to_string((int)sta) + "\n", LogBlack);
     if (sta == key_action::key_down)
         ActiveLayout->OnKeyEvent(LayoutBase::KeyEvts::Down);
     if (sta == key_action::key_longPush) {
@@ -124,19 +125,19 @@ static void btnDownHandler(key_action sta) {
 }
 
 static void btnLeftHandler(key_action sta) {
-    DEBUG_LOG("left %d\n", sta);
+    com_log("left " + std::to_string((int)sta) + "\n", LogBlack);
     if (sta == key_action::key_down)
         ActiveLayout->OnKeyEvent(LayoutBase::KeyEvts::Left);
 }
 
 static void btnRightHandler(key_action sta) {
-    DEBUG_LOG("right %d\n", sta);
+    com_log("right " + std::to_string((int)sta) + "\n", LogBlack);
     if (sta == key_action::key_down)
         ActiveLayout->OnKeyEvent(LayoutBase::KeyEvts::Right);
 }
 
 static void btnEnterHandler(key_action sta) {
-    DEBUG_LOG("enter %d\n", sta);
+    com_log("enter " + std::to_string((int)sta) + "\n", LogBlack);
     if (sta == key_action::key_down)
         ActiveLayout->OnKeyEvent(LayoutBase::KeyEvts::Enter);
     if (sta == key_action::key_longPush) {
@@ -146,7 +147,7 @@ static void btnEnterHandler(key_action sta) {
 }
 
 static void btnEscapeHandler(key_action sta) {
-    DEBUG_LOG("esc %d\n", sta);
+    com_log("esc " + std::to_string((int)sta) + "\n", LogBlack);
     if (sta == key_action::key_down)
         ActiveLayout->GoBack();
 }

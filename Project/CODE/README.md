@@ -20,6 +20,7 @@
 *注意：* **Car** 全局只有一个！！！
 
 原则上全局变量都放Car里。
+https://github.com/dachunfree/kernel/blob/master/kernel_xilinx_v4.4/drivers/hwmon/ads8028.c
 # 资源分配
 **GPT1** 给逐飞systick用。 
  **GPT2** 给软件定时器用。

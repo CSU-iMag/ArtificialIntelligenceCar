@@ -25,7 +25,7 @@ __INLINE void Encoder::CalSpeed() {
     //读取编码器计数值
     speed = PULSE_TO_CM_S(static_cast<int16_t>(TMR_CNTR));
     TMR_CNTR = 0;
-    speed = filter_moving.Moving(speed);
+//    speed = filter_moving.Moving(speed);
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -43,56 +43,16 @@ void pulse_encoder_schedule() {
     CRITICAL_REGION_ENTER();
     Car.EncoderL.CalSpeed();
     Car.EncoderR.CalSpeed();
+	
+//    filter_fir_speedL.filter_fir();
+//    filter_fir_speedR.filter_fir();
     CRITICAL_REGION_EXIT();
 
     Car.EncoderL.speed = -Car.EncoderL.speed;
-
     Car.EncoderL.CalDistance();
     Car.EncoderR.CalDistance();
     if (IS_STEADY)
         Car.Machine.Steady();
     if (IS_STOPPED)
         Car.Machine.Stopped();
-}
-
-void tmr_init() {
-    IOMUXC_SetPinMux(
-        IOMUXC_GPIO_B0_00_QTIMER1_TIMER0, /* GPIO_B0_00 is configured as
-                                             QTIMER1_TIMER0 */
-        0U); /* Software Input On Field: Input Path is determined by
-                functionality */
-    IOMUXC_SetPinMux(
-        IOMUXC_GPIO_B0_01_QTIMER1_TIMER1, /* GPIO_B0_01 is configured as
-                                             QTIMER1_TIMER1 */
-        0U); /* Software Input On Field: Input Path is determined by
-                functionality */
-    IOMUXC_SetPinMux(
-        IOMUXC_GPIO_B0_02_QTIMER1_TIMER2, /* GPIO_B0_02 is configured as
-                                             QTIMER1_TIMER2 */
-        0U); /* Software Input On Field: Input Path is determined by
-                functionality */
-    IOMUXC_SetPinMux(
-        IOMUXC_GPIO_B1_08_QTIMER1_TIMER3, /* GPIO_B1_08 is configured as
-                                             QTIMER1_TIMER3 */
-        0U);
-    IOMUXC_GPR->GPR6 =
-        ((IOMUXC_GPR->GPR6 &
-          (~(IOMUXC_GPR_GPR6_QTIMER1_TRM0_INPUT_SEL_MASK |
-             IOMUXC_GPR_GPR6_QTIMER1_TRM1_INPUT_SEL_MASK |
-             IOMUXC_GPR_GPR6_QTIMER1_TRM2_INPUT_SEL_MASK |
-             IOMUXC_GPR_GPR6_QTIMER1_TRM3_INPUT_SEL_MASK |
-             IOMUXC_GPR_GPR6_QTIMER2_TRM3_INPUT_SEL_MASK))) /* Mask bits to zero
-                                                               which are setting
-                                                             */
-         | IOMUXC_GPR_GPR6_QTIMER1_TRM0_INPUT_SEL(
-               0x00U) /* QTIMER1 TMR0 input select: input from IOMUX */
-         | IOMUXC_GPR_GPR6_QTIMER1_TRM1_INPUT_SEL(
-               0x00U) /* QTIMER1 TMR1 input select: input from IOMUX */
-         | IOMUXC_GPR_GPR6_QTIMER1_TRM2_INPUT_SEL(
-               0x00U) /* QTIMER1 TMR2 input select: input from IOMUX */
-         | IOMUXC_GPR_GPR6_QTIMER1_TRM3_INPUT_SEL(
-               0x00U) /* QTIMER1 TMR3 input select: input from IOMUX */
-         | IOMUXC_GPR_GPR6_QTIMER2_TRM3_INPUT_SEL(
-               0x00U) /* QTIMER2 TMR3 input select: input from IOMUX */
-        );
 }

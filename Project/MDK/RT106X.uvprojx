@@ -1169,9 +1169,9 @@
               <FilePath>..\CODE\car\machine.cpp</FilePath>
             </File>
             <File>
-              <FileName>pack.cpp</FileName>
+              <FileName>package.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\CODE\utility\pack.cpp</FilePath>
+              <FilePath>..\CODE\utility\package.cpp</FilePath>
             </File>
             <File>
               <FileName>gb2312.c</FileName>
@@ -1235,11 +1235,6 @@
               <FilePath>..\CODE\ai\deep.cpp</FilePath>
             </File>
             <File>
-              <FileName>tv.nctv.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\CODE\ai\tv.nctv.c</FilePath>
-            </File>
-            <File>
               <FileName>model1.nncu.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\CODE\ai\model1.nncu.c</FilePath>
@@ -1258,6 +1253,11 @@
               <FileName>model3.nncu.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\CODE\ai\model3.nncu.c</FilePath>
+            </File>
+            <File>
+              <FileName>filter.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\CODE\utility\filter.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1388,11 +1388,6 @@
               <FileName>bluetooth.hpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\CODE\bsp\bluetooth.hpp</FilePath>
-            </File>
-            <File>
-              <FileName>pack.hpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\CODE\utility\pack.hpp</FilePath>
             </File>
           </Files>
         </Group>

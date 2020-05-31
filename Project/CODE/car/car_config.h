@@ -9,7 +9,7 @@
 //  <i> 关闭后打印调试信息
 #define BLUETOOTH_ENABLED 0
 
-// <o> HC-06 Boundrate
+// <o> HC-06 波特率
 // <i> Default 115200bps
 // <921600=> 921600
 // <460800=> 460800
@@ -76,7 +76,7 @@
 #define MagR_ROW3 7
 
 // <o> 出轨判定阈值 <0-300>
-#define MAG_DERAIL_THRESHOLD 26
+#define MAG_DERAIL_THRESHOLD 52
 
 // </h> ///////////////////////////////
 
@@ -107,19 +107,18 @@
 // </c>
 // <i> 失控自动停车
 
-// <o>Motor Freq<13000-17000>
-//  <i> 电机PWM频率(Hz)
-#define MOTOR_FREQ 14561
+// <o>电机PWM频率(Hz)<13000-17000>
+#define MOTOR_FREQ 52123
 
-// <o>Motor Max<0-100>
+// <o>最大占空比<0-100>
 //  <i>Default: 72
 #define MOTOR_MAX 70
 
-// <o>Motor Min<0-100>
+// <o>最小占空比<0-100>
 //  <i>Default: 26
 #define MOTOR_MIN 5
 
-// <o>Target Speed<0-200>
+// <o>目标速度<0-200>
 //  <i>cm/s
 #define TARGET_SPEED 85
 
@@ -129,7 +128,7 @@
 
 // <o>Sample period<1-9999>
 //  <i>(ms)
-#define CPU_USAGE_PERIOD 100
+#define CPU_USAGE_PERIOD 60
 
 // </h> //////////////////////////////
 

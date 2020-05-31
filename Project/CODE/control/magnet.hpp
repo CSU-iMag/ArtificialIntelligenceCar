@@ -18,12 +18,13 @@ class MagSensor {
     friend void storage_load(uint32 sector, uint32 page);
  
   protected:
-    filter_movAve_t filter_RawData;
+//    filter_movAve_t filter_RawData;
+	  filter_fir_t filter_fir_mag;
     ADCCH_enum Channel;
     float fValue;
 
   public:
-    uint16_t RawData, MaxRawData;
+    float RawData, MaxRawData;
     MagSensor(const ADCCH_enum &adc);
     virtual ~MagSensor() = default;
     void Init();

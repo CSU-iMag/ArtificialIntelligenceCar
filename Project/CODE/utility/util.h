@@ -33,6 +33,7 @@
     PRINTF(__VA_ARGS__)
 
 #define SECTION_SDRAM __attribute__((section(".bss.SDRAM_CACHE")))
+#define SECTION_NONCACHE __attribute__((section("NonCacheable.init")))
 
 /**
  * @brief Size of a field in declared structure

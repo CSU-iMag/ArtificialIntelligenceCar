@@ -1,7 +1,6 @@
 #include "Bluetooth.hpp"
 #include "car.hpp"
 #include "zf_uart.h"
-#include "pack.hpp"
 
 static const Baud_t BAUD[12] = {{'1', 1200},   {'2', 2400},   {'3', 4800},
                                 {'4', 9600},   {'5', 19200},  {'6', 38400},

@@ -1,15 +1,25 @@
 #ifndef COMMUNICATION_H
 #define COMMUNICATION_H
 
-#include "timer.hpp"
+#include "fsl_common.h"
+#include <string>
 
-extern SoftTimer Send_Direction_PackData_tim;
-extern SoftTimer Send_Speed_PackData_tim;
-extern SoftTimer Send_AI_PackData_tim;
-extern SoftTimer VisualScopeTmr;
+enum log_color_enum { LogBlack, LogRed, LogGreen, LogBlue, LogOrange, LogLime };
 
 void com_init();
-void com_startSend();
-void com_stopSend();
+void com_push(uint8_t packID, const uint8_t *payload, uint8_t length);
+
+/**
+ * @brief 向上位机发送彩色日志
+ * @param str [in]
+ * @param color [in] @ref log_color_enum
+ * @code
+ *  com_log("Hello, World!\n", LogLime);
+ * @endcode
+ */
+__STATIC_INLINE void com_log(std::string str, log_color_enum color = LogBlack) {
+    str.insert(str.cbegin(), (char)color);
+    com_push(0x8f, (const uint8_t *)&str[0], str.size());
+}
 
 #endif

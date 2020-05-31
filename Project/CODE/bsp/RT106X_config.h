@@ -42,7 +42,7 @@
 //printf串口打印函数所使用的串口、串口波特率、串口引脚宏定义
 //-------------------------------------------------------------------------------------------------------------------
 #define DEBUG_UART                  USART_1
-#define DEBUG_UART_BAUD             115200
+#define DEBUG_UART_BAUD             921600
 #define DEBUG_UART_TX_PIN           UART1_TX_B12
 #define DEBUG_UART_RX_PIN           UART1_RX_B13
 

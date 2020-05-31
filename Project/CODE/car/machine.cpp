@@ -118,5 +118,5 @@ void CarMachine::ST_Exception(CarData *) {
 void CarMachine::ST_Recover(CarData *) {
     DEBUG_LOG("Recover\n");
     Car.beep0.BeepFreqDelay(5555, 111);
-    InternalEvent(IS_DERAIL ? ST_IDLE : ST_LAUNCH);
+    // InternalEvent(IS_DERAIL ? ST_IDLE : ST_LAUNCH);
 }

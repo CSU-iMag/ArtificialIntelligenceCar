@@ -43,6 +43,49 @@ component:
  * BOARD_InitPeripherals functional group
  **********************************************************************************************************************/
 /***********************************************************************************************************************
+ * DMA0 initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'DMA0'
+- type: 'edma'
+- mode: 'basic'
+- custom_name_enabled: 'false'
+- type_id: 'edma_6d0dd4e17e2f179c7d42d98767129ede'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'DMA0'
+- config_sets:
+  - fsl_edma:
+    - common_settings:
+      - enableContinuousLinkMode: 'false'
+      - enableHaltOnError: 'true'
+      - enableRoundRobinArbitration: 'false'
+      - enableDebugMode: 'false'
+    - dma_table:
+      - 0: []
+      - 1: []
+    - edma_channels: []
+    - errInterruptConfig:
+      - enableErrInterrupt: 'false'
+      - errorInterrupt:
+        - IRQn: 'DMA_ERROR_IRQn'
+        - enable_priority: 'false'
+        - priority: '0'
+        - enable_custom_name: 'false'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+const edma_config_t DMA0_config = {
+  .enableContinuousLinkMode = false,
+  .enableHaltOnError = true,
+  .enableRoundRobinArbitration = false,
+  .enableDebugMode = false
+};
+
+void DMA0_init(void) {
+}
+
+/***********************************************************************************************************************
  * DCP initialization code
  **********************************************************************************************************************/
 /* clang-format off */
@@ -392,7 +435,7 @@ void TMR2_init(void) {
 instance:
 - name: 'communicate'
 - type: 'lpuart'
-- mode: 'transfer'
+- mode: 'edma'
 - custom_name_enabled: 'true'
 - type_id: 'lpuart_54a65a580e3462acdbacefd5299e0cac'
 - functional_group: 'BOARD_InitPeripherals'
@@ -403,7 +446,7 @@ instance:
       - clockSource: 'LpuartClock'
       - lpuartSrcClkFreq: 'BOARD_BootClockRUN'
       - baudRate_Bps: '460800'
-      - parityMode: 'kLPUART_ParityDisabled'
+      - parityMode: 'kLPUART_ParityEven'
       - dataBitsCount: 'kLPUART_EightDataBits'
       - isMsb: 'false'
       - stopBitCount: 'kLPUART_OneStopBit'
@@ -417,14 +460,32 @@ instance:
       - rxIdleConfig: 'kLPUART_IdleCharacter2'
       - enableTx: 'true'
       - enableRx: 'true'
-  - transferCfg:
-    - transfer:
-      - init_rx_transfer: 'true'
-      - rx_transfer:
-        - data_size: '20'
-      - init_tx_transfer: 'true'
-      - tx_transfer:
-        - data_size: '20'
+  - edmaCfg:
+    - edma_channels:
+      - enable_rx_edma_channel: 'true'
+      - edma_rx_channel:
+        - eDMAn: '5'
+        - eDMA_source: 'kDmaRequestMuxLPUART5Rx'
+        - enableTriggerPIT: 'false'
+        - init_channel_priority: 'false'
+        - edma_channel_Preemption:
+          - enableChannelPreemption: 'false'
+          - enablePreemptAbility: 'false'
+          - channelPriority: '0'
+        - enable_custom_name: 'false'
+      - enable_tx_edma_channel: 'true'
+      - edma_tx_channel:
+        - eDMAn: '6'
+        - eDMA_source: 'kDmaRequestMuxLPUART5Tx'
+        - enableTriggerPIT: 'false'
+        - init_channel_priority: 'false'
+        - edma_channel_Preemption:
+          - enableChannelPreemption: 'false'
+          - enablePreemptAbility: 'false'
+          - channelPriority: '0'
+        - enable_custom_name: 'false'
+    - lpuart_edma_handle:
+      - enable_custom_name: 'false'
       - init_callback: 'true'
       - callback_fcn: 'com_callback'
       - user_data: ''
@@ -432,7 +493,7 @@ instance:
 /* clang-format on */
 const lpuart_config_t communicate_config = {
   .baudRate_Bps = 460800,
-  .parityMode = kLPUART_ParityDisabled,
+  .parityMode = kLPUART_ParityEven,
   .dataBitsCount = kLPUART_EightDataBits,
   .isMsb = false,
   .stopBitCount = kLPUART_OneStopBit,
@@ -447,21 +508,83 @@ const lpuart_config_t communicate_config = {
   .enableTx = true,
   .enableRx = true
 };
-lpuart_handle_t communicate_handle;
-uint8_t communicate_rxBuffer[COMMUNICATE_RX_BUFFER_SIZE];
-const lpuart_transfer_t communicate_rxTransfer = {
-  .data = communicate_rxBuffer,
-  .dataSize = COMMUNICATE_RX_BUFFER_SIZE
-};
-uint8_t communicate_txBuffer[COMMUNICATE_TX_BUFFER_SIZE];
-const lpuart_transfer_t communicate_txTransfer = {
-  .data = communicate_txBuffer,
-  .dataSize = COMMUNICATE_TX_BUFFER_SIZE
-};
+edma_handle_t communicate_RX_Handle;
+edma_handle_t communicate_TX_Handle;
+lpuart_edma_handle_t communicate_LPUART_eDMA_Handle;
 
 void communicate_init(void) {
   LPUART_Init(COMMUNICATE_PERIPHERAL, &communicate_config, COMMUNICATE_CLOCK_SOURCE);
-  LPUART_TransferCreateHandle(COMMUNICATE_PERIPHERAL, &communicate_handle, com_callback, NULL);
+  /* Set the source kDmaRequestMuxLPUART5Rx request in the DMAMUX */
+  DMAMUX_SetSource(COMMUNICATE_RX_DMAMUX_BASEADDR, COMMUNICATE_RX_DMA_CHANNEL, COMMUNICATE_RX_DMA_REQUEST);
+  /* Enable the channel 5 in the DMAMUX */
+  DMAMUX_EnableChannel(COMMUNICATE_RX_DMAMUX_BASEADDR, COMMUNICATE_RX_DMA_CHANNEL);
+  /* Set the source kDmaRequestMuxLPUART5Tx request in the DMAMUX */
+  DMAMUX_SetSource(COMMUNICATE_TX_DMAMUX_BASEADDR, COMMUNICATE_TX_DMA_CHANNEL, COMMUNICATE_TX_DMA_REQUEST);
+  /* Enable the channel 6 in the DMAMUX */
+  DMAMUX_EnableChannel(COMMUNICATE_TX_DMAMUX_BASEADDR, COMMUNICATE_TX_DMA_CHANNEL);
+  /* Create the eDMA communicate_RX_Handle handle */
+  EDMA_CreateHandle(&communicate_RX_Handle, COMMUNICATE_RX_DMA_BASEADDR, COMMUNICATE_RX_DMA_CHANNEL);
+  /* Create the eDMA communicate_TX_Handle handle */
+  EDMA_CreateHandle(&communicate_TX_Handle, COMMUNICATE_TX_DMA_BASEADDR, COMMUNICATE_TX_DMA_CHANNEL);
+  /* Create the LPUART eDMA handle */
+  LPUART_TransferCreateHandleEDMA(COMMUNICATE_PERIPHERAL, &communicate_LPUART_eDMA_Handle, com_callback, NULL, &communicate_TX_Handle, &communicate_RX_Handle);
+}
+
+/***********************************************************************************************************************
+ * SConsole initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'SConsole'
+- type: 'lpuart'
+- mode: 'polling'
+- custom_name_enabled: 'true'
+- type_id: 'lpuart_54a65a580e3462acdbacefd5299e0cac'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'LPUART1'
+- config_sets:
+  - lpuartConfig_t:
+    - lpuartConfig:
+      - clockSource: 'LpuartClock'
+      - lpuartSrcClkFreq: 'BOARD_BootClockRUN'
+      - baudRate_Bps: '921600'
+      - parityMode: 'kLPUART_ParityDisabled'
+      - dataBitsCount: 'kLPUART_EightDataBits'
+      - isMsb: 'false'
+      - stopBitCount: 'kLPUART_OneStopBit'
+      - txFifoWatermark: '0'
+      - rxFifoWatermark: '1'
+      - enableRxRTS: 'false'
+      - enableTxCTS: 'false'
+      - txCtsSource: 'kLPUART_CtsSourceMatchResult'
+      - txCtsConfig: 'kLPUART_CtsSampleAtStart'
+      - rxIdleType: 'kLPUART_IdleTypeStartBit'
+      - rxIdleConfig: 'kLPUART_IdleCharacter1'
+      - enableTx: 'true'
+      - enableRx: 'true'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+const lpuart_config_t SConsole_config = {
+  .baudRate_Bps = 921600,
+  .parityMode = kLPUART_ParityDisabled,
+  .dataBitsCount = kLPUART_EightDataBits,
+  .isMsb = false,
+  .stopBitCount = kLPUART_OneStopBit,
+  .txFifoWatermark = 0,
+  .rxFifoWatermark = 1,
+  .enableRxRTS = false,
+  .enableTxCTS = false,
+  .txCtsSource = kLPUART_CtsSourceMatchResult,
+  .txCtsConfig = kLPUART_CtsSampleAtStart,
+  .rxIdleType = kLPUART_IdleTypeStartBit,
+  .rxIdleConfig = kLPUART_IdleCharacter1,
+  .enableTx = true,
+  .enableRx = true
+};
+
+void SConsole_init(void) {
+  LPUART_Init(SCONSOLE_PERIPHERAL, &SConsole_config, SCONSOLE_CLOCK_SOURCE);
 }
 
 /***********************************************************************************************************************
@@ -469,13 +592,19 @@ void communicate_init(void) {
  **********************************************************************************************************************/
 void BOARD_InitPeripherals(void)
 {
+  /* Global initialization */
+  DMAMUX_Init(DMA0_DMAMUX_BASEADDR);
+  EDMA_Init(DMA0_DMA_BASEADDR, &DMA0_config);
+
   /* Initialize components */
+  DMA0_init();
   DCP_init();
   GPT2_init();
   PulseEncoder_init();
   TEMPMON_init();
   TMR2_init();
   communicate_init();
+  SConsole_init();
 }
 
 /***********************************************************************************************************************

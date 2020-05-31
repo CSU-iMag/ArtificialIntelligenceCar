@@ -120,7 +120,7 @@ BOARD_InitPins:
   - {pin_num: D12, peripheral: GPIO2, signal: 'gpio_io, 21', pin_signal: GPIO_B1_05, identifier: INT, direction: INPUT}
   - {pin_num: C13, peripheral: GPIO2, signal: 'gpio_io, 27', pin_signal: GPIO_B1_11, identifier: SW6, direction: INPUT, gpio_interrupt: kGPIO_IntFallingEdge, pull_up_down_config: Pull_Up_100K_Ohm}
   - {pin_num: C11, peripheral: GPIO2, signal: 'gpio_io, 18', pin_signal: GPIO_B1_02, identifier: HAL}
-  - {pin_num: E12, peripheral: GPIO2, signal: 'gpio_io, 20', pin_signal: GPIO_B1_04, identifier: MOTOR_EN}
+  - {pin_num: E12, peripheral: GPIO2, signal: 'gpio_io, 20', pin_signal: GPIO_B1_04, identifier: MOTOR_EN, direction: OUTPUT, gpio_init_state: 'true'}
   - {pin_num: A13, peripheral: TMR2, signal: 'TIMER, 3', pin_signal: GPIO_B1_09, identifier: BEEP}
   - {pin_num: E7, peripheral: TMR1, signal: 'TIMER, 1', pin_signal: GPIO_B0_01, identifier: DIR1}
   - {pin_num: A12, peripheral: TMR1, signal: 'TIMER, 3', pin_signal: GPIO_B1_08, identifier: DIR2}
@@ -175,6 +175,15 @@ void BOARD_InitPins(void) {
   GPIO_PinInit(GPIO1, 31U, &SW2_config);
   /* Enable GPIO pin interrupt on GPIO_AD_B1_15 (pin J14) */
   GPIO_PortEnableInterrupts(GPIO1, 1U << 31U);
+
+  /* GPIO configuration of MOTOR_EN on GPIO_B1_04 (pin E12) */
+  gpio_pin_config_t MOTOR_EN_config = {
+      .direction = kGPIO_DigitalOutput,
+      .outputLogic = 1U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on GPIO_B1_04 (pin E12) */
+  GPIO_PinInit(GPIO2, 20U, &MOTOR_EN_config);
 
   /* GPIO configuration of INT on GPIO_B1_05 (pin D12) */
   gpio_pin_config_t INT_config = {

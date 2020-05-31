@@ -49,10 +49,13 @@ struct HomePage : ListLayout {
 struct DebugInfo : ListLayout {
     DebugInfo() : ListLayout(&tree, its, "DebugInfo", {"1", "2", "3"}) {}
 
-    // //! @brief 更新第i行显示的字符串
-    // __inline void UpdateValue(unsigned id, SGUI_CSZSTR str) {
-    //     ListObject.stItems.pstItems[id].cszLabelText = str;
-    // }
+    //! @brief 更新第i行显示的字符串
+    __inline void UpdateValue(unsigned id, std::string str) {
+        if (this != ActiveLayout)
+            return;
+        Items[id].UpdateValue(str);
+        Repaint();
+    }
 
   private:
     static const int ChildrenCnt = 3;
@@ -185,10 +188,10 @@ struct ControlPanel : ListLayout {
 struct ComEnable : ListLayout {
     ComEnable()
         : ListLayout(&tree, its, "-上位机通信使能",
-                     {"发送AI包：", "逐飞示波器："}) {}
+                     {"发送AI包：", "速度包：", "逐飞示波器："}) {}
 
   private:
-    static const uint8_t item_cnt = 2;
+    static const uint8_t item_cnt = 3;
     struct TreeNode tree = {.Parent = &gui_home};
     SGUI_ITEMS_ITEM its[item_cnt];
 
@@ -201,14 +204,16 @@ struct MotorConfig : ListLayout {
     MotorConfig()
         : ListLayout(&tree, its, "-后轮电机配置",
                      {"目标速度：", "左轮速度：", "右轮速度：", "左轮距离：",
-                      "右轮距离：", "清空距离"}) {}
+                      "右轮距离：", "清空距离", "固定占空比："}) {}
     static void UpdateValue(sched_event_data_t);
 
   private:
-    static const uint8_t item_cnt = 6;
+    static const uint8_t item_cnt = 7;
     struct TreeNode tree = {.Parent = &gui_home};
     SGUI_ITEMS_ITEM its[item_cnt];
-
+    int8_t duty;
+   
+    void UpdateDuty(int8_t inc);
     virtual void KeyEnterPush();
     virtual void KeyLeftPush();
     virtual void KeyRightPush();

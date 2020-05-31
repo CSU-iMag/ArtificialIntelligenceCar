@@ -21,5 +21,3 @@ void Beep::BeepFreqDelay(uint32_t Freq, uint16_t ms) {
     BeepFreq(Freq);
     beep_timer.Start(ms);
 }
-
-void Beep::Init() { IOMUXC_SetPinMux(IOMUXC_GPIO_B1_09_QTIMER2_TIMER3, 0U); }

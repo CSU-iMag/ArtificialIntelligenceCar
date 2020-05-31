@@ -6,8 +6,6 @@
                                            
 //! @note 板载蜂鸣器已在MCUXpressoConfigTool初始化
 struct Beep {
-    //! @brief set pin mux to qtimer
-    void Init();
     //! @brief be quiet
     void Mute();
     //! @brief start beep with Freq

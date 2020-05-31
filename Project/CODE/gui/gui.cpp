@@ -1,9 +1,9 @@
 #include "gui.hpp"
 #include "SEEKFREE_MPU6050.h"
 #include "car.hpp"
-#include "communication.hpp"
 #include "fsl_gpt.h"
 #include "music.hpp"
+#include "package.hpp"
 #include "storage.hpp"
 #include "timer.hpp"
 #include "usage.hpp"
@@ -119,8 +119,8 @@ void Resistance::KeyEnterPush() {
 ///////////////////////////////////////////////////////////////////////////////
 
 void MagadcDat::UpdateValue() {
-   if (this != ActiveLayout)
-       return;
+    if (this != ActiveLayout)
+        return;
     for (int i(0); i < ADC_CNT; ++i)
         if (FigureMode) {
             Items[i + 1].UpdateValue(std::to_string(Car.MagList[i]->GetRaw()));
@@ -362,15 +362,19 @@ void ComEnable::KeyEnterPush() {
     Items[row].UpdateValue(enabled[row] ? "发送中…" : "已关闭");
 
     if (enabled[0]) {
-        Send_AI_PackData_tim.Start(STEER_PERIOD);
+        SendAiTim.Start(STEER_PERIOD);
     } else {
-        Send_AI_PackData_tim.Stop();
+        SendAiTim.Stop();
     }
 
     if (enabled[1]) {
-        VisualScopeTmr.Start(6);
+        SendSpeedTim.Start(912);
     } else {
-        VisualScopeTmr.Stop();
+        SendSpeedTim.Stop();
+    }
+
+    if (enabled[2]) {
+    } else {
     }
 }
 
@@ -396,14 +400,34 @@ void MotorConfig::KeyEnterPush() {
     }
 }
 
+void MotorConfig::UpdateDuty(int8_t inc) {
+    duty += inc;
+    LIMITING(duty, 0, MOTOR_MAX);
+    Car.MotorL.SetDuty(duty);
+    Car.MotorR.SetDuty(duty);
+    Items[6].UpdateValue(std::to_string(duty));
+}
+
 void MotorConfig::KeyRightPush() {
-    if (ListObject.stItems.iSelection == 0)
+    switch (ListObject.stItems.iSelection) {
+    case 0:
         Car.TargetSpeed -= 10;
+        break;
+    case 6:
+        UpdateDuty(-5);
+        break;
+    }
 }
 
 void MotorConfig::KeyLeftPush() {
-    if (ListObject.stItems.iSelection == 0)
+    switch (ListObject.stItems.iSelection) {
+    case 0:
         Car.TargetSpeed += 10;
+        break;
+    case 6:
+        UpdateDuty(5);
+        break;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -415,6 +439,7 @@ ModelSelect::ModelSelect() : MenuLayout(&tree, item_cnt, its) {
 }
 
 void ModelSelect::KeyEnterPush() {
+    CRITICAL_REGION_ENTER();
     switch (MenuObject.stItems.iSelection) {
     case 0:
         Car.Model = model1;
@@ -432,6 +457,7 @@ void ModelSelect::KeyEnterPush() {
         break;
     }
     deep_init();
+    CRITICAL_REGION_EXIT();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

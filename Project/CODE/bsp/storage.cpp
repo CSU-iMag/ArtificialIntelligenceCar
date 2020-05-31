@@ -1,12 +1,14 @@
 #include "storage.hpp"
 #include "car.hpp"
 #include "car_config.h"
+#include "communication.hpp"
 #include "core_cm7.h"
 #include "gui.hpp"
 #include "pid.hpp"
 #include "util.h"
 #include "zf_flash.h"
 
+using std::to_string;
 struct StorageData {
     uint8_t Gain[PGA_CNT];
     uint16_t MagMax[ADC_CNT];
@@ -57,6 +59,7 @@ void storage_load(uint32 sector, uint32 page) {
     Car.Steer3010.steerOffset = store.data.SteerOffset;
     Car.Steer3010.steerCtrl.SetPID(store.data.SteerCoeff.Kp,
                                    store.data.SteerCoeff.Ki,
+                                   //    0.01,
                                    store.data.SteerCoeff.Kd);
     Car.MotorL.speedCtrl.SetPID(store.data.SpeedCoeff.Kp,
                                 store.data.SpeedCoeff.Ki,
@@ -67,20 +70,25 @@ void storage_load(uint32 sector, uint32 page) {
     CRITICAL_REGION_EXIT();
 
     gui_reloadVal();
-    DEBUG_LOG("\n======Load Parameters from Flash======\n");
-    DEBUG_LOG("target speed=%f\n", Car.TargetSpeed);
-    DEBUG_LOG("steer offset=%f\n", Car.Steer3010.steerOffset);
-    DEBUG_LOG("steer pid: %f %f %f\n", Car.Steer3010.steerCtrl.instance.Kp,
-              Car.Steer3010.steerCtrl.instance.Ki,
-              Car.Steer3010.steerCtrl.instance.Kd);
-    DEBUG_LOG("speed pid: %f %f %f\n", Car.MotorL.speedCtrl.instance.Kp,
-              Car.MotorL.speedCtrl.instance.Ki,
-              Car.MotorL.speedCtrl.instance.Kd);
-    DEBUG_LOG("Risisters:");
+    com_log("\nLoadParam fromFlash\n", LogBlue);
+    com_log("\ntarget speed=");
+    com_log(to_string(Car.TargetSpeed));
+    com_log("\nsteer offset=");
+    com_log(to_string(Car.Steer3010.steerOffset));
+    com_log("\nsteer pid:");
+    com_log(to_string(STEER_K(p)) + ' ');
+    com_log(to_string(STEER_K(i)) + ' ');
+    com_log(to_string(STEER_K(d)) + ' ');
+    com_log("\nspeed pid:");
+    com_log(to_string(SPEED_K(L, p)) + ' ');
+    com_log(to_string(SPEED_K(L, i)) + ' ');
+    com_log(to_string(SPEED_K(L, d)) + ' ');
+    com_log("\nRisisters:");
     for (int i(0); i < PGA_CNT; ++i)
-        DEBUG_LOG(" %d", dynamic_cast<MagSensorPGA *>(Car.MagList[i])->Gain);
-    DEBUG_LOG("\nRawMax:");
+        com_log(to_string(dynamic_cast<MagSensorPGA *>(Car.MagList[i])->Gain) +
+                ' ');
+    com_log("\nRawMax:");
     for (int i(0); i < ADC_CNT; ++i)
-        DEBUG_LOG(" %d", Car.MagList[i]->MaxRawData);
-    DEBUG_LOG("\n==========================\n");
+        com_log(to_string(Car.MagList[i]->MaxRawData) + ' ');
+    com_log("\n==============\n", LogBlue);
 }

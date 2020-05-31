@@ -7,7 +7,6 @@
 #include "deep.hpp"
 #include "fsl_src.h"
 #include "gui.hpp"
-#include "pack.hpp"
 #include "rit.hpp"
 #include "storage.hpp"
 #include "timer.hpp"
@@ -30,30 +29,26 @@ void iMagCar::Startup() {
     // mpu6050_init();
     // EncoderL.Init();
     // EncoderR.Init();
+    // Hc06.Init();
     MotorL.Init();
     MotorR.Init();
     Steer3010.Init();
-    Hc06.Init();
-    beep0.Init();
     ActiveLayout->Repaint(); //!< after oled
-    tmr_init();
     bat_init();
     com_init();
     rit_init();
-    pack_Init();
     deep_init();
     magnet_init();
     cpu_usage_init();
     MCP4452_all_init(); //!< after i2c
     DEBUG_LOG("MCP4452 Check: %d\n", MCP4452_self_check());
-    storage_load(SLN_DEBUG_SECTOR, SLN_DEBUG_PAGE); //!< after MCP4452
-    gpio_init(MOTOR_EN_PIN, GPO, 1, GPIO_PIN_CONFIG);
 
     
     EnableGlobalIRQ(0);
+    storage_load(SLN_DEBUG_SECTOR, SLN_DEBUG_PAGE); //!< after MCP4452
     gui_motor.upd_tmr.Start(62);
     beep0.Mute();
-    DEBUG_LOG("Startup Successfully!\n");
+    com_log("Startup Successfully!\n", LogGreen);
 }
 
 void iMagCar::Run() {

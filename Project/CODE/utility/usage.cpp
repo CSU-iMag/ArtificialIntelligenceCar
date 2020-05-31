@@ -4,7 +4,7 @@
 #include "util.h"
 #include <new>
 
-unsigned cpu_usage_cnt, cpu_usage_raw;
+std::uint_fast64_t cpu_usage_cnt, cpu_usage_raw;
 
 void no_memory() {
     DEBUG_LOG("No more memory!\n");

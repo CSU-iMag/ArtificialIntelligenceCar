@@ -18,7 +18,7 @@
    <tools>
       <pins name="Pins" version="7.0" enabled="true" update_project_code="true">
          <generated_project_files>
-            <file path="../../Libraries/seekfree_libraries/board/pin_mux.c" update_enabled="true"/>
+            <file path="board/pin_mux.c" update_enabled="true"/>
             <file path="board/pin_mux.h" update_enabled="true"/>
          </generated_project_files>
          <pins_profile>
@@ -376,6 +376,8 @@
                   <pin peripheral="GPIO2" signal="gpio_io, 20" pin_num="E12" pin_signal="GPIO_B1_04">
                      <pin_features>
                         <pin_feature name="identifier" value="MOTOR_EN"/>
+                        <pin_feature name="direction" value="OUTPUT"/>
+                        <pin_feature name="gpio_init_state" value="true"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="TMR2" signal="TIMER, 3" pin_num="A13" pin_signal="GPIO_B1_09">
@@ -399,7 +401,7 @@
       </pins>
       <clocks name="Clocks" version="7.0" enabled="true" update_project_code="true">
          <generated_project_files>
-            <file path="../../Libraries/seekfree_libraries/board/clock_config.c" update_enabled="true"/>
+            <file path="board/clock_config.c" update_enabled="true"/>
             <file path="board/clock_config.h" update_enabled="true"/>
          </generated_project_files>
          <clocks_profile>
@@ -707,6 +709,16 @@
                   <data type="Version">2.1.0</data>
                </feature>
             </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.edma" description="在工具链/IDE 工程中未找到EDMA Driver。该工程不会被编译！" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.drivers.edma" description="该工具链/IDE 工程不支持EDMA Driver版本。所需：${required_value}, 实际：${actual_value}. 工程编译可能不正确。" problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">2.3.0</data>
+               </feature>
+            </dependency>
             <dependency resourceType="SWComponent" resourceId="platform.drivers.gpt" description="在工具链/IDE 工程中未找到gpt。该工程不会被编译！" problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data type="Boolean">true</data>
@@ -760,6 +772,16 @@
                <description></description>
                <options/>
                <dependencies>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.dmamux" description="The fsl_dmamux driver is missing in the project (required for the eDMA).问题必须在其它工具中被解决。" problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="enabled" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.dmamux" description="The compatible version of the fsl_dmamux driver is not available in the project (required for the eDMA).问题必须在其它工具中被解决。" problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="version" evaluation="compatible">
+                        <data type="Version">2.0.2</data>
+                     </feature>
+                  </dependency>
                   <dependency resourceType="ClockOutput" resourceId="PERCLK_CLK_ROOT" description="PERCLK_CLK_ROOT is inactive.问题必须在其它工具中被解决。" problem_level="2" source="Peripherals:BOARD_InitPeripherals">
                      <feature name="frequency" evaluation="greaterThan">
                         <data type="Frequency" unit="Hz">0</data>
@@ -816,6 +838,31 @@
                      </feature>
                   </dependency>
                   <dependency resourceType="PeripheralUnifiedSignal" resourceId="LPUART5.uart_rx" description="Signal RX of the peripheral LPUART5 is not routed.问题必须在其它工具中被解决。" problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.lpuart_edma" description="The fsl_uart_edma driver is missing in the project (required for the eDMA mode).问题必须在其它工具中被解决。" problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="enabled" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.lpuart_edma" description="The compatible version of the fsl_uart_edma driver is not available in the project (required for the eDMA mode).问题必须在其它工具中被解决。" problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="version" evaluation="compatible">
+                        <data type="Version">2.2.8</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="ClockOutput" resourceId="UART_CLK_ROOT" description="UART_CLK_ROOT is inactive.问题必须在其它工具中被解决。" problem_level="2" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="frequency" evaluation="greaterThan">
+                        <data type="Frequency" unit="Hz">0</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="LPUART1.uart_tx" description="Signal TX of the peripheral LPUART1 is not routed.问题必须在其它工具中被解决。" problem_level="1" source="Peripherals:BOARD_InitPeripherals">
+                     <feature name="routed" evaluation="equal">
+                        <data type="Boolean">true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="PeripheralUnifiedSignal" resourceId="LPUART1.uart_rx" description="Signal RX of the peripheral LPUART1 is not routed.问题必须在其它工具中被解决。" problem_level="1" source="Peripherals:BOARD_InitPeripherals">
                      <feature name="routed" evaluation="equal">
                         <data type="Boolean">true</data>
                      </feature>
@@ -910,6 +957,30 @@
                               </set>
                            </struct>
                         </array>
+                     </config_set>
+                  </instance>
+                  <instance name="DMA0" uuid="f7aa5f64-b0a1-4fae-8f5a-2b7bc3e27e16" type="edma" type_id="edma_6d0dd4e17e2f179c7d42d98767129ede" mode="basic" peripheral="DMA0" enabled="true" comment="" custom_name_enabled="false">
+                     <config_set name="fsl_edma">
+                        <struct name="common_settings">
+                           <setting name="enableContinuousLinkMode" value="false"/>
+                           <setting name="enableHaltOnError" value="true"/>
+                           <setting name="enableRoundRobinArbitration" value="false"/>
+                           <setting name="enableDebugMode" value="false"/>
+                        </struct>
+                        <array name="dma_table">
+                           <struct name="0"/>
+                           <struct name="1"/>
+                        </array>
+                        <array name="edma_channels"/>
+                        <struct name="errInterruptConfig">
+                           <setting name="enableErrInterrupt" value="false"/>
+                           <struct name="errorInterrupt">
+                              <setting name="IRQn" value="DMA_ERROR_IRQn"/>
+                              <setting name="enable_priority" value="false"/>
+                              <setting name="priority" value="0"/>
+                              <setting name="enable_custom_name" value="false"/>
+                           </struct>
+                        </struct>
                      </config_set>
                   </instance>
                   <instance name="GPIO1" uuid="ddc3fa84-85d3-47d9-8a57-be7cc3653932" type="igpio" type_id="igpio_b1c1fa279aa7069dca167502b8589cb7" mode="GPIO" peripheral="GPIO1" enabled="false" comment="" custom_name_enabled="false">
@@ -1108,12 +1179,12 @@
                         <setting name="EnableTimerInInit" value="true"/>
                      </config_set>
                   </instance>
-                  <instance name="LPUART1" uuid="7e79ebd5-644e-41ec-b554-11570eb46ede" type="lpuart" type_id="lpuart_54a65a580e3462acdbacefd5299e0cac" mode="polling" peripheral="LPUART1" enabled="false" comment="" custom_name_enabled="false">
+                  <instance name="SConsole" uuid="7e79ebd5-644e-41ec-b554-11570eb46ede" type="lpuart" type_id="lpuart_54a65a580e3462acdbacefd5299e0cac" mode="polling" peripheral="LPUART1" enabled="true" comment="" custom_name_enabled="true">
                      <config_set name="lpuartConfig_t">
                         <struct name="lpuartConfig">
                            <setting name="clockSource" value="LpuartClock"/>
                            <setting name="lpuartSrcClkFreq" value="BOARD_BootClockRUN"/>
-                           <setting name="baudRate_Bps" value="115200"/>
+                           <setting name="baudRate_Bps" value="921600"/>
                            <setting name="parityMode" value="kLPUART_ParityDisabled"/>
                            <setting name="dataBitsCount" value="kLPUART_EightDataBits"/>
                            <setting name="isMsb" value="false"/>
@@ -1122,7 +1193,7 @@
                            <setting name="rxFifoWatermark" value="1"/>
                            <setting name="enableRxRTS" value="false"/>
                            <setting name="enableTxCTS" value="false"/>
-                           <setting name="txCtsSource" value="kLPUART_CtsSourcePin"/>
+                           <setting name="txCtsSource" value="kLPUART_CtsSourceMatchResult"/>
                            <setting name="txCtsConfig" value="kLPUART_CtsSampleAtStart"/>
                            <setting name="rxIdleType" value="kLPUART_IdleTypeStartBit"/>
                            <setting name="rxIdleConfig" value="kLPUART_IdleCharacter1"/>
@@ -1556,13 +1627,13 @@
                         </struct>
                      </config_set>
                   </instance>
-                  <instance name="communicate" uuid="d9ec5a81-f154-437e-b9c0-212b30219682" type="lpuart" type_id="lpuart_54a65a580e3462acdbacefd5299e0cac" mode="transfer" peripheral="LPUART5" enabled="true" comment="" custom_name_enabled="true">
+                  <instance name="communicate" uuid="d9ec5a81-f154-437e-b9c0-212b30219682" type="lpuart" type_id="lpuart_54a65a580e3462acdbacefd5299e0cac" mode="edma" peripheral="LPUART5" enabled="true" comment="" custom_name_enabled="true">
                      <config_set name="lpuartConfig_t">
                         <struct name="lpuartConfig">
                            <setting name="clockSource" value="LpuartClock"/>
                            <setting name="lpuartSrcClkFreq" value="BOARD_BootClockRUN"/>
                            <setting name="baudRate_Bps" value="460800"/>
-                           <setting name="parityMode" value="kLPUART_ParityDisabled"/>
+                           <setting name="parityMode" value="kLPUART_ParityEven"/>
                            <setting name="dataBitsCount" value="kLPUART_EightDataBits"/>
                            <setting name="isMsb" value="false"/>
                            <setting name="stopBitCount" value="kLPUART_OneStopBit"/>
@@ -1578,16 +1649,37 @@
                            <setting name="enableRx" value="true"/>
                         </struct>
                      </config_set>
-                     <config_set name="transferCfg">
-                        <struct name="transfer">
-                           <setting name="init_rx_transfer" value="true"/>
-                           <struct name="rx_transfer">
-                              <setting name="data_size" value="20"/>
+                     <config_set name="edmaCfg">
+                        <struct name="edma_channels">
+                           <setting name="enable_rx_edma_channel" value="true"/>
+                           <struct name="edma_rx_channel">
+                              <setting name="eDMAn" value="5"/>
+                              <setting name="eDMA_source" value="kDmaRequestMuxLPUART5Rx"/>
+                              <setting name="enableTriggerPIT" value="false"/>
+                              <setting name="init_channel_priority" value="false"/>
+                              <struct name="edma_channel_Preemption">
+                                 <setting name="enableChannelPreemption" value="false"/>
+                                 <setting name="enablePreemptAbility" value="false"/>
+                                 <setting name="channelPriority" value="0"/>
+                              </struct>
+                              <setting name="enable_custom_name" value="false"/>
                            </struct>
-                           <setting name="init_tx_transfer" value="true"/>
-                           <struct name="tx_transfer">
-                              <setting name="data_size" value="20"/>
+                           <setting name="enable_tx_edma_channel" value="true"/>
+                           <struct name="edma_tx_channel">
+                              <setting name="eDMAn" value="6"/>
+                              <setting name="eDMA_source" value="kDmaRequestMuxLPUART5Tx"/>
+                              <setting name="enableTriggerPIT" value="false"/>
+                              <setting name="init_channel_priority" value="false"/>
+                              <struct name="edma_channel_Preemption">
+                                 <setting name="enableChannelPreemption" value="false"/>
+                                 <setting name="enablePreemptAbility" value="false"/>
+                                 <setting name="channelPriority" value="0"/>
+                              </struct>
+                              <setting name="enable_custom_name" value="false"/>
                            </struct>
+                        </struct>
+                        <struct name="lpuart_edma_handle">
+                           <setting name="enable_custom_name" value="false"/>
                            <setting name="init_callback" value="true"/>
                            <setting name="callback_fcn" value="com_callback"/>
                            <setting name="user_data" value=""/>
@@ -1601,7 +1693,7 @@
             <component name="system" uuid="6b50af15-7910-4541-b2e1-3545329567a4" type_id="system_54b53072540eeeb8f8e9343e71f28176">
                <config_set_global name="global_system_definitions"/>
             </component>
-            <component name="msg" uuid="37fa67ba-44ab-42dc-9bed-b0eeec048388" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
+            <component name="msg" uuid="90aa910e-c19e-429f-974f-d09fd5e12d60" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
                <config_set_global name="global_messages"/>
             </component>
          </components>

@@ -9,6 +9,8 @@
 /***********************************************************************************************************************
  * Included files
  **********************************************************************************************************************/
+#include "fsl_edma.h"
+#include "fsl_dmamux.h"
 #include "fsl_common.h"
 #include "fsl_dcp.h"
 #include "fsl_gpt.h"
@@ -16,6 +18,7 @@
 #include "fsl_qtmr.h"
 #include "fsl_tempmon.h"
 #include "fsl_lpuart.h"
+#include "fsl_lpuart_edma.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -25,6 +28,10 @@ extern "C" {
  * Definitions
  **********************************************************************************************************************/
 /* Definitions for BOARD_InitPeripherals functional group */
+/* Used DMA device. */
+#define DMA0_DMA_BASEADDR DMA0
+/* Associated DMAMUX device that is used for muxing of requests. */
+#define DMA0_DMAMUX_BASEADDR DMAMUX
 /* Definition of peripheral ID */
 #define DCP_PERIPHERAL DCP
 /* Definition of peripheral ID */
@@ -59,14 +66,31 @@ extern "C" {
 #define COMMUNICATE_PERIPHERAL LPUART5
 /* Definition of the clock source frequency */
 #define COMMUNICATE_CLOCK_SOURCE 80000000UL
-/* Rx transfer buffer size. */
-#define COMMUNICATE_RX_BUFFER_SIZE 20
-/* Rx transfer buffer size. */
-#define COMMUNICATE_TX_BUFFER_SIZE 20
+/* communicate eDMA source request. */
+#define COMMUNICATE_RX_DMA_REQUEST kDmaRequestMuxLPUART5Rx
+/* Selected eDMA channel number. */
+#define COMMUNICATE_RX_DMA_CHANNEL 5
+/* DMAMUX device that is used for muxing of the request. */
+#define COMMUNICATE_RX_DMAMUX_BASEADDR DMAMUX
+/* Used DMA device. */
+#define COMMUNICATE_RX_DMA_BASEADDR DMA0
+/* communicate eDMA source request. */
+#define COMMUNICATE_TX_DMA_REQUEST kDmaRequestMuxLPUART5Tx
+/* Selected eDMA channel number. */
+#define COMMUNICATE_TX_DMA_CHANNEL 6
+/* DMAMUX device that is used for muxing of the request. */
+#define COMMUNICATE_TX_DMAMUX_BASEADDR DMAMUX
+/* Used DMA device. */
+#define COMMUNICATE_TX_DMA_BASEADDR DMA0
+/* Definition of peripheral ID */
+#define SCONSOLE_PERIPHERAL LPUART1
+/* Definition of the clock source frequency */
+#define SCONSOLE_CLOCK_SOURCE 80000000UL
 
 /***********************************************************************************************************************
  * Global variables
  **********************************************************************************************************************/
+extern const edma_config_t DMA0_config;
 /* Common initialization settings */
 extern const dcp_config_t DCP_config;
 /* User DCP handler */
@@ -77,17 +101,16 @@ extern const qtmr_config_t PulseEncoder_Channel_2_config;
 extern const tempmon_config_t TEMPMON_config;
 extern const qtmr_config_t TMR2_Channel_3_config;
 extern const lpuart_config_t communicate_config;
-extern lpuart_handle_t communicate_handle;
-extern uint8_t communicate_rxBuffer[COMMUNICATE_RX_BUFFER_SIZE];
-extern const lpuart_transfer_t communicate_rxTransfer;
-extern uint8_t communicate_txBuffer[COMMUNICATE_TX_BUFFER_SIZE];
-extern const lpuart_transfer_t communicate_txTransfer;
+extern edma_handle_t communicate_RX_Handle;
+extern edma_handle_t communicate_TX_Handle;
+extern lpuart_edma_handle_t communicate_LPUART_eDMA_Handle;
+extern const lpuart_config_t SConsole_config;
 
 /***********************************************************************************************************************
  * Callback functions
  **********************************************************************************************************************/
-/* LPUART transfer callback function for the communicate component (init. function BOARD_InitPeripherals)*/
-extern void com_callback(LPUART_Type *base, lpuart_handle_t *handle, status_t status, void *userData);
+/* LPUART eDMA callback function for the communicate component (init. function BOARD_InitPeripherals)*/
+extern void com_callback(LPUART_Type *,lpuart_edma_handle_t *,status_t ,void *);
 
 /***********************************************************************************************************************
  * Initialization functions

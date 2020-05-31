@@ -34,13 +34,17 @@ bool SaveMaxEnabled;
 volatile float MagErrorForPID;
 
 MagSensor::MagSensor(const ADCCH_enum &adc)
-    : filter_RawData(FILTER_MAGNET_SIZE), Channel(adc), MaxRawData(1) {}
+    : /*filter_RawData(FILTER_MAGNET_SIZE)*/
+      filter_fir_mag(fir_low1.numTaps, fir_low1.pCoeffs, 1,
+                     (float32_t *)&RawData),
+      Channel(adc), MaxRawData(1) {}
 
 void MagSensor::Init() { adc_init(MAGNET_ADC, Channel, MAG_SAMPLE_RESOLUTION); }
 
 void MagSensor::Sample() {
-    RawData = adc_mean_filter(MAGNET_ADC, Channel, 6);
-    RawData = filter_RawData.Moving(RawData);
+    RawData = (float32_t)adc_mean_filter(MAGNET_ADC, Channel, 6);
+//    RawData = filter_RawData.Moving(RawData);
+	  filter_fir_mag.filter_fir();
     if (SaveMaxEnabled)
         MaxRawData = std::max(MaxRawData, RawData);
 }
@@ -103,6 +107,10 @@ void UpdateGUI() {
         return;
     gui_steering.err_curve.AppendValue(MagErrorForPID * 9);
     gui_magadcDat.UpdateValue();
+    gui_debug.UpdateValue(
+        1, std::to_string(Car.MagList[MagL_FRONT]->GetNormalized() +
+                          Car.MagList[MagM_FRONT]->GetNormalized() +
+                          Car.MagList[MagR_FRONT]->GetNormalized()));
 }
 
 void mag_sample_sched(sched_event_data_t dat) {
