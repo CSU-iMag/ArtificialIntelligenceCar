@@ -84,11 +84,11 @@
 
 // <o> 舵机中值 <0-10000>
 //  <i>Default: 1500
-#define STEER_CENTER 1265
+#define STEER_CENTER 1250
 
 // <o> 最右边 <0-10000>
 //  <i>Default: 400
-#define STEER_MIN 1107
+#define STEER_MIN 1090
 
 // <o> 最左边 <0-10000>
 //  <i>Default: 400
@@ -116,7 +116,7 @@
 
 // <o>最小占空比<0-100>
 //  <i>Default: 26
-#define MOTOR_MIN 5
+#define MOTOR_MIN 3
 
 // <o>目标速度<0-200>
 //  <i>cm/s

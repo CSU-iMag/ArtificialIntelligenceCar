@@ -7,7 +7,8 @@
 #include "fsl_pwm.h"
 
 //! @brief 从QTIMER读到的脉冲数转换成车速cm/s
-#define PULSE_TO_CM_S(rawSpeed) ((float)rawSpeed * 9 / 1024 / ENCODER_PERIOD * 1000)
+#define PULSE_TO_CM_S(rawSpeed)                                                \
+    ((float)rawSpeed * 9 / 1024 / ENCODER_PERIOD * 1000)
 
 //! @brief 浮点数百分比转定时器Compare
 #define PERCENT_TO_TICKS(percent) ((uint32)(percent * PWM_DUTY_MAX / 100))
@@ -18,7 +19,8 @@
 //! @brief 舵机高电平时间转占空比
 #define PULSE_TO_PERCENT(width_us) ((float)width_us * STEER_FREQ / 10000)
 
-#define RESCALE_VALUE(value, new_scale, old_scale) ((value) * (new_scale) / (old_scale))
+#define RESCALE_VALUE(value, new_scale, old_scale)                             \
+    ((value) * (new_scale) / (old_scale))
 
 #define CRITICAL_REGION_ENTER()                                                \
     do {                                                                       \
@@ -61,6 +63,8 @@
  */
 #define FIELD_ARRAY_SIZE(struct_type, field)                                   \
     (FIELD_SIZE(struct_type, field) / FIELD_SIZE(struct_type, field[0]))
+
+#define BIT(b) (1 << (b))
 
 /**
  * @brief Set a bit in the uint32 word.
@@ -137,18 +141,18 @@
  */
 #define ROUNDED_DIV(A, B) (((A) + ((B) / 2)) / (B))
 
-    /**
-     * @brief Function for changing the value unit.
-     *
-     * @param[in]   value               Value to be rescaled.
-     * @param[in]   old_unit_reversal   Reversal of the incoming unit.
-     * @param[in]   new_unit_reversal   Reversal of the desired unit.
-     *
-     * @return      Number of bytes written.
-     */
-    static __INLINE uint64_t
-    value_rescale(uint32_t value, uint32_t old_unit_reversal,
-                  uint16_t new_unit_reversal) {
+/**
+ * @brief Function for changing the value unit.
+ *
+ * @param[in]   value               Value to be rescaled.
+ * @param[in]   old_unit_reversal   Reversal of the incoming unit.
+ * @param[in]   new_unit_reversal   Reversal of the desired unit.
+ *
+ * @return      Number of bytes written.
+ */
+static __INLINE uint64_t value_rescale(uint32_t value,
+                                       uint32_t old_unit_reversal,
+                                       uint16_t new_unit_reversal) {
     return (uint64_t)ROUNDED_DIV((uint64_t)value * new_unit_reversal,
                                  old_unit_reversal);
 }
@@ -307,12 +311,9 @@ static __INLINE uint8_t uint32_big_encode(uint32_t value,
 #define CAR_ERROR_CHECK(err)                                                   \
     if (!(err)) {                                                              \
         DisableGlobalIRQ();                                                    \
-        extern void gpio_set(PIN_enum pin, uint8 dat);                         \
-        gpio_set(MOTOR_EN_PIN, 0);                                             \
         PRINTF("CAR ASSERT ERROR \" %s \": file \"%s\" Line \"%d\" \n", #err,  \
                __FILE__, __LINE__);                                            \
-        for (;;)                                                               \
-            __BKPT(0);                                                         \
+        __BKPT(0);                                                             \
     }
 
 //! @brief 一个字是32位

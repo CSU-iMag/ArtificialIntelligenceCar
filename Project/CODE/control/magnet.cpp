@@ -1,6 +1,5 @@
 /*********电磁检测*********/
 #include "magnet.hpp"
-#include "beep.hpp"
 #include "car.hpp"
 #include "filter.hpp"
 #include "fsl_gpt.h"
@@ -39,10 +38,11 @@ MagSensor::MagSensor(const ADCCH_enum &adc)
                      (float32_t *)&RawData),
       Channel(adc), MaxRawData(1) {}
 
-void MagSensor::Init() { adc_init(MAGNET_ADC, Channel, MAG_SAMPLE_RESOLUTION); }
+void MagSensor::Init() { //adc_init(MAGNET_ADC, Channel, MAG_SAMPLE_RESOLUTION); 
+}
 
 void MagSensor::Sample() {
-    RawData = (float32_t)adc_mean_filter(MAGNET_ADC, Channel, 6);
+    // RawData = (float32_t)adc_mean_filter(MAGNET_ADC, Channel, 6);
 //    RawData = filter_RawData.Moving(RawData);
 	  filter_fir_mag.filter_fir();
     if (SaveMaxEnabled)
@@ -74,14 +74,14 @@ MagSensorPGA::MagSensorPGA(const ADCCH_enum &adc, const pga_channels &res)
 
 bool MagSensorPGA::Check(uint8_t val) {
     Gain = val;
-    RawData = adc_mean_filter(MAGNET_ADC, Channel, 9);
+    // RawData = adc_mean_filter(MAGNET_ADC, Channel, 9);
     return RawData < MaxRawData - 12;
 }
 
 void MagSensorPGA::Calibrate() {
     GPT_StopTimer(GPT2);
     Gain = 255;
-    MaxRawData = adc_mean_filter(MAGNET_ADC, Channel, 10);
+    // MaxRawData = adc_mean_filter(MAGNET_ADC, Channel, 10);
 
     for (int_fast16_t left(0), right(255), middle(128); left < right;
          middle = left + ((left - right) >> 1))
@@ -92,7 +92,9 @@ void MagSensorPGA::Calibrate() {
 
     DEBUG_LOG("PGA_Calibrate GAIN:%d\n", Gain);
     GPT_StartTimer(GPT2);
+#ifdef BEEP_ENABLED
     Car.beep0.BeepFreqDelay(2333, 666);
+#endif
 }
 
 static __inline void DerailProtect(void) {
@@ -111,6 +113,8 @@ void UpdateGUI() {
         1, std::to_string(Car.MagList[MagL_FRONT]->GetNormalized() +
                           Car.MagList[MagM_FRONT]->GetNormalized() +
                           Car.MagList[MagR_FRONT]->GetNormalized()));
+
+    // PRINTF("%f\n", Car.MagList[MagL_ROW3]->GetNormalized());
 }
 
 void mag_sample_sched(sched_event_data_t dat) {
@@ -142,4 +146,8 @@ void magnet_init(void) {
     for (int i(0); i < ADC_CNT; ++i)
         Car.MagList[i]->Init();
     mag_sample_tim.Start(MAG_SAMPLE_PERIOD);
+}
+
+void SlaveCallback(LPUART_Type *, lpuart_edma_handle_t *, status_t, void *) {
+    
 }

@@ -6,30 +6,18 @@
 
 std::vector<Button> iMagCar::Keypad;
 
-/** @brief 按键初始化
- *  @param[in] pin 用逐飞的定义
- *  @note   是否采用中断都在这里实现
- */
-void Button::Init() {
-#ifdef BUTTON_MODE_INT
-    gpio_interrupt_init(Pin, FALLING, GPIO_INT_CONFIG);
-    NVIC_SetPriority(GPIO2_Combined_16_31_IRQn, BUTTON_PRIORITY); // TODO: irqn
-#else
-    gpio_init(pin, GPI, 0, GPIO_PIN_CONFIG);
-#endif
-    CAR_ERROR_CHECK(event);
-}
-
 /** @brief 查询按键状态
  *  @retval true if pressed
  */
-bool Button::IsPressed() { return !gpio_get(pin); }
+bool Button::IsPressed() {
+    return !GPIO_PinReadPadStatus(GPIO1, pin);
+}
 
 /**
  * @brief 按钮状态机
  */
 void Button::evt_handle() {
-    bool value(gpio_get(pin));
+    bool value(GPIO_PinReadPadStatus(GPIO1, pin));
 
     switch (state) {
     case ButtonState::idle:
@@ -153,7 +141,7 @@ static void btnEscapeHandler(key_action sta) {
 }
 
 void key_timer_schedule(sched_event_data_t dat) {
-    for (auto &k : Car.Keypad) // &&&&&&&&&&&&&&&
+    for (auto &k : Car.Keypad)  // &&&&&&&&&&&&&&&
         k.evt_handle();
 }
 
@@ -167,7 +155,5 @@ void key_init() {
     KEYPAD_ASSIGN_EVT(BUTTON_RIGHT_ID, btnRightHandler);
     KEYPAD_ASSIGN_EVT(BUTTON_ENTER_ID, btnEnterHandler);
     KEYPAD_ASSIGN_EVT(BUTTON_ESCAPE_ID, btnEscapeHandler);
-    for (auto k : Car.Keypad)
-        k.Init();
     key_timer.Start(KEY_SCAN_PERIOD);
 }

@@ -19,8 +19,7 @@ static void SendOne(std::vector<uint8_t> &pack) {
     memcpy(buf + 1, &pack[0], pack.size());
     buf[0] = SOH;
     buf[pack.size() + 1] = EOT;
-    LPUART_SendEDMA(COMMUNICATE_PERIPHERAL, &communicate_LPUART_eDMA_Handle,
-                    &xfer);
+    LPUART_SendEDMA(COM_PERIPHERAL, &COM_LPUART_eDMA_Handle, &xfer);
 }
 
 static void SendPop() {
@@ -59,7 +58,7 @@ void com_push(uint8_t packID, const uint8_t *payload, uint8_t length) {
     pack.push_back(parity);
 
     CRITICAL_REGION_ENTER();
-    if (LPUART_GetStatusFlags(COMMUNICATE_PERIPHERAL) &
+    if (LPUART_GetStatusFlags(COM_PERIPHERAL) &
         kLPUART_TxDataRegEmptyFlag)
         SendOne(pack);
     else
@@ -73,7 +72,7 @@ void com_callback(LPUART_Type *base, lpuart_edma_handle_t *handle,
     }
     if (kStatus_LPUART_TxIdle == status)
         SendPop();
-    DEBUG_LOG("uart call sta=%d\n", status);
+    // DEBUG_LOG("uart call sta=%d\n", status);
 }
 
 void com_init() {

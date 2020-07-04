@@ -6,53 +6,57 @@
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Pins v7.0
+product: Pins v8.0
 processor: MIMXRT1064xxxxA
 package_id: MIMXRT1064DVL6A
 mcu_data: ksdk2_0
 processor_version: 7.0.1
 board: MIMXRT1064-EVK
 pin_labels:
-- {pin_num: D7, pin_signal: GPIO_B0_00, label: LCDIF_CLK, identifier: LCDIF_CLK;LSB1}
-- {pin_num: E7, pin_signal: GPIO_B0_01, label: LCDIF_ENABLE, identifier: LCDIF_ENABLE;DIR1}
-- {pin_num: E8, pin_signal: GPIO_B0_02, label: LCDIF_HSYNC, identifier: LCDIF_HSYNC;LSB2}
-- {pin_num: A11, pin_signal: GPIO_B1_00, label: LCDIF_D12, identifier: LCDIF_D12;MOTOR_L}
+- {pin_num: D7, pin_signal: GPIO_B0_00, label: LSB, identifier: LCDIF_CLK;LSB1;LSB2}
+- {pin_num: E7, pin_signal: GPIO_B0_01, label: LSB, identifier: LCDIF_ENABLE;DIR1;LSB1}
+- {pin_num: E8, pin_signal: GPIO_B0_02, label: DIR, identifier: LCDIF_HSYNC;LSB2;DIR2}
+- {pin_num: C9, pin_signal: GPIO_B0_09, label: LED, identifier: LCDIF_D5;LED}
+- {pin_num: A11, pin_signal: GPIO_B1_00, label: BEEP, identifier: LCDIF_D12;MOTOR_L;BEEP}
 - {pin_num: B11, pin_signal: GPIO_B1_01, label: LCDIF_D13, identifier: LCDIF_D13;MOTOR_R}
 - {pin_num: C11, pin_signal: GPIO_B1_02, label: LCDIF_D14, identifier: LCDIF_D14;HAL}
 - {pin_num: D11, pin_signal: GPIO_B1_03, label: LCDIF_D15, identifier: LCDIF_D15;LED1}
 - {pin_num: E12, pin_signal: GPIO_B1_04, label: ENET_RXD0, identifier: ENET_RXD0;MOTOR_EN}
 - {pin_num: D12, pin_signal: GPIO_B1_05, label: ENET_RXD1, identifier: ENET_RXD1;SW6;SW5;INT}
 - {pin_num: B12, pin_signal: GPIO_B1_07, label: ENET_TXD0, identifier: ENET_TXD0;LED3}
-- {pin_num: A12, pin_signal: GPIO_B1_08, label: ENET_TXD1, identifier: ENET_TXD1;DIR2}
+- {pin_num: A12, pin_signal: GPIO_B1_08, label: DIR, identifier: ENET_TXD1;DIR2;DIR1}
 - {pin_num: A13, pin_signal: GPIO_B1_09, label: ENET_TXEN, identifier: ENET_TXEN;SW5;BEEP}
-- {pin_num: C13, pin_signal: GPIO_B1_11, label: ENET_RXER, identifier: ENET_RXER;SW6}
-- {pin_num: D13, pin_signal: GPIO_B1_12, label: SD_CD_SW, identifier: SD_CD_SW;UART5_TX}
+- {pin_num: C13, pin_signal: GPIO_B1_11, label: OLED, identifier: ENET_RXER;SW6;DC}
+- {pin_num: D13, pin_signal: GPIO_B1_12, label: OLED, identifier: SD_CD_SW;UART5_TX;RES}
 - {pin_num: D14, pin_signal: GPIO_B1_13, label: WDOG_B, identifier: WDOG_B;UART5_RX}
-- {pin_num: B14, pin_signal: GPIO_B1_15, label: USB_HOST_PWR/BACKLIGHT_CTL, identifier: BACKLIGHT_CTL;LED2}
+- {pin_num: B14, pin_signal: GPIO_B1_15, label: MOTOR, identifier: BACKLIGHT_CTL;LED2;STEER}
 - {pin_num: M14, pin_signal: GPIO_AD_B0_00, label: 'USB_HOST_OC/J24[10]', identifier: CS}
-- {pin_num: H10, pin_signal: GPIO_AD_B0_01, label: 'USB_OTG1_ID/J24[9]', identifier: D1}
+- {pin_num: H10, pin_signal: GPIO_AD_B0_01, label: KEY, identifier: D1;K2}
 - {pin_num: M11, pin_signal: GPIO_AD_B0_02, label: 'USB_OTG1_PWR/J24[2]', identifier: D0}
-- {pin_num: G11, pin_signal: GPIO_AD_B0_03, label: 'USB_OTG1_OC/J24[1]', identifier: DC}
-- {pin_num: H14, pin_signal: GPIO_AD_B0_14, label: 'CAN2_TX/U12[1]', identifier: CAN2_TX;AD_CH2}
-- {pin_num: L10, pin_signal: GPIO_AD_B0_15, label: 'CAN2_RX/U12[4]', identifier: CAN2_RX;AD_CH3}
-- {pin_num: J11, pin_signal: GPIO_AD_B1_00, label: 'I2C1_SCL/CSI_I2C_SCL/J35[20]/J23[6]/U13[17]/U32[4]', identifier: I2C_SCL_FXOS8700CQ;CSI_I2C_SCL;AD_CH4}
-- {pin_num: K11, pin_signal: GPIO_AD_B1_01, label: 'I2C1_SDA/CSI_I2C_SDA/J35[22]/J23[5]/U13[18]/U32[6]', identifier: I2C_SDA_FXOS8700CQ;CSI_I2C_SDA;AD_CH5}
-- {pin_num: L11, pin_signal: GPIO_AD_B1_02, label: 'SPDIF_OUT/J22[7]', identifier: SPDIF_OUT;AD_CH7}
-- {pin_num: M12, pin_signal: GPIO_AD_B1_03, label: 'SPDIF_IN/J22[8]', identifier: SPDIF_IN;AD_CH6}
+- {pin_num: G11, pin_signal: GPIO_AD_B0_03, label: KEY, identifier: DC;K6}
+- {pin_num: G13, pin_signal: GPIO_AD_B0_10, label: MOTOR, identifier: INT1_COMBO;RIGHT}
+- {pin_num: G10, pin_signal: GPIO_AD_B0_11, label: MOTOR, identifier: INT2_COMBO;LEFT}
+- {pin_num: K14, pin_signal: GPIO_AD_B0_12, label: HAL, identifier: UART1_TXD;HAL1}
+- {pin_num: H14, pin_signal: GPIO_AD_B0_14, label: KEY, identifier: CAN2_TX;AD_CH2;K4}
+- {pin_num: L10, pin_signal: GPIO_AD_B0_15, label: KEY, identifier: CAN2_RX;AD_CH3;K5}
+- {pin_num: J11, pin_signal: GPIO_AD_B1_00, label: IIC, identifier: I2C_SCL_FXOS8700CQ;CSI_I2C_SCL;AD_CH4;SCL}
+- {pin_num: K11, pin_signal: GPIO_AD_B1_01, label: IIC, identifier: I2C_SDA_FXOS8700CQ;CSI_I2C_SDA;AD_CH5;SDA}
+- {pin_num: L11, pin_signal: GPIO_AD_B1_02, label: KEY, identifier: SPDIF_OUT;AD_CH7;K1}
+- {pin_num: M12, pin_signal: GPIO_AD_B1_03, label: KEY, identifier: SPDIF_IN;AD_CH6;K3}
 - {pin_num: H13, pin_signal: GPIO_AD_B1_08, label: 'AUD_INT/CSI_D9//J35[13]/J22[4]', identifier: CSI_D9;AD_CH11}
 - {pin_num: M13, pin_signal: GPIO_AD_B1_09, label: 'SAI1_MCLK/CSI_D8/J35[11]', identifier: CSI_D8;AD_CH12}
-- {pin_num: L13, pin_signal: GPIO_AD_B1_10, label: 'SAI1_RX_SYNC/CSI_D7/J35[9]/J23[1]', identifier: CSI_D7;AD_BAT}
-- {pin_num: J13, pin_signal: GPIO_AD_B1_11, label: 'SAI1_RX_BCLK/CSI_D6/J35[7]/J23[2]', identifier: CSI_D6;AD_CH1}
+- {pin_num: L13, pin_signal: GPIO_AD_B1_10, label: K66, identifier: CSI_D7;AD_BAT;MTSR}
+- {pin_num: J13, pin_signal: GPIO_AD_B1_11, label: K66, identifier: CSI_D6;AD_CH1;MRST}
 - {pin_num: H12, pin_signal: GPIO_AD_B1_12, label: 'SAI1_RXD/CSI_D5/J35[5]/U13[16]', identifier: CSI_D5;SW4;SCL}
-- {pin_num: H11, pin_signal: GPIO_AD_B1_13, label: 'SAI1_TXD/CSI_D4/J35[3]/U13[14]', identifier: CSI_D4;SW3;SDA}
-- {pin_num: G12, pin_signal: GPIO_AD_B1_14, label: 'SAI1_TX_BCLK/CSI_D3/J35[4]/U13[12]', identifier: CSI_D3;SW1}
-- {pin_num: J14, pin_signal: GPIO_AD_B1_15, label: 'SAI1_TX_SYNC/CSI_D2/J35[6]/U13[13]', identifier: CSI_D2;SW2}
-- {pin_num: L5, pin_signal: GPIO_SD_B1_00, label: FlexSPI_D3_B, identifier: FlexSPI_D3_B;MOTOR_L;RES}
-- {pin_num: M5, pin_signal: GPIO_SD_B1_01, label: FlexSPI_D2_B, identifier: FlexSPI_D2_B;MOTOR_R;SDA;SW5}
+- {pin_num: H11, pin_signal: GPIO_AD_B1_13, label: OLED, identifier: CSI_D4;SW3;SDA;MOSI}
+- {pin_num: G12, pin_signal: GPIO_AD_B1_14, label: OLED, identifier: CSI_D3;SW1;CLK}
+- {pin_num: J14, pin_signal: GPIO_AD_B1_15, label: MOTOR, identifier: CSI_D2;SW2;DIR;DIRECT}
+- {pin_num: L5, pin_signal: GPIO_SD_B1_00, label: COM, identifier: FlexSPI_D3_B;MOTOR_L;RES;TXD}
+- {pin_num: M5, pin_signal: GPIO_SD_B1_01, label: COM, identifier: FlexSPI_D2_B;MOTOR_R;SDA;SW5;COM;RXD}
 - {pin_num: M3, pin_signal: GPIO_SD_B1_02, label: FlexSPI_D1_B, identifier: FlexSPI_D1_B;STEERING}
 - {pin_num: M4, pin_signal: GPIO_SD_B1_03, label: FlexSPI_D0_B, identifier: FlexSPI_D0_B;SCL;SW4}
-- {pin_num: P2, pin_signal: GPIO_SD_B1_04, label: FlexSPI_CLK_B, identifier: FlexSPI_CLK_B;INT;SW3}
-- {pin_num: L12, pin_signal: GPIO_AD_B1_04, label: 'CSI_PIXCLK/J35[8]/J23[3]', identifier: CSI_PIXCLK;AD_CH8}
+- {pin_num: P2, pin_signal: GPIO_SD_B1_04, label: HAL, identifier: HAL2}
+- {pin_num: L12, pin_signal: GPIO_AD_B1_04, label: BAT, identifier: CSI_PIXCLK;AD_CH8;BAT}
 - {pin_num: K12, pin_signal: GPIO_AD_B1_05, label: 'CSI_MCLK/J35[12]/J23[4]', identifier: CSI_MCLK;AD_CH9}
 - {pin_num: J12, pin_signal: GPIO_AD_B1_06, label: 'CSI_VSYNC/J35[18]/J22[2]/UART_TX', identifier: CSI_VSYNC;AD_CH10}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
@@ -78,52 +82,44 @@ void BOARD_InitBootPins(void) {
 BOARD_InitPins:
 - options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
 - pin_list:
-  - {pin_num: L14, peripheral: LPUART1, signal: RX, pin_signal: GPIO_AD_B0_13, software_input_on: Disable, hysteresis_enable: Disable}
-  - {pin_num: K14, peripheral: LPUART1, signal: TX, pin_signal: GPIO_AD_B0_12, software_input_on: Disable, hysteresis_enable: Disable}
-  - {pin_num: M3, peripheral: PWM2, signal: 'A, 3', pin_signal: GPIO_SD_B1_02, identifier: STEERING, direction: OUTPUT}
-  - {pin_num: J13, peripheral: ADC1, signal: 'IN, 0', pin_signal: GPIO_AD_B1_11, identifier: AD_CH1}
-  - {pin_num: H14, peripheral: ADC1, signal: 'IN, 3', pin_signal: GPIO_AD_B0_14, identifier: AD_CH2}
-  - {pin_num: L10, peripheral: ADC1, signal: 'IN, 4', pin_signal: GPIO_AD_B0_15, identifier: AD_CH3}
-  - {pin_num: J11, peripheral: ADC1, signal: 'IN, 5', pin_signal: GPIO_AD_B1_00, identifier: AD_CH4}
-  - {pin_num: K11, peripheral: ADC1, signal: 'IN, 6', pin_signal: GPIO_AD_B1_01, identifier: AD_CH5}
-  - {pin_num: M12, peripheral: ADC1, signal: 'IN, 8', pin_signal: GPIO_AD_B1_03, identifier: AD_CH6}
-  - {pin_num: L11, peripheral: ADC1, signal: 'IN, 7', pin_signal: GPIO_AD_B1_02, identifier: AD_CH7}
-  - {pin_num: L12, peripheral: ADC1, signal: 'IN, 9', pin_signal: GPIO_AD_B1_04, identifier: AD_CH8}
-  - {pin_num: K12, peripheral: ADC1, signal: 'IN, 10', pin_signal: GPIO_AD_B1_05, identifier: AD_CH9}
-  - {pin_num: J12, peripheral: ADC1, signal: 'IN, 11', pin_signal: GPIO_AD_B1_06, identifier: AD_CH10}
-  - {pin_num: H13, peripheral: ADC1, signal: 'IN, 13', pin_signal: GPIO_AD_B1_08, identifier: AD_CH11}
-  - {pin_num: M13, peripheral: ADC1, signal: 'IN, 14', pin_signal: GPIO_AD_B1_09, identifier: AD_CH12}
-  - {pin_num: L13, peripheral: ADC1, signal: 'IN, 15', pin_signal: GPIO_AD_B1_10, identifier: AD_BAT}
-  - {pin_num: D14, peripheral: LPUART5, signal: RX, pin_signal: GPIO_B1_13, identifier: UART5_RX}
-  - {pin_num: D13, peripheral: LPUART5, signal: TX, pin_signal: GPIO_B1_12, identifier: UART5_TX}
-  - {pin_num: D7, peripheral: TMR1, signal: 'TIMER, 0', pin_signal: GPIO_B0_00, identifier: LSB1}
-  - {pin_num: E8, peripheral: TMR1, signal: 'TIMER, 2', pin_signal: GPIO_B0_02, identifier: LSB2}
-  - {pin_num: A11, peripheral: PWM1, signal: 'A, 3', pin_signal: GPIO_B1_00, identifier: MOTOR_L, direction: OUTPUT}
-  - {pin_num: B11, peripheral: PWM1, signal: 'B, 3', pin_signal: GPIO_B1_01, identifier: MOTOR_R, direction: OUTPUT}
-  - {pin_num: P2, peripheral: GPIO3, signal: 'gpio_io, 04', pin_signal: GPIO_SD_B1_04, identifier: SW3, direction: INPUT, gpio_interrupt: kGPIO_IntFallingEdge, pull_up_down_config: Pull_Up_100K_Ohm}
-  - {pin_num: M4, peripheral: GPIO3, signal: 'gpio_io, 03', pin_signal: GPIO_SD_B1_03, identifier: SW4, direction: INPUT, gpio_interrupt: kGPIO_IntFallingEdge, pull_up_down_config: Pull_Up_100K_Ohm}
-  - {pin_num: M5, peripheral: GPIO3, signal: 'gpio_io, 01', pin_signal: GPIO_SD_B1_01, identifier: SW5, direction: INPUT, gpio_interrupt: kGPIO_IntFallingEdge, pull_up_down_config: Pull_Up_100K_Ohm}
-  - {pin_num: L5, peripheral: GPIO3, signal: 'gpio_io, 00', pin_signal: GPIO_SD_B1_00, identifier: RES}
-  - {pin_num: M14, peripheral: GPIO1, signal: 'gpio_io, 00', pin_signal: GPIO_AD_B0_00}
-  - {pin_num: H10, peripheral: GPIO1, signal: 'gpio_io, 01', pin_signal: GPIO_AD_B0_01}
-  - {pin_num: M11, peripheral: GPIO1, signal: 'gpio_io, 02', pin_signal: GPIO_AD_B0_02}
-  - {pin_num: G11, peripheral: GPIO1, signal: 'gpio_io, 03', pin_signal: GPIO_AD_B0_03}
-  - {pin_num: D11, peripheral: PWM2, signal: 'B, 3', pin_signal: GPIO_B1_03, identifier: LED1, direction: OUTPUT}
-  - {pin_num: B14, peripheral: PWM4, signal: 'A, 3', pin_signal: GPIO_B1_15, identifier: LED2, direction: OUTPUT}
-  - {pin_num: B12, peripheral: GPT1, signal: 'gpt_compare, 1', pin_signal: GPIO_B1_07, identifier: LED3}
-  - {pin_num: G12, peripheral: GPIO1, signal: 'gpio_io, 30', pin_signal: GPIO_AD_B1_14, identifier: SW1, direction: INPUT, gpio_interrupt: kGPIO_IntFallingEdge, pull_up_down_config: Pull_Up_100K_Ohm}
-  - {pin_num: J14, peripheral: GPIO1, signal: 'gpio_io, 31', pin_signal: GPIO_AD_B1_15, identifier: SW2, direction: INPUT, gpio_interrupt: kGPIO_IntFallingEdge, pull_up_down_config: Pull_Up_100K_Ohm}
-  - {pin_num: H11, peripheral: GPIO1, signal: 'gpio_io, 29', pin_signal: GPIO_AD_B1_13, identifier: SDA, direction: OUTPUT, gpio_init_state: 'true', pull_up_down_config: no_init,
-    open_drain: Enable}
-  - {pin_num: H12, peripheral: GPIO1, signal: 'gpio_io, 28', pin_signal: GPIO_AD_B1_12, identifier: SCL, direction: OUTPUT, gpio_init_state: 'true', pull_up_down_config: no_init,
-    open_drain: Enable}
-  - {pin_num: D12, peripheral: GPIO2, signal: 'gpio_io, 21', pin_signal: GPIO_B1_05, identifier: INT, direction: INPUT}
-  - {pin_num: C13, peripheral: GPIO2, signal: 'gpio_io, 27', pin_signal: GPIO_B1_11, identifier: SW6, direction: INPUT, gpio_interrupt: kGPIO_IntFallingEdge, pull_up_down_config: Pull_Up_100K_Ohm}
-  - {pin_num: C11, peripheral: GPIO2, signal: 'gpio_io, 18', pin_signal: GPIO_B1_02, identifier: HAL}
-  - {pin_num: E12, peripheral: GPIO2, signal: 'gpio_io, 20', pin_signal: GPIO_B1_04, identifier: MOTOR_EN, direction: OUTPUT, gpio_init_state: 'true'}
-  - {pin_num: A13, peripheral: TMR2, signal: 'TIMER, 3', pin_signal: GPIO_B1_09, identifier: BEEP}
-  - {pin_num: E7, peripheral: TMR1, signal: 'TIMER, 1', pin_signal: GPIO_B0_01, identifier: DIR1}
-  - {pin_num: A12, peripheral: TMR1, signal: 'TIMER, 3', pin_signal: GPIO_B1_08, identifier: DIR2}
+  - {pin_num: P2, peripheral: GPIO3, signal: 'gpio_io, 04', pin_signal: GPIO_SD_B1_04, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: no_init,
+    pull_keeper_enable: Disable, slew_rate: Fast}
+  - {pin_num: K14, peripheral: GPIO1, signal: 'gpio_io, 12', pin_signal: GPIO_AD_B0_12, identifier: HAL1, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: no_init,
+    pull_keeper_enable: Disable, slew_rate: Fast}
+  - {pin_num: L11, peripheral: GPIO1, signal: 'gpio_io, 18', pin_signal: GPIO_AD_B1_02, identifier: K1, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
+    pull_keeper_select: Pull}
+  - {pin_num: M12, peripheral: GPIO1, signal: 'gpio_io, 19', pin_signal: GPIO_AD_B1_03, identifier: K3, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
+    pull_keeper_select: Pull}
+  - {pin_num: H10, peripheral: GPIO1, signal: 'gpio_io, 01', pin_signal: GPIO_AD_B0_01, identifier: K2, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
+    pull_keeper_select: Pull}
+  - {pin_num: G11, peripheral: GPIO1, signal: 'gpio_io, 03', pin_signal: GPIO_AD_B0_03, identifier: K6, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
+    pull_keeper_select: Pull}
+  - {pin_num: L10, peripheral: GPIO1, signal: 'gpio_io, 15', pin_signal: GPIO_AD_B0_15, identifier: K5, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
+    pull_keeper_select: Pull}
+  - {pin_num: H14, peripheral: GPIO1, signal: 'gpio_io, 14', pin_signal: GPIO_AD_B0_14, identifier: K4, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
+    pull_keeper_select: Pull}
+  - {pin_num: M5, peripheral: LPUART4, signal: RX, pin_signal: GPIO_SD_B1_01, identifier: RXD, speed: MHZ_100, slew_rate: Fast}
+  - {pin_num: L5, peripheral: LPUART4, signal: TX, pin_signal: GPIO_SD_B1_00, identifier: TXD, slew_rate: Fast}
+  - {pin_num: D7, peripheral: TMR1, signal: 'TIMER, 0', pin_signal: GPIO_B0_00, identifier: LSB2, slew_rate: Fast}
+  - {pin_num: E7, peripheral: TMR1, signal: 'TIMER, 1', pin_signal: GPIO_B0_01, identifier: LSB1, slew_rate: Fast}
+  - {pin_num: E8, peripheral: TMR1, signal: 'TIMER, 2', pin_signal: GPIO_B0_02, identifier: DIR2}
+  - {pin_num: A12, peripheral: TMR1, signal: 'TIMER, 3', pin_signal: GPIO_B1_08, identifier: DIR1}
+  - {pin_num: J11, peripheral: LPI2C1, signal: SCL, pin_signal: GPIO_AD_B1_00, identifier: SCL, slew_rate: Fast}
+  - {pin_num: K11, peripheral: LPI2C1, signal: SDA, pin_signal: GPIO_AD_B1_01, identifier: SDA, slew_rate: Fast}
+  - {pin_num: L13, peripheral: LPUART8, signal: TX, pin_signal: GPIO_AD_B1_10, identifier: MTSR, speed: MHZ_200, slew_rate: Fast}
+  - {pin_num: J13, peripheral: LPUART8, signal: RX, pin_signal: GPIO_AD_B1_11, identifier: MRST, speed: MHZ_200, slew_rate: Fast}
+  - {pin_num: J14, peripheral: GPIO1, signal: 'gpio_io, 31', pin_signal: GPIO_AD_B1_15, identifier: DIRECT, direction: OUTPUT, pull_keeper_enable: Disable}
+  - {pin_num: G13, peripheral: PWM1, signal: 'A, 3', pin_signal: GPIO_AD_B0_10, identifier: RIGHT, direction: OUTPUT, pull_keeper_select: no_init, pull_keeper_enable: Disable,
+    slew_rate: Slow}
+  - {pin_num: G10, peripheral: PWM1, signal: 'B, 3', pin_signal: GPIO_AD_B0_11, identifier: LEFT, direction: OUTPUT, pull_keeper_select: no_init, pull_keeper_enable: Disable}
+  - {pin_num: B14, peripheral: PWM4, signal: 'A, 3', pin_signal: GPIO_B1_15, identifier: STEER, direction: OUTPUT, pull_keeper_select: no_init, pull_keeper_enable: Disable}
+  - {pin_num: A11, peripheral: FLEXIO2, signal: 'IO, 16', pin_signal: GPIO_B1_00, identifier: BEEP, direction: OUTPUT, speed: MHZ_200, slew_rate: Fast}
+  - {pin_num: C13, peripheral: GPIO2, signal: 'gpio_io, 27', pin_signal: GPIO_B1_11, identifier: DC, direction: OUTPUT, speed: MHZ_200, slew_rate: Fast}
+  - {pin_num: D13, peripheral: GPIO2, signal: 'gpio_io, 28', pin_signal: GPIO_B1_12, identifier: RES, direction: OUTPUT, speed: MHZ_200, slew_rate: Fast}
+  - {pin_num: G12, peripheral: GPIO1, signal: 'gpio_io, 30', pin_signal: GPIO_AD_B1_14, identifier: CLK, direction: OUTPUT, speed: MHZ_200, slew_rate: Fast}
+  - {pin_num: H11, peripheral: GPIO1, signal: 'gpio_io, 29', pin_signal: GPIO_AD_B1_13, identifier: MOSI, direction: OUTPUT, speed: MHZ_200, slew_rate: Fast}
+  - {pin_num: L12, peripheral: ADC1, signal: 'IN, 9', pin_signal: GPIO_AD_B1_04, identifier: BAT}
+  - {pin_num: C9, peripheral: PWM2, signal: 'B, 1', pin_signal: GPIO_B0_09, identifier: LED, direction: OUTPUT, speed: MHZ_50}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 
@@ -136,125 +132,137 @@ BOARD_InitPins:
 void BOARD_InitPins(void) {
   CLOCK_EnableClock(kCLOCK_Iomuxc);           /* iomuxc clock (iomuxc_clk_enable): 0x03U */
 
-  /* GPIO configuration of SCL on GPIO_AD_B1_12 (pin H12) */
-  gpio_pin_config_t SCL_config = {
-      .direction = kGPIO_DigitalOutput,
-      .outputLogic = 1U,
+  /* GPIO configuration of K2 on GPIO_AD_B0_01 (pin H10) */
+  gpio_pin_config_t K2_config = {
+      .direction = kGPIO_DigitalInput,
+      .outputLogic = 0U,
       .interruptMode = kGPIO_NoIntmode
   };
-  /* Initialize GPIO functionality on GPIO_AD_B1_12 (pin H12) */
-  GPIO_PinInit(GPIO1, 28U, &SCL_config);
+  /* Initialize GPIO functionality on GPIO_AD_B0_01 (pin H10) */
+  GPIO_PinInit(GPIO1, 1U, &K2_config);
 
-  /* GPIO configuration of SDA on GPIO_AD_B1_13 (pin H11) */
-  gpio_pin_config_t SDA_config = {
+  /* GPIO configuration of K6 on GPIO_AD_B0_03 (pin G11) */
+  gpio_pin_config_t K6_config = {
+      .direction = kGPIO_DigitalInput,
+      .outputLogic = 0U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on GPIO_AD_B0_03 (pin G11) */
+  GPIO_PinInit(GPIO1, 3U, &K6_config);
+
+  /* GPIO configuration of HAL1 on GPIO_AD_B0_12 (pin K14) */
+  gpio_pin_config_t HAL1_config = {
+      .direction = kGPIO_DigitalInput,
+      .outputLogic = 0U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on GPIO_AD_B0_12 (pin K14) */
+  GPIO_PinInit(GPIO1, 12U, &HAL1_config);
+
+  /* GPIO configuration of K4 on GPIO_AD_B0_14 (pin H14) */
+  gpio_pin_config_t K4_config = {
+      .direction = kGPIO_DigitalInput,
+      .outputLogic = 0U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on GPIO_AD_B0_14 (pin H14) */
+  GPIO_PinInit(GPIO1, 14U, &K4_config);
+
+  /* GPIO configuration of K5 on GPIO_AD_B0_15 (pin L10) */
+  gpio_pin_config_t K5_config = {
+      .direction = kGPIO_DigitalInput,
+      .outputLogic = 0U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on GPIO_AD_B0_15 (pin L10) */
+  GPIO_PinInit(GPIO1, 15U, &K5_config);
+
+  /* GPIO configuration of K1 on GPIO_AD_B1_02 (pin L11) */
+  gpio_pin_config_t K1_config = {
+      .direction = kGPIO_DigitalInput,
+      .outputLogic = 0U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on GPIO_AD_B1_02 (pin L11) */
+  GPIO_PinInit(GPIO1, 18U, &K1_config);
+
+  /* GPIO configuration of K3 on GPIO_AD_B1_03 (pin M12) */
+  gpio_pin_config_t K3_config = {
+      .direction = kGPIO_DigitalInput,
+      .outputLogic = 0U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on GPIO_AD_B1_03 (pin M12) */
+  GPIO_PinInit(GPIO1, 19U, &K3_config);
+
+  /* GPIO configuration of MOSI on GPIO_AD_B1_13 (pin H11) */
+  gpio_pin_config_t MOSI_config = {
       .direction = kGPIO_DigitalOutput,
-      .outputLogic = 1U,
+      .outputLogic = 0U,
       .interruptMode = kGPIO_NoIntmode
   };
   /* Initialize GPIO functionality on GPIO_AD_B1_13 (pin H11) */
-  GPIO_PinInit(GPIO1, 29U, &SDA_config);
+  GPIO_PinInit(GPIO1, 29U, &MOSI_config);
 
-  /* GPIO configuration of SW1 on GPIO_AD_B1_14 (pin G12) */
-  gpio_pin_config_t SW1_config = {
-      .direction = kGPIO_DigitalInput,
+  /* GPIO configuration of CLK on GPIO_AD_B1_14 (pin G12) */
+  gpio_pin_config_t CLK_config = {
+      .direction = kGPIO_DigitalOutput,
       .outputLogic = 0U,
-      .interruptMode = kGPIO_IntFallingEdge
+      .interruptMode = kGPIO_NoIntmode
   };
   /* Initialize GPIO functionality on GPIO_AD_B1_14 (pin G12) */
-  GPIO_PinInit(GPIO1, 30U, &SW1_config);
-  /* Enable GPIO pin interrupt on GPIO_AD_B1_14 (pin G12) */
-  GPIO_PortEnableInterrupts(GPIO1, 1U << 30U);
+  GPIO_PinInit(GPIO1, 30U, &CLK_config);
 
-  /* GPIO configuration of SW2 on GPIO_AD_B1_15 (pin J14) */
-  gpio_pin_config_t SW2_config = {
-      .direction = kGPIO_DigitalInput,
+  /* GPIO configuration of DIRECT on GPIO_AD_B1_15 (pin J14) */
+  gpio_pin_config_t DIRECT_config = {
+      .direction = kGPIO_DigitalOutput,
       .outputLogic = 0U,
-      .interruptMode = kGPIO_IntFallingEdge
+      .interruptMode = kGPIO_NoIntmode
   };
   /* Initialize GPIO functionality on GPIO_AD_B1_15 (pin J14) */
-  GPIO_PinInit(GPIO1, 31U, &SW2_config);
-  /* Enable GPIO pin interrupt on GPIO_AD_B1_15 (pin J14) */
-  GPIO_PortEnableInterrupts(GPIO1, 1U << 31U);
+  GPIO_PinInit(GPIO1, 31U, &DIRECT_config);
 
-  /* GPIO configuration of MOTOR_EN on GPIO_B1_04 (pin E12) */
-  gpio_pin_config_t MOTOR_EN_config = {
+  /* GPIO configuration of DC on GPIO_B1_11 (pin C13) */
+  gpio_pin_config_t DC_config = {
       .direction = kGPIO_DigitalOutput,
-      .outputLogic = 1U,
-      .interruptMode = kGPIO_NoIntmode
-  };
-  /* Initialize GPIO functionality on GPIO_B1_04 (pin E12) */
-  GPIO_PinInit(GPIO2, 20U, &MOTOR_EN_config);
-
-  /* GPIO configuration of INT on GPIO_B1_05 (pin D12) */
-  gpio_pin_config_t INT_config = {
-      .direction = kGPIO_DigitalInput,
       .outputLogic = 0U,
       .interruptMode = kGPIO_NoIntmode
-  };
-  /* Initialize GPIO functionality on GPIO_B1_05 (pin D12) */
-  GPIO_PinInit(GPIO2, 21U, &INT_config);
-
-  /* GPIO configuration of SW6 on GPIO_B1_11 (pin C13) */
-  gpio_pin_config_t SW6_config = {
-      .direction = kGPIO_DigitalInput,
-      .outputLogic = 0U,
-      .interruptMode = kGPIO_IntFallingEdge
   };
   /* Initialize GPIO functionality on GPIO_B1_11 (pin C13) */
-  GPIO_PinInit(GPIO2, 27U, &SW6_config);
-  /* Enable GPIO pin interrupt on GPIO_B1_11 (pin C13) */
-  GPIO_PortEnableInterrupts(GPIO2, 1U << 27U);
+  GPIO_PinInit(GPIO2, 27U, &DC_config);
 
-  /* GPIO configuration of SW5 on GPIO_SD_B1_01 (pin M5) */
-  gpio_pin_config_t SW5_config = {
-      .direction = kGPIO_DigitalInput,
+  /* GPIO configuration of RES on GPIO_B1_12 (pin D13) */
+  gpio_pin_config_t RES_config = {
+      .direction = kGPIO_DigitalOutput,
       .outputLogic = 0U,
-      .interruptMode = kGPIO_IntFallingEdge
+      .interruptMode = kGPIO_NoIntmode
   };
-  /* Initialize GPIO functionality on GPIO_SD_B1_01 (pin M5) */
-  GPIO_PinInit(GPIO3, 1U, &SW5_config);
-  /* Enable GPIO pin interrupt on GPIO_SD_B1_01 (pin M5) */
-  GPIO_PortEnableInterrupts(GPIO3, 1U << 1U);
+  /* Initialize GPIO functionality on GPIO_B1_12 (pin D13) */
+  GPIO_PinInit(GPIO2, 28U, &RES_config);
 
-  /* GPIO configuration of SW4 on GPIO_SD_B1_03 (pin M4) */
-  gpio_pin_config_t SW4_config = {
+  /* GPIO configuration of HAL2 on GPIO_SD_B1_04 (pin P2) */
+  gpio_pin_config_t HAL2_config = {
       .direction = kGPIO_DigitalInput,
       .outputLogic = 0U,
-      .interruptMode = kGPIO_IntFallingEdge
-  };
-  /* Initialize GPIO functionality on GPIO_SD_B1_03 (pin M4) */
-  GPIO_PinInit(GPIO3, 3U, &SW4_config);
-  /* Enable GPIO pin interrupt on GPIO_SD_B1_03 (pin M4) */
-  GPIO_PortEnableInterrupts(GPIO3, 1U << 3U);
-
-  /* GPIO configuration of SW3 on GPIO_SD_B1_04 (pin P2) */
-  gpio_pin_config_t SW3_config = {
-      .direction = kGPIO_DigitalInput,
-      .outputLogic = 0U,
-      .interruptMode = kGPIO_IntFallingEdge
+      .interruptMode = kGPIO_NoIntmode
   };
   /* Initialize GPIO functionality on GPIO_SD_B1_04 (pin P2) */
-  GPIO_PinInit(GPIO3, 4U, &SW3_config);
-  /* Enable GPIO pin interrupt on GPIO_SD_B1_04 (pin P2) */
-  GPIO_PortEnableInterrupts(GPIO3, 1U << 4U);
+  GPIO_PinInit(GPIO3, 4U, &HAL2_config);
 
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B0_00_GPIO1_IO00,        /* GPIO_AD_B0_00 is configured as GPIO1_IO00 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
       IOMUXC_GPIO_AD_B0_01_GPIO1_IO01,        /* GPIO_AD_B0_01 is configured as GPIO1_IO01 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B0_02_GPIO1_IO02,        /* GPIO_AD_B0_02 is configured as GPIO1_IO02 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_AD_B0_03_GPIO1_IO03,        /* GPIO_AD_B0_03 is configured as GPIO1_IO03 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B0_12_LPUART1_TX,        /* GPIO_AD_B0_12 is configured as LPUART1_TX */
+      IOMUXC_GPIO_AD_B0_10_FLEXPWM1_PWMA03,   /* GPIO_AD_B0_10 is configured as FLEXPWM1_PWMA03 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B0_13_LPUART1_RX,        /* GPIO_AD_B0_13 is configured as LPUART1_RX */
+      IOMUXC_GPIO_AD_B0_11_FLEXPWM1_PWMB03,   /* GPIO_AD_B0_11 is configured as FLEXPWM1_PWMB03 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B0_12_GPIO1_IO12,        /* GPIO_AD_B0_12 is configured as GPIO1_IO12 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_AD_B0_14_GPIO1_IO14,        /* GPIO_AD_B0_14 is configured as GPIO1_IO14 */
@@ -263,10 +271,10 @@ void BOARD_InitPins(void) {
       IOMUXC_GPIO_AD_B0_15_GPIO1_IO15,        /* GPIO_AD_B0_15 is configured as GPIO1_IO15 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B1_00_GPIO1_IO16,        /* GPIO_AD_B1_00 is configured as GPIO1_IO16 */
+      IOMUXC_GPIO_AD_B1_00_LPI2C1_SCL,        /* GPIO_AD_B1_00 is configured as LPI2C1_SCL */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B1_01_GPIO1_IO17,        /* GPIO_AD_B1_01 is configured as GPIO1_IO17 */
+      IOMUXC_GPIO_AD_B1_01_LPI2C1_SDA,        /* GPIO_AD_B1_01 is configured as LPI2C1_SDA */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_AD_B1_02_GPIO1_IO18,        /* GPIO_AD_B1_02 is configured as GPIO1_IO18 */
@@ -278,25 +286,10 @@ void BOARD_InitPins(void) {
       IOMUXC_GPIO_AD_B1_04_GPIO1_IO20,        /* GPIO_AD_B1_04 is configured as GPIO1_IO20 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B1_05_GPIO1_IO21,        /* GPIO_AD_B1_05 is configured as GPIO1_IO21 */
+      IOMUXC_GPIO_AD_B1_10_LPUART8_TX,        /* GPIO_AD_B1_10 is configured as LPUART8_TX */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B1_06_GPIO1_IO22,        /* GPIO_AD_B1_06 is configured as GPIO1_IO22 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B1_08_GPIO1_IO24,        /* GPIO_AD_B1_08 is configured as GPIO1_IO24 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B1_09_GPIO1_IO25,        /* GPIO_AD_B1_09 is configured as GPIO1_IO25 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B1_10_GPIO1_IO26,        /* GPIO_AD_B1_10 is configured as GPIO1_IO26 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B1_11_GPIO1_IO27,        /* GPIO_AD_B1_11 is configured as GPIO1_IO27 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B1_12_GPIO1_IO28,        /* GPIO_AD_B1_12 is configured as GPIO1_IO28 */
+      IOMUXC_GPIO_AD_B1_11_LPUART8_RX,        /* GPIO_AD_B1_11 is configured as LPUART8_RX */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_AD_B1_13_GPIO1_IO29,        /* GPIO_AD_B1_13 is configured as GPIO1_IO29 */
@@ -317,55 +310,28 @@ void BOARD_InitPins(void) {
       IOMUXC_GPIO_B0_02_QTIMER1_TIMER2,       /* GPIO_B0_02 is configured as QTIMER1_TIMER2 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_B1_00_FLEXPWM1_PWMA03,      /* GPIO_B1_00 is configured as FLEXPWM1_PWMA03 */
+      IOMUXC_GPIO_B0_09_FLEXPWM2_PWMB01,      /* GPIO_B0_09 is configured as FLEXPWM2_PWMB01 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_B1_01_FLEXPWM1_PWMB03,      /* GPIO_B1_01 is configured as FLEXPWM1_PWMB03 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_GPIO_B1_02_GPIO2_IO18,           /* GPIO_B1_02 is configured as GPIO2_IO18 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_GPIO_B1_03_FLEXPWM2_PWMB03,      /* GPIO_B1_03 is configured as FLEXPWM2_PWMB03 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_GPIO_B1_04_GPIO2_IO20,           /* GPIO_B1_04 is configured as GPIO2_IO20 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_GPIO_B1_05_GPIO2_IO21,           /* GPIO_B1_05 is configured as GPIO2_IO21 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_GPIO_B1_07_GPT1_COMPARE1,        /* GPIO_B1_07 is configured as GPT1_COMPARE1 */
+      IOMUXC_GPIO_B1_00_FLEXIO2_FLEXIO16,     /* GPIO_B1_00 is configured as FLEXIO2_FLEXIO16 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_B1_08_QTIMER1_TIMER3,       /* GPIO_B1_08 is configured as QTIMER1_TIMER3 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_B1_09_QTIMER2_TIMER3,       /* GPIO_B1_09 is configured as QTIMER2_TIMER3 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
       IOMUXC_GPIO_B1_11_GPIO2_IO27,           /* GPIO_B1_11 is configured as GPIO2_IO27 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_B1_12_LPUART5_TX,           /* GPIO_B1_12 is configured as LPUART5_TX */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_GPIO_B1_13_LPUART5_RX,           /* GPIO_B1_13 is configured as LPUART5_RX */
+      IOMUXC_GPIO_B1_12_GPIO2_IO28,           /* GPIO_B1_12 is configured as GPIO2_IO28 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_B1_15_FLEXPWM4_PWMA03,      /* GPIO_B1_15 is configured as FLEXPWM4_PWMA03 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_SD_B1_00_GPIO3_IO00,        /* GPIO_SD_B1_00 is configured as GPIO3_IO00 */
+      IOMUXC_GPIO_SD_B1_00_LPUART4_TX,        /* GPIO_SD_B1_00 is configured as LPUART4_TX */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_SD_B1_01_GPIO3_IO01,        /* GPIO_SD_B1_01 is configured as GPIO3_IO01 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_GPIO_SD_B1_02_FLEXPWM2_PWMA03,   /* GPIO_SD_B1_02 is configured as FLEXPWM2_PWMA03 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_GPIO_SD_B1_03_GPIO3_IO03,        /* GPIO_SD_B1_03 is configured as GPIO3_IO03 */
+      IOMUXC_GPIO_SD_B1_01_LPUART4_RX,        /* GPIO_SD_B1_01 is configured as LPUART4_RX */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_SD_B1_04_GPIO3_IO04,        /* GPIO_SD_B1_04 is configured as GPIO3_IO04 */
@@ -383,16 +349,85 @@ void BOARD_InitPins(void) {
       | IOMUXC_GPR_GPR28_GPIO_MUX3_GPIO_SEL(0x00U) /* GPIO3 and GPIO8 share same IO MUX function, GPIO_MUX3 selects one GPIO function: 0x00U */
     );
   IOMUXC_GPR->GPR6 = ((IOMUXC_GPR->GPR6 &
-    (~(IOMUXC_GPR_GPR6_QTIMER1_TRM0_INPUT_SEL_MASK | IOMUXC_GPR_GPR6_QTIMER1_TRM1_INPUT_SEL_MASK | IOMUXC_GPR_GPR6_QTIMER1_TRM2_INPUT_SEL_MASK | IOMUXC_GPR_GPR6_QTIMER1_TRM3_INPUT_SEL_MASK | IOMUXC_GPR_GPR6_QTIMER2_TRM3_INPUT_SEL_MASK))) /* Mask bits to zero which are setting */
+    (~(IOMUXC_GPR_GPR6_QTIMER1_TRM0_INPUT_SEL_MASK | IOMUXC_GPR_GPR6_QTIMER1_TRM1_INPUT_SEL_MASK | IOMUXC_GPR_GPR6_QTIMER1_TRM2_INPUT_SEL_MASK | IOMUXC_GPR_GPR6_QTIMER1_TRM3_INPUT_SEL_MASK))) /* Mask bits to zero which are setting */
       | IOMUXC_GPR_GPR6_QTIMER1_TRM0_INPUT_SEL(0x00U) /* QTIMER1 TMR0 input select: input from IOMUX */
       | IOMUXC_GPR_GPR6_QTIMER1_TRM1_INPUT_SEL(0x00U) /* QTIMER1 TMR1 input select: input from IOMUX */
       | IOMUXC_GPR_GPR6_QTIMER1_TRM2_INPUT_SEL(0x00U) /* QTIMER1 TMR2 input select: input from IOMUX */
       | IOMUXC_GPR_GPR6_QTIMER1_TRM3_INPUT_SEL(0x00U) /* QTIMER1 TMR3 input select: input from IOMUX */
-      | IOMUXC_GPR_GPR6_QTIMER2_TRM3_INPUT_SEL(0x00U) /* QTIMER2 TMR3 input select: input from IOMUX */
     );
   IOMUXC_SetPinConfig(
-      IOMUXC_GPIO_AD_B0_12_LPUART1_TX,        /* GPIO_AD_B0_12 PAD functional properties : */
-      0x10B0U);                               /* Slew Rate Field: Slow Slew Rate
+      IOMUXC_GPIO_AD_B0_01_GPIO1_IO01,        /* GPIO_AD_B0_01 PAD functional properties : */
+      0x0170B0U);                             /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_AD_B0_03_GPIO1_IO03,        /* GPIO_AD_B0_03 PAD functional properties : */
+      0x0170B0U);                             /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_AD_B0_10_FLEXPWM1_PWMA03,   /* GPIO_AD_B0_10 PAD functional properties : */
+      0x80B0U);                               /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Disabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_AD_B0_11_FLEXPWM1_PWMB03,   /* GPIO_AD_B0_11 PAD functional properties : */
+      0x60A0U);                               /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0/4
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Disabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_AD_B0_12_GPIO1_IO12,        /* GPIO_AD_B0_12 PAD functional properties : */
+      0x0100B1U);                             /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Disabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_AD_B0_14_GPIO1_IO14,        /* GPIO_AD_B0_14 PAD functional properties : */
+      0x0170B0U);                             /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_AD_B0_15_GPIO1_IO15,        /* GPIO_AD_B0_15 PAD functional properties : */
+      0x0170B0U);                             /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_AD_B1_00_LPI2C1_SCL,        /* GPIO_AD_B1_00 PAD functional properties : */
+      0x10B1U);                               /* Slew Rate Field: Fast Slew Rate
                                                  Drive Strength Field: R0/6
                                                  Speed Field: medium(100MHz)
                                                  Open Drain Enable Field: Open Drain Disabled
@@ -401,8 +436,8 @@ void BOARD_InitPins(void) {
                                                  Pull Up / Down Config. Field: 100K Ohm Pull Down
                                                  Hyst. Enable Field: Hysteresis Disabled */
   IOMUXC_SetPinConfig(
-      IOMUXC_GPIO_AD_B0_13_LPUART1_RX,        /* GPIO_AD_B0_13 PAD functional properties : */
-      0x10B0U);                               /* Slew Rate Field: Slow Slew Rate
+      IOMUXC_GPIO_AD_B1_01_LPI2C1_SDA,        /* GPIO_AD_B1_01 PAD functional properties : */
+      0x10B1U);                               /* Slew Rate Field: Fast Slew Rate
                                                  Drive Strength Field: R0/6
                                                  Speed Field: medium(100MHz)
                                                  Open Drain Enable Field: Open Drain Disabled
@@ -411,85 +446,175 @@ void BOARD_InitPins(void) {
                                                  Pull Up / Down Config. Field: 100K Ohm Pull Down
                                                  Hyst. Enable Field: Hysteresis Disabled */
   IOMUXC_SetPinConfig(
-      IOMUXC_GPIO_AD_B1_12_GPIO1_IO28,        /* GPIO_AD_B1_12 PAD functional properties : */
-      0x18B0U);                               /* Slew Rate Field: Slow Slew Rate
+      IOMUXC_GPIO_AD_B1_02_GPIO1_IO18,        /* GPIO_AD_B1_02 PAD functional properties : */
+      0x0170B0U);                             /* Slew Rate Field: Slow Slew Rate
                                                  Drive Strength Field: R0/6
                                                  Speed Field: medium(100MHz)
-                                                 Open Drain Enable Field: Open Drain Enabled
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_AD_B1_03_GPIO1_IO19,        /* GPIO_AD_B1_03 PAD functional properties : */
+      0x0170B0U);                             /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_AD_B1_10_LPUART8_TX,        /* GPIO_AD_B1_10 PAD functional properties : */
+      0x10F1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: max(200MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_AD_B1_11_LPUART8_RX,        /* GPIO_AD_B1_11 PAD functional properties : */
+      0x10F1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: max(200MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
                                                  Pull / Keep Enable Field: Pull/Keeper Enabled
                                                  Pull / Keep Select Field: Keeper
                                                  Pull Up / Down Config. Field: 100K Ohm Pull Down
                                                  Hyst. Enable Field: Hysteresis Disabled */
   IOMUXC_SetPinConfig(
       IOMUXC_GPIO_AD_B1_13_GPIO1_IO29,        /* GPIO_AD_B1_13 PAD functional properties : */
-      0x18B0U);                               /* Slew Rate Field: Slow Slew Rate
+      0x10F1U);                               /* Slew Rate Field: Fast Slew Rate
                                                  Drive Strength Field: R0/6
-                                                 Speed Field: medium(100MHz)
-                                                 Open Drain Enable Field: Open Drain Enabled
+                                                 Speed Field: max(200MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
                                                  Pull / Keep Enable Field: Pull/Keeper Enabled
                                                  Pull / Keep Select Field: Keeper
                                                  Pull Up / Down Config. Field: 100K Ohm Pull Down
                                                  Hyst. Enable Field: Hysteresis Disabled */
   IOMUXC_SetPinConfig(
       IOMUXC_GPIO_AD_B1_14_GPIO1_IO30,        /* GPIO_AD_B1_14 PAD functional properties : */
-      0x90B0U);                               /* Slew Rate Field: Slow Slew Rate
+      0x10F1U);                               /* Slew Rate Field: Fast Slew Rate
                                                  Drive Strength Field: R0/6
-                                                 Speed Field: medium(100MHz)
+                                                 Speed Field: max(200MHz)
                                                  Open Drain Enable Field: Open Drain Disabled
                                                  Pull / Keep Enable Field: Pull/Keeper Enabled
                                                  Pull / Keep Select Field: Keeper
-                                                 Pull Up / Down Config. Field: 100K Ohm Pull Up
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
                                                  Hyst. Enable Field: Hysteresis Disabled */
   IOMUXC_SetPinConfig(
       IOMUXC_GPIO_AD_B1_15_GPIO1_IO31,        /* GPIO_AD_B1_15 PAD functional properties : */
-      0x90B0U);                               /* Slew Rate Field: Slow Slew Rate
+      0xB0U);                                 /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Disabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B0_00_QTIMER1_TIMER0,       /* GPIO_B0_00 PAD functional properties : */
+      0x10B1U);                               /* Slew Rate Field: Fast Slew Rate
                                                  Drive Strength Field: R0/6
                                                  Speed Field: medium(100MHz)
                                                  Open Drain Enable Field: Open Drain Disabled
                                                  Pull / Keep Enable Field: Pull/Keeper Enabled
                                                  Pull / Keep Select Field: Keeper
-                                                 Pull Up / Down Config. Field: 100K Ohm Pull Up
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B0_01_QTIMER1_TIMER1,       /* GPIO_B0_01 PAD functional properties : */
+      0x10B1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B0_09_FLEXPWM2_PWMB01,      /* GPIO_B0_09 PAD functional properties : */
+      0x1030U);                               /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: low(50MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_B1_00_FLEXIO2_FLEXIO16,     /* GPIO_B1_00 PAD functional properties : */
+      0x10F1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: max(200MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
                                                  Hyst. Enable Field: Hysteresis Disabled */
   IOMUXC_SetPinConfig(
       IOMUXC_GPIO_B1_11_GPIO2_IO27,           /* GPIO_B1_11 PAD functional properties : */
-      0x90B0U);                               /* Slew Rate Field: Slow Slew Rate
+      0x10F1U);                               /* Slew Rate Field: Fast Slew Rate
                                                  Drive Strength Field: R0/6
-                                                 Speed Field: medium(100MHz)
+                                                 Speed Field: max(200MHz)
                                                  Open Drain Enable Field: Open Drain Disabled
                                                  Pull / Keep Enable Field: Pull/Keeper Enabled
                                                  Pull / Keep Select Field: Keeper
-                                                 Pull Up / Down Config. Field: 100K Ohm Pull Up
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
                                                  Hyst. Enable Field: Hysteresis Disabled */
   IOMUXC_SetPinConfig(
-      IOMUXC_GPIO_SD_B1_01_GPIO3_IO01,        /* GPIO_SD_B1_01 PAD functional properties : */
-      0x90B0U);                               /* Slew Rate Field: Slow Slew Rate
+      IOMUXC_GPIO_B1_12_GPIO2_IO28,           /* GPIO_B1_12 PAD functional properties : */
+      0x10F1U);                               /* Slew Rate Field: Fast Slew Rate
                                                  Drive Strength Field: R0/6
-                                                 Speed Field: medium(100MHz)
+                                                 Speed Field: max(200MHz)
                                                  Open Drain Enable Field: Open Drain Disabled
                                                  Pull / Keep Enable Field: Pull/Keeper Enabled
                                                  Pull / Keep Select Field: Keeper
-                                                 Pull Up / Down Config. Field: 100K Ohm Pull Up
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
                                                  Hyst. Enable Field: Hysteresis Disabled */
   IOMUXC_SetPinConfig(
-      IOMUXC_GPIO_SD_B1_03_GPIO3_IO03,        /* GPIO_SD_B1_03 PAD functional properties : */
-      0x90B0U);                               /* Slew Rate Field: Slow Slew Rate
+      IOMUXC_GPIO_B1_15_FLEXPWM4_PWMA03,      /* GPIO_B1_15 PAD functional properties : */
+      0xB0U);                                 /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Disabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_SD_B1_00_LPUART4_TX,        /* GPIO_SD_B1_00 PAD functional properties : */
+      0x10B1U);                               /* Slew Rate Field: Fast Slew Rate
                                                  Drive Strength Field: R0/6
                                                  Speed Field: medium(100MHz)
                                                  Open Drain Enable Field: Open Drain Disabled
                                                  Pull / Keep Enable Field: Pull/Keeper Enabled
                                                  Pull / Keep Select Field: Keeper
-                                                 Pull Up / Down Config. Field: 100K Ohm Pull Up
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
+                                                 Hyst. Enable Field: Hysteresis Disabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_SD_B1_01_LPUART4_RX,        /* GPIO_SD_B1_01 PAD functional properties : */
+      0x10B1U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
                                                  Hyst. Enable Field: Hysteresis Disabled */
   IOMUXC_SetPinConfig(
       IOMUXC_GPIO_SD_B1_04_GPIO3_IO04,        /* GPIO_SD_B1_04 PAD functional properties : */
-      0x90B0U);                               /* Slew Rate Field: Slow Slew Rate
+      0x0100B1U);                             /* Slew Rate Field: Fast Slew Rate
                                                  Drive Strength Field: R0/6
                                                  Speed Field: medium(100MHz)
                                                  Open Drain Enable Field: Open Drain Disabled
-                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Disabled
                                                  Pull / Keep Select Field: Keeper
-                                                 Pull Up / Down Config. Field: 100K Ohm Pull Up
-                                                 Hyst. Enable Field: Hysteresis Disabled */
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
+                                                 Hyst. Enable Field: Hysteresis Enabled */
 }
 
 /***********************************************************************************************************************

@@ -16,6 +16,8 @@ class Motor {
   public:
     PID speedCtrl;
     float duty;
+    float target;
+    
     Motor(PWMCH_enum ch, float OutMin, float OutMax);
     void Init();
     void SetDuty(float duty);

@@ -26,7 +26,7 @@
 #include "common.h"
 #include "fsl_lpspi.h"
 
-#define DELAY_TIMER_TYPE            1		//0：适用systick进行延时   1：适用GPT进行延时
+#define DELAY_TIMER_TYPE            0		//0：适用systick进行延时   1：适用GPT进行延时
     
     
 #define DELAY_GPT 					GPT1	//选择使用的GPT定时器

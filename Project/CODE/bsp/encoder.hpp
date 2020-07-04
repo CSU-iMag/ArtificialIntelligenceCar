@@ -16,10 +16,11 @@ class Encoder {
     double distance;                        //实际距离
     float speed;                            //实际速度
 
-  public:
-    Encoder(qtmr_channel_selection_t QTIMER_Channel);
     void CalSpeed();
     void CalDistance();
+    
+  public:
+    Encoder(qtmr_channel_selection_t QTIMER_Channel);
     __inline float GetSpeed() { return speed; }
     __inline float GetDistance() { return distance; }
     __inline void ClearDistance() { distance = 0; }

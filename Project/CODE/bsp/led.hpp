@@ -11,7 +11,7 @@ class SoftLED {
   public:
     void Init();
     void SetBrightness(float percent);
-    SoftLED(PWMCH_enum ch) : channel(ch) {}
+    explicit SoftLED(PWMCH_enum ch) : channel(ch) {}
 };
 
 class HardLED {
@@ -23,7 +23,7 @@ class HardLED {
     void TurnOn();
     void TurnOff();
     void Toggle();
-    HardLED(PIN_enum pin, bool active_state = false)
+    explicit HardLED(PIN_enum pin, bool active_state = false)
         : Pin(pin), ActiveState(active_state) {}
 };
 

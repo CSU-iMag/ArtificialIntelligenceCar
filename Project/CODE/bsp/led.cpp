@@ -28,17 +28,12 @@ void led_schedule(sched_event_data_t dat) {
         CountDown = false;
     if (Duty >= 99)
         CountDown = true;
-
-    Car.ledCore.Toggle();
-    Car.ledGreen.SetBrightness(Duty);
+    Car.CoreLED.SetBrightness(Duty);
 }
 
 SoftTimer ledTmr(led_schedule);
 
 void led_init() {
-    Car.ledCore.Init();
-    Car.ledGreen.Init();
-    Car.ledWhite.Init();
-    Car.ledBlue.Init();
+    Car.CoreLED.Init();
     ledTmr.Start(LED_SOFT_BLINK_INTERVAL);
 }

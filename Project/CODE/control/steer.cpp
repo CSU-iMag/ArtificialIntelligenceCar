@@ -1,6 +1,8 @@
 #include "steer.hpp"
 #include "car.hpp"
 #include "car_config.h"
+#include "communication.hpp"
+#include "deep.hpp"
 #include "gui.hpp"
 #include "magnet.hpp"
 #include "route.h"
@@ -32,15 +34,21 @@ void Steer::DutySet(float duty) {
 //-------------------------------------------------------------------------------------------------------------------
 //  @name     pid���ƶ��
 //-------------------------------------------------------------------------------------------------------------------
-void steer_schedule() {
-    if (Car.CtrlMode != ControlMode::PID)
-        return;
-    CRITICAL_REGION_ENTER();
-    auto steering =
-        Car.Steer3010.steerCtrl.Realize(MagErrorForPID) + STEER_CENTER;
-    LIMITING(steering, STEER_MIN, STEER_MAX);
-    Car.Steer3010.steerDutyforAI =
-        RESCALE_VALUE(steering - STEER_MIN, 255, STEER_MAX - STEER_MIN);
+void steer_schedule(sched_event_data_t dat) {
+    float steering;
+    if (Car.CtrlMode == ControlMode::AI)
+        steering = deep_predict();
+    else {
+        CRITICAL_REGION_ENTER();
+        steering =
+            Car.Steer3010.steerCtrl.Realize(MagErrorForPID) + STEER_CENTER;
+        CRITICAL_REGION_EXIT();
+        LIMITING(steering, STEER_MIN, STEER_MAX);
+        Car.Steer3010.steerDutyforAI =
+            RESCALE_VALUE(steering - STEER_MIN, 255, STEER_MAX - STEER_MIN);
+    }
+    
     Car.Steer3010.WidthSet(steering);
-    CRITICAL_REGION_EXIT();
+    Car.MotorL.target = Car.MotorR.target =
+        Car.TargetSpeed - std::abs(steering - STEER_CENTER) * Car.Deceleration;
 }

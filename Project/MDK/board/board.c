@@ -172,6 +172,6 @@ void board_init(void) {
     BOARD_BootClockRUN(); //初始化开发板时钟
     BOARD_InitBootPins(); //初始化开发板引脚
     BOARD_InitPeripherals();
-    BOARD_InitDebugConsole();
+    // BOARD_InitDebugConsole();
     NVIC_SetPriorityGrouping(((uint32_t)0x3)); //设置中断优先级分组
 }

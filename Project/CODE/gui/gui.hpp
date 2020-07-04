@@ -38,7 +38,7 @@ struct HomePage : ListLayout {
     HomePage();
 
   private:
-    static const int ChildrenCnt = 10;
+    static const int ChildrenCnt = 8;
     struct TreeNode tree = {.Parent = &gui_background};
     SGUI_ITEMS_ITEM its[ChildrenCnt];
 
@@ -61,17 +61,6 @@ struct DebugInfo : ListLayout {
     static const int ChildrenCnt = 3;
     struct TreeNode tree = {.Parent = &gui_home};
     SGUI_ITEMS_ITEM its[ChildrenCnt];
-};
-
-struct AttitudeDat : ListLayout {
-    AttitudeDat()
-        : ListLayout(&tree, its, "Attitude", {"acc_x", "acc_y", "acc_z"}) {}
-    void UpdateValue();
-
-  private:
-    static const uint8_t cnt = 6;
-    struct TreeNode tree = {.Parent = &gui_home};
-    SGUI_ITEMS_ITEM its[cnt];
 };
 
 struct Resistance : ListLayout {
@@ -118,28 +107,6 @@ struct MagadcDat : ListLayout {
     virtual void KeyRightPush();
 
     //! @brief Switch display mode: figure or graph
-    virtual void KeyEnterPush();
-};
-
-struct HC06AT : ListLayout {
-    HC06AT()
-        : ListLayout(&tree, its, "HC06",
-                     {"RxBuff= ", "TestAT  ", "Baud  = ", "passw = ",
-                      "MA/SL = ", "Valida= ", "Version "}) {}
-    void UpdateValue();
-
-  private:
-    static const uint8_t Hc06Num = 7;
-    struct TreeNode tree = {.Parent = &gui_home};
-    SGUI_ITEMS_ITEM its[Hc06Num];
-
-    //! @brief
-    virtual void KeyLeftPush();
-
-    //! @brief
-    virtual void KeyRightPush();
-
-    //! @brief
     virtual void KeyEnterPush();
 };
 
@@ -204,11 +171,11 @@ struct MotorConfig : ListLayout {
     MotorConfig()
         : ListLayout(&tree, its, "-后轮电机配置",
                      {"目标速度：", "左轮速度：", "右轮速度：", "左轮距离：",
-                      "右轮距离：", "清空距离", "固定占空比："}) {}
+                      "右轮距离：", "清空距离", "固定占空比：", "弯道减速：", "弯道差速："}) {}
     static void UpdateValue(sched_event_data_t);
 
   private:
-    static const uint8_t item_cnt = 7;
+    static const uint8_t item_cnt = 9;
     struct TreeNode tree = {.Parent = &gui_home};
     SGUI_ITEMS_ITEM its[item_cnt];
     int8_t duty;

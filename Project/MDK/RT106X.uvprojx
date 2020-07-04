@@ -1079,11 +1079,6 @@
               <FilePath>..\CODE\utility\scheduler.cpp</FilePath>
             </File>
             <File>
-              <FileName>attitude.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\CODE\control\attitude.cpp</FilePath>
-            </File>
-            <File>
               <FileName>rit.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\CODE\control\rit.cpp</FilePath>
@@ -1129,11 +1124,6 @@
               <FilePath>..\CODE\bsp\bat.cpp</FilePath>
             </File>
             <File>
-              <FileName>beep.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\CODE\bsp\beep.cpp</FilePath>
-            </File>
-            <File>
               <FileName>timer.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\CODE\utility\timer.cpp</FilePath>
@@ -1152,11 +1142,6 @@
               <FileName>storage.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\CODE\bsp\storage.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>bluetooth.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\CODE\bsp\bluetooth.cpp</FilePath>
             </File>
             <File>
               <FileName>communication.cpp</FileName>
@@ -1240,11 +1225,6 @@
               <FilePath>..\CODE\ai\model1.nncu.c</FilePath>
             </File>
             <File>
-              <FileName>music.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\CODE\utility\music.cpp</FilePath>
-            </File>
-            <File>
               <FileName>model2.nncu.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\CODE\ai\model2.nncu.c</FilePath>
@@ -1298,16 +1278,6 @@
               <FileName>scheduler.hpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\CODE\utility\scheduler.hpp</FilePath>
-            </File>
-            <File>
-              <FileName>attitude.hpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\CODE\control\attitude.hpp</FilePath>
-            </File>
-            <File>
-              <FileName>rit.hpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\CODE\control\rit.hpp</FilePath>
             </File>
             <File>
               <FileName>key.hpp</FileName>
@@ -1383,11 +1353,6 @@
               <FileName>pga.hpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\CODE\control\pga.hpp</FilePath>
-            </File>
-            <File>
-              <FileName>bluetooth.hpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\CODE\bsp\bluetooth.hpp</FilePath>
             </File>
           </Files>
         </Group>

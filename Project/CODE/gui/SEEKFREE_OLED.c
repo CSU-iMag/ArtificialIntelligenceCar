@@ -27,15 +27,39 @@
  ********************************************************************************************************************/
 
 #include "SEEKFREE_OLED.h"
-#include "zf_gpio.h"
-#include "zf_iomuxc.h"
+#include "fsl_gpio.h"
+#include "pin_mux.h"
 #include "zf_systick.h"
 
-#define OLED_SCL(x) gpio_set(OLED_SCL_PIN, x)
-#define OLED_SDA(x) gpio_set(OLED_SDA_PIN, x)
-#define OLED_RST(x) gpio_set(OLED_RST_PIN, x)
-#define OLED_DC(x) gpio_set(OLED_DC_PIN, x)
-#define OLED_CS(x) gpio_set(OLED_CS_PIN, x)
+//定义显示方向
+// 0 横屏模式
+// 1 横屏模式  旋转180
+#define OLED_DISPLAY_DIR 0
+
+#if (0 == OLED_DISPLAY_DIR || 1 == OLED_DISPLAY_DIR)
+#define X_WIDTH 128
+#define Y_WIDTH 64
+
+#else
+#error "OLED_DISPLAY_DIR 定义错误"
+#endif
+
+#define Brightness 0x7f //设置OLED亮度  越大越亮    范围0-0XFF
+#define XLevelL 0x00
+#define XLevelH 0x10
+#define XLevel ((XLevelH & 0x0F) * 16 + XLevelL)
+#define Max_Column 128
+#define Max_Row 64
+
+#define OLED_SCL(x)                                                            \
+    GPIO_PinWrite(BOARD_INITPINS_CLK_PORT, BOARD_INITPINS_CLK_PIN, x)
+#define OLED_SDA(x)                                                            \
+    GPIO_PinWrite(BOARD_INITPINS_MOSI_PORT, BOARD_INITPINS_MOSI_PIN, x)
+#define OLED_RST(x)                                                            \
+    GPIO_PinWrite(BOARD_INITPINS_RES_PORT, BOARD_INITPINS_RES_PIN, x)
+#define OLED_DC(x)                                                             \
+    GPIO_PinWrite(BOARD_INITPINS_DC_PORT, BOARD_INITPINS_DC_PIN, x)
+#define OLED_CS(x)
 
 //-------------------------------------------------------------------------------------------------------------------
 //  @brief      内部调用，用户无需关心
@@ -115,12 +139,6 @@ void oled_set_pos(uint8 x, uint8 y) {
 //  Sample usage:
 //-------------------------------------------------------------------------------------------------------------------
 void oled_init(void) {
-    gpio_init(OLED_SCL_PIN, GPO, 1, GPIO_PIN_CONFIG);
-    gpio_init(OLED_SDA_PIN, GPO, 0, GPIO_PIN_CONFIG);
-    gpio_init(OLED_RST_PIN, GPO, 1, GPIO_PIN_CONFIG);
-    gpio_init(OLED_DC_PIN, GPO, 1, GPIO_PIN_CONFIG);
-    gpio_init(OLED_CS_PIN, GPO, 1, GPIO_PIN_CONFIG);
-
     OLED_SCL(1);
     OLED_RST(0);
     systick_delay_ms(50);
@@ -130,7 +148,7 @@ void oled_init(void) {
     oled_wrcmd(0x00); //---set low column address
     oled_wrcmd(0x10); //---set high column address
     oled_wrcmd(0x40); //--set start line address  Set Mapping RAM Display Start
-                      //Line (0x00~0x3F)
+                      // Line (0x00~0x3F)
     oled_wrcmd(0x81); //--set contrast control register
     oled_wrcmd(Brightness); // Set SEG Output Current Brightness
 

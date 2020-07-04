@@ -2,6 +2,7 @@
 #define STEERx_H
 
 #include "pid.hpp"
+#include "scheduler.hpp"
 #include "util.h"
 #include "zf_pwm.h"
 
@@ -19,6 +20,6 @@ class Steer {
     __inline void WidthSet(uint16_t us) { DutySet(PULSE_TO_PERCENT(us)); }
 };
 
-void steer_schedule();
+void steer_schedule(sched_event_data_t);
 
 #endif

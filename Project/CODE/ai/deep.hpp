@@ -6,6 +6,6 @@ extern "C" const unsigned char model2[];
 extern "C" const unsigned char model3[];
 
 void deep_init();
-void deep_schedule();
+float deep_predict();
 
 #endif

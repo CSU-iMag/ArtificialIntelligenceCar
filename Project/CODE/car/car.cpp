@@ -1,53 +1,45 @@
 #include "car.hpp"
 #include "MCP4452.h"
 #include "SEEKFREE_IIC.h"
-#include "SEEKFREE_MPU6050.h"
 #include "bat.hpp"
 #include "communication.hpp"
 #include "deep.hpp"
 #include "fsl_src.h"
 #include "gui.hpp"
-#include "rit.hpp"
 #include "storage.hpp"
 #include "timer.hpp"
 #include "usage.hpp"
 #include "util.h"
+#include "zf_pit.h"
 #include "zf_flash.h"
 
-//! @warning å…¨å±€å”¯ä¸€
+//! @warning 全局唯一！
 AT_SDRAM_SECTION(iMagCar Car);
 
 void iMagCar::Startup() {
     DisableGlobalIRQ();
     board_init(); //!< before all
-    DEBUG_LOG("\n\r SRC: %d \n", SRC_GetResetStatusFlags(SRC));
+    //    DEBUG_LOG("\n\r SRC: %d \n", SRC_GetResetStatusFlags(SRC));
     CAR_ERROR_CHECK(flash_init() == 0);
     led_init();
     key_init();
-    oled_init(); //!< after key
-    simiic_init();
-    // mpu6050_init();
-    // EncoderL.Init();
-    // EncoderR.Init();
-    // Hc06.Init();
+    CarOLED.fnInitialize(); //!< after key
+    ActiveLayout->Repaint(); //!< after oled
     MotorL.Init();
     MotorR.Init();
     Steer3010.Init();
-    ActiveLayout->Repaint(); //!< after oled
     bat_init();
     com_init();
-    rit_init();
     deep_init();
     magnet_init();
     cpu_usage_init();
+    simiic_init();
     MCP4452_all_init(); //!< after i2c
     DEBUG_LOG("MCP4452 Check: %d\n", MCP4452_self_check());
 
-    
     EnableGlobalIRQ(0);
     storage_load(SLN_DEBUG_SECTOR, SLN_DEBUG_PAGE); //!< after MCP4452
     gui_motor.upd_tmr.Start(62);
-    beep0.Mute();
     com_log("Startup Successfully!\n", LogGreen);
 }
 
@@ -57,15 +49,15 @@ void iMagCar::Run() {
 }
 
 void iMagCar::Launch() {
-    pit_interrupt_ms(MOTOR_CHANNEL, MOTOR_PERIOD);
-    pit_interrupt_ms(STEER_CHANNEL, STEER_PERIOD);
+    PIT_StartTimer(PIT, PIT_MOTOR_CH);
+    PIT_StartTimer(PIT, PIT_STEER_CH);
 }
 
 void iMagCar::Pause() {
     Car.MotorL.Stop();
     Car.MotorR.Stop();
-    pit_close(MOTOR_CHANNEL);
-    pit_close(STEER_CHANNEL);
+    pit_close(PIT_MOTOR_CH);
+    pit_close(PIT_STEER_CH);
 }
 
 iMagCar::~iMagCar() {
@@ -80,6 +72,5 @@ void LaunchDelaySchedule(sched_event_data_t dat) {
     //     return;
     // SongOfJoy.Start();
     // cnt = 0;
-    Car.beep0.Mute();
     Car.Machine.Start();
 }

@@ -12,13 +12,15 @@
 #include "fsl_edma.h"
 #include "fsl_dmamux.h"
 #include "fsl_common.h"
-#include "fsl_dcp.h"
-#include "fsl_gpt.h"
+#include "fsl_adc.h"
+#include "fsl_lpuart.h"
 #include "fsl_clock.h"
+#include "fsl_lpuart_edma.h"
+#include "fsl_gpio.h"
+#include "fsl_lpi2c.h"
 #include "fsl_qtmr.h"
 #include "fsl_tempmon.h"
-#include "fsl_lpuart.h"
-#include "fsl_lpuart_edma.h"
+#include "fsl_pit.h"
 
 #if defined(__cplusplus)
 extern "C" {
@@ -32,85 +34,150 @@ extern "C" {
 #define DMA0_DMA_BASEADDR DMA0
 /* Associated DMAMUX device that is used for muxing of requests. */
 #define DMA0_DMAMUX_BASEADDR DMAMUX
+/* BOARD_InitPeripherals defines for ADC1 */
 /* Definition of peripheral ID */
-#define DCP_PERIPHERAL DCP
+#define BAT_PERIPHERAL ADC1
+/* Definition of special channel interconnected with ADC_ETC which takes real channel to be measured from ADC_ETC. */
+#define BAT_CHANNEL_DRIVEN_BY_ADC_ETC 16U
+/* Definition of ADC1 channel from configuration #0 9 */
+#define BAT 9U
+/* BAT interrupt vector ID (number). */
+#define BAT_IRQN ADC1_IRQn
+/* BAT interrupt vector priority. */
+#define BAT_IRQ_PRIORITY 6
+/* BAT interrupt handler identifier. */
+#define BAT_IRQHANDLER ADC1_IRQHandler
 /* Definition of peripheral ID */
-#define GPT2_PERIPHERAL GPT2
+#define COM_PERIPHERAL LPUART4
 /* Definition of the clock source frequency */
-#define GPT2_CLOCK_SOURCE 75000000UL
-/* GPT2 interrupt vector ID (number). */
-#define GPT2_GPT_IRQN GPT2_IRQn
-/* GPT2 interrupt vector priority. */
-#define GPT2_GPT_IRQ_PRIORITY 6
-/* GPT2 interrupt handler identifier. */
-#define GPT2_GPT_IRQHANDLER GPT2_IRQHandler
+#define COM_CLOCK_SOURCE 80000000UL
+/* COM eDMA source request. */
+#define COM_RX_DMA_REQUEST kDmaRequestMuxLPUART4Rx
+/* Selected eDMA channel number. */
+#define COM_RX_DMA_CHANNEL 2
+/* DMAMUX device that is used for muxing of the request. */
+#define COM_RX_DMAMUX_BASEADDR DMAMUX
+/* Used DMA device. */
+#define COM_RX_DMA_BASEADDR DMA0
+/* COM eDMA source request. */
+#define COM_TX_DMA_REQUEST kDmaRequestMuxLPUART4Tx
+/* Selected eDMA channel number. */
+#define COM_TX_DMA_CHANNEL 1
+/* DMAMUX device that is used for muxing of the request. */
+#define COM_TX_DMAMUX_BASEADDR DMAMUX
+/* Used DMA device. */
+#define COM_TX_DMA_BASEADDR DMA0
+/* GPIO1 interrupt vector ID (number). */
+#define GPIO1_GPIO_COMB_0_15_IRQN GPIO1_Combined_0_15_IRQn
+/* GPIO1 interrupt handler identifier. */
+#define GPIO1_GPIO_COMB_0_15_IRQHANDLER GPIO1_Combined_0_15_IRQHandler
+/* GPIO1 interrupt vector ID (number). */
+#define GPIO1_GPIO_COMB_16_31_IRQN GPIO1_Combined_16_31_IRQn
+/* GPIO1 interrupt handler identifier. */
+#define GPIO1_GPIO_COMB_16_31_IRQHANDLER GPIO1_Combined_16_31_IRQHandler
+/* GPIO3 interrupt vector ID (number). */
+#define GPIO3_GPIO_COMB_0_15_IRQN GPIO3_Combined_0_15_IRQn
+/* GPIO3 interrupt handler identifier. */
+#define GPIO3_GPIO_COMB_0_15_IRQHANDLER GPIO3_Combined_0_15_IRQHandler
+/* GPIO3 interrupt vector ID (number). */
+#define GPIO3_GPIO_COMB_16_31_IRQN GPIO3_Combined_16_31_IRQn
+/* GPIO3 interrupt handler identifier. */
+#define GPIO3_GPIO_COMB_16_31_IRQHANDLER GPIO3_Combined_16_31_IRQHandler
+/* BOARD_InitPeripherals defines for LPI2C1 */
+/* Definition of peripheral ID */
+#define PGA_PERIPHERAL LPI2C1
+/* Definition of clock source */
+#define PGA_CLOCK_FREQ 60000000UL
 /* Definition of peripheral ID */
 #define PULSEENCODER_PERIPHERAL TMR1
 /* Definition of the timer channel Channel_0. */
 #define PULSEENCODER_CHANNEL_0_CHANNEL kQTMR_Channel_0
 /* Definition of the timer channel Channel_2. */
-#define PULSEENCODER_CHANNEL_2_CHANNEL kQTMR_Channel_2
+#define PULSEENCODER_CHANNEL_2_CHANNEL kQTMR_Channel_1
 /* Definition of the timer channel Channel_0 clock source frequency. */
 #define PULSEENCODER_CHANNEL_0_CLOCK_SOURCE 1UL
 /* Definition of the timer channel Channel_2 clock source frequency. */
-#define PULSEENCODER_CHANNEL_2_CLOCK_SOURCE 10UL
+#define PULSEENCODER_CHANNEL_2_CLOCK_SOURCE 1UL
+/* Definition of peripheral ID */
+#define SLAVE_PERIPHERAL LPUART8
+/* Definition of the clock source frequency */
+#define SLAVE_CLOCK_SOURCE 80000000UL
+/* SLAVE eDMA source request. */
+#define SLAVE_RX_DMA_REQUEST kDmaRequestMuxLPUART8Rx
+/* Selected eDMA channel number. */
+#define SLAVE_RX_DMA_CHANNEL 0
+/* DMAMUX device that is used for muxing of the request. */
+#define SLAVE_RX_DMAMUX_BASEADDR DMAMUX
+/* Used DMA device. */
+#define SLAVE_RX_DMA_BASEADDR DMA0
 /* Definition of peripheral ID */
 #define TEMPMON_PERIPHERAL TEMPMON
-/* Definition of peripheral ID */
-#define TMR2_PERIPHERAL TMR2
-/* Definition of the timer channel Channel_3. */
-#define TMR2_CHANNEL_3_CHANNEL kQTMR_Channel_3
-/* Definition of the timer channel Channel_3 clock source frequency. */
-#define TMR2_CHANNEL_3_CLOCK_SOURCE 18750000UL
-/* Definition of peripheral ID */
-#define COMMUNICATE_PERIPHERAL LPUART5
-/* Definition of the clock source frequency */
-#define COMMUNICATE_CLOCK_SOURCE 80000000UL
-/* communicate eDMA source request. */
-#define COMMUNICATE_RX_DMA_REQUEST kDmaRequestMuxLPUART5Rx
-/* Selected eDMA channel number. */
-#define COMMUNICATE_RX_DMA_CHANNEL 5
-/* DMAMUX device that is used for muxing of the request. */
-#define COMMUNICATE_RX_DMAMUX_BASEADDR DMAMUX
-/* Used DMA device. */
-#define COMMUNICATE_RX_DMA_BASEADDR DMA0
-/* communicate eDMA source request. */
-#define COMMUNICATE_TX_DMA_REQUEST kDmaRequestMuxLPUART5Tx
-/* Selected eDMA channel number. */
-#define COMMUNICATE_TX_DMA_CHANNEL 6
-/* DMAMUX device that is used for muxing of the request. */
-#define COMMUNICATE_TX_DMAMUX_BASEADDR DMAMUX
-/* Used DMA device. */
-#define COMMUNICATE_TX_DMA_BASEADDR DMA0
-/* Definition of peripheral ID */
-#define SCONSOLE_PERIPHERAL LPUART1
-/* Definition of the clock source frequency */
-#define SCONSOLE_CLOCK_SOURCE 80000000UL
+/* BOARD_InitPeripherals defines for PIT */
+/* Definition of peripheral ID. */
+#define PIT_PERIPHERAL PIT
+/* Definition of clock source frequency. */
+#define PIT_CLK_FREQ 25000000UL
+/* Definition of ticks count for channel 0 - deprecated. */
+#define PIT_0_TICKS 74999U
+/* Definition of ticks count for channel 1 - deprecated. */
+#define PIT_1_TICKS 149999U
+/* Definition of ticks count for channel 2 - deprecated. */
+#define PIT_2_TICKS 249999U
+/* PIT interrupt vector ID (number) - deprecated. */
+#define PIT_0_IRQN PIT0_IRQn
+/* PIT interrupt handler identifier - deprecated. */
+#define PIT_0_IRQHANDLER PIT0_IRQHandler
+/* PIT interrupt vector ID (number) - deprecated. */
+#define PIT_1_IRQN PIT_IRQn
+/* PIT interrupt handler identifier - deprecated. */
+#define PIT_1_IRQHANDLER PIT1_IRQHandler
+/* PIT interrupt vector ID (number) - deprecated. */
+#define PIT_2_IRQN PIT_IRQn
+/* PIT interrupt handler identifier - deprecated. */
+#define PIT_2_IRQHANDLER PIT2_IRQHandler
+/* Definition of channel number for channel 0. */
+#define PIT_ENCODER_CH kPIT_Chnl_0
+/* Definition of channel number for channel 1. */
+#define PIT_MOTOR_CH kPIT_Chnl_1
+/* Definition of channel number for channel 2. */
+#define PIT_STEER_CH kPIT_Chnl_2
+/* Definition of ticks count for channel 0. */
+#define PIT_ENCODER_CH_TICKS 74999U
+/* Definition of ticks count for channel 1. */
+#define PIT_MOTOR_CH_TICKS 149999U
+/* Definition of ticks count for channel 2. */
+#define PIT_STEER_CH_TICKS 249999U
+/* PIT interrupt vector ID (number). */
+#define PIT_IRQN PIT_IRQn
+/* PIT interrupt vector priority. */
+#define PIT_IRQ_PRIORITY 2
+/* PIT interrupt handler identifier. */
+#define PIT_IRQHANDLER PIT_IRQHandler
 
 /***********************************************************************************************************************
  * Global variables
  **********************************************************************************************************************/
 extern const edma_config_t DMA0_config;
-/* Common initialization settings */
-extern const dcp_config_t DCP_config;
-/* User DCP handler */
-extern const dcp_handle_t DCP_handle_0;
-extern const gpt_config_t GPT2_config;
+extern const adc_config_t BAT_config;
+extern const adc_channel_config_t BAT_channels_config[1];
+extern const lpuart_config_t COM_config;
+extern edma_handle_t COM_RX_Handle;
+extern edma_handle_t COM_TX_Handle;
+extern lpuart_edma_handle_t COM_LPUART_eDMA_Handle;
+extern const lpi2c_master_config_t PGA_masterConfig;
 extern const qtmr_config_t PulseEncoder_Channel_0_config;
 extern const qtmr_config_t PulseEncoder_Channel_2_config;
+extern const lpuart_config_t SLAVE_config;
+extern edma_handle_t SLAVE_RX_Handle;
+extern lpuart_edma_handle_t SLAVE_LPUART_eDMA_Handle;
 extern const tempmon_config_t TEMPMON_config;
-extern const qtmr_config_t TMR2_Channel_3_config;
-extern const lpuart_config_t communicate_config;
-extern edma_handle_t communicate_RX_Handle;
-extern edma_handle_t communicate_TX_Handle;
-extern lpuart_edma_handle_t communicate_LPUART_eDMA_Handle;
-extern const lpuart_config_t SConsole_config;
+extern const pit_config_t PIT_config;
 
 /***********************************************************************************************************************
  * Callback functions
  **********************************************************************************************************************/
-/* LPUART eDMA callback function for the communicate component (init. function BOARD_InitPeripherals)*/
-extern void com_callback(LPUART_Type *,lpuart_edma_handle_t *,status_t ,void *);
+/* LPUART eDMA callback function for the SLAVE component (init. function BOARD_InitPeripherals)*/
+extern void SlaveCallback(LPUART_Type *,lpuart_edma_handle_t *,status_t ,void *);
 
 /***********************************************************************************************************************
  * Initialization functions

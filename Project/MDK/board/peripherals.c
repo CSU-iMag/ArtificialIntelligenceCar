@@ -6,7 +6,7 @@
 /* clang-format off */
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 !!GlobalInfo
-product: Peripherals v7.0
+product: Peripherals v8.0
 processor: MIMXRT1064xxxxA
 package_id: MIMXRT1064DVL6A
 mcu_data: ksdk2_0
@@ -17,20 +17,6 @@ functionalGroups:
   UUID: 807635b5-074f-4250-b1e8-d8001ebce3f1
   called_from_default_init: true
   selectedCore: core0
- * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
-
-/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-component:
-- type: 'system'
-- type_id: 'system_54b53072540eeeb8f8e9343e71f28176'
-- global_system_definitions: []
- * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
-
-/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-component:
-- type: 'msg'
-- type_id: 'msg_6e2baaf3b97dbeef01c0043275f9a0e7'
-- global_messages: []
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
 
@@ -65,6 +51,7 @@ instance:
     - dma_table:
       - 0: []
       - 1: []
+      - 2: []
     - edma_channels: []
     - errInterruptConfig:
       - enableErrInterrupt: 'false'
@@ -86,131 +73,381 @@ void DMA0_init(void) {
 }
 
 /***********************************************************************************************************************
- * DCP initialization code
+ * BAT initialization code
  **********************************************************************************************************************/
 /* clang-format off */
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 instance:
-- name: 'DCP'
-- type: 'dcp'
-- mode: 'general'
-- custom_name_enabled: 'false'
-- type_id: 'dcp_95a1068fdf77eaec189146622e54f5e0'
+- name: 'BAT'
+- type: 'adc_12b1msps_sar'
+- mode: 'ADC_GENERAL'
+- custom_name_enabled: 'true'
+- type_id: 'adc_12b1msps_sar_6a490e886349a7b2b07bed10ce7b299b'
 - functional_group: 'BOARD_InitPeripherals'
-- peripheral: 'DCP'
+- peripheral: 'ADC1'
 - config_sets:
-  - config_general:
-    - settings_common:
-      - setting_gatherResidualWrites: 'true'
-      - setting_enableContextCaching: 'false'
-      - setting_enableContextSwitching: 'true'
-      - setting_enableChannel: 'kDCP_ch0Enable'
-    - settings_interrupt:
-      - setting_enableChannelInterrupt: ''
-      - setting_interrupt_channel0:
-        - IRQn: 'DCP_VMI_IRQn'
-        - enable_priority: 'false'
-        - priority: '0'
-        - enable_custom_name: 'false'
-      - setting_interrupt:
-        - IRQn: 'DCP_IRQn'
-        - enable_priority: 'false'
-        - priority: '0'
-        - enable_custom_name: 'false'
-  - config_handles:
-    - settings_handles:
-      - 0:
-        - handlerId: 'handle_0'
-        - channel: 'kDCP_Channel0'
-        - keySlot: 'kDCP_KeySlot0'
-        - swapConfig: ''
- * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
-/* clang-format on */
-const dcp_config_t DCP_config = {
-  .gatherResidualWrites = true,
-  .enableContextCaching = false,
-  .enableContextSwitching = true,
-  .enableChannel = kDCP_ch0Enable,
-  .enableChannelInterrupt = kDCP_chIntDisable,
-};
-const dcp_handle_t DCP_handle_0 = {
-  .channel = kDCP_Channel0,
-  .keySlot = kDCP_KeySlot0,
-  .swapConfig = kDCP_NoSwap,
-};
-
-void DCP_init(void) {
-  /* Initialize DCP. */
-  DCP_Init(DCP_PERIPHERAL, &DCP_config);
-}
-
-/***********************************************************************************************************************
- * GPT2 initialization code
- **********************************************************************************************************************/
-/* clang-format off */
-/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-instance:
-- name: 'GPT2'
-- type: 'gpt'
-- mode: 'general'
-- custom_name_enabled: 'false'
-- type_id: 'gpt_e92a0cbd07e389b82a1d19b05eb9fdda'
-- functional_group: 'BOARD_InitPeripherals'
-- peripheral: 'GPT2'
-- config_sets:
-  - fsl_gpt:
-    - gpt_config:
-      - clockSource: 'kGPT_ClockSource_Periph'
-      - clockSourceFreq: 'BOARD_BootClockRUN'
-      - oscDivider: '1'
-      - divider: '75'
-      - enableFreeRun: 'false'
-      - enableRunInWait: 'true'
-      - enableRunInStop: 'false'
-      - enableRunInDoze: 'false'
-      - enableRunInDbg: 'false'
-      - enableMode: 'true'
-    - input_capture_channels: []
-    - output_compare_channels:
-      - 0:
-        - channel: 'kGPT_OutputCompare_Channel1'
-        - mode: 'kGPT_OutputOperation_Disconnected'
-        - compare_value_str: '1ms'
-    - interrupt_requests: 'kGPT_OutputCompare1InterruptEnable'
-    - isInterruptEnabled: 'true'
-    - interrupt:
-      - IRQn: 'GPT2_IRQn'
+  - fsl_adc:
+    - clockConfig:
+      - clockSource: 'kADC_ClockSourceAD'
+      - clockSourceFreq: 'custom:10 MHz'
+      - clockDriver: 'kADC_ClockDriver8'
+      - samplePeriodMode: 'kADC_SamplePeriodLong24Clcoks'
+      - enableAsynchronousClockOutput: 'true'
+    - conversionConfig:
+      - resolution: 'kADC_Resolution12Bit'
+      - hardwareAverageMode: 'kADC_HardwareAverageCount32'
+      - enableHardwareTrigger: 'software'
+      - enableHighSpeed: 'false'
+      - enableLowPower: 'false'
+      - enableContinuousConversion: 'false'
+      - enableOverWrite: 'false'
+      - enableDma: 'false'
+    - resultingTime: []
+    - resultCorrection:
+      - doAutoCalibration: 'true'
+      - offset: '0'
+    - hardwareCompareConfiguration:
+      - hardwareCompareMode: 'disabled'
+      - value1: '0'
+      - value2: '0'
+    - enableInterrupt: 'true'
+    - adc_interrupt:
+      - IRQn: 'ADC1_IRQn'
       - enable_priority: 'true'
       - priority: '6'
       - enable_custom_name: 'false'
-    - EnableTimerInInit: 'true'
+    - adc_channels_config:
+      - 0:
+        - channelNumber: 'IN.9'
+        - channelName: 'BAT'
+        - channelGroup: '0'
+        - initializeChannel: 'true'
+        - enableInterruptOnConversionCompleted: 'true'
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
-const gpt_config_t GPT2_config = {
-  .clockSource = kGPT_ClockSource_Periph,
-  .divider = 75,
-  .enableFreeRun = false,
-  .enableRunInWait = true,
-  .enableRunInStop = false,
-  .enableRunInDoze = false,
-  .enableRunInDbg = false,
-  .enableMode = true
+const adc_config_t BAT_config = {
+  .enableOverWrite = false,
+  .enableContinuousConversion = false,
+  .enableHighSpeed = false,
+  .enableLowPower = false,
+  .enableLongSample = true,
+  .enableAsynchronousClockOutput = true,
+  .referenceVoltageSource = kADC_ReferenceVoltageSourceAlt0,
+  .samplePeriodMode = kADC_SamplePeriodLong24Clcoks,
+  .clockSource = kADC_ClockSourceAD,
+  .clockDriver = kADC_ClockDriver8,
+  .resolution = kADC_Resolution12Bit
+};
+const adc_channel_config_t BAT_channels_config[1] = {
+  {
+    .channelNumber = BAT,
+    .enableInterruptOnConversionCompleted = true
+  }
+};
+void BAT_init(void) {
+  /* Initialize ADC1 peripheral. */
+  ADC_Init(BAT_PERIPHERAL, &BAT_config);
+  /* Configure ADC1 peripheral to average 32 conversions in one measurement. */
+  ADC_SetHardwareAverageConfig(BAT_PERIPHERAL, kADC_HardwareAverageCount32);
+  /* Perform ADC1 auto calibration. */
+  ADC_DoAutoCalibration(BAT_PERIPHERAL);
+  /* Initialize ADC1 channel 9. */
+  ADC_SetChannelConfig(BAT_PERIPHERAL, 0U, &BAT_channels_config[0]);
+  /* Interrupt vector ADC1_IRQn priority settings in the NVIC */
+  NVIC_SetPriority(BAT_IRQN, BAT_IRQ_PRIORITY);
+  /* Enable interrupt ADC1_IRQn request in the NVIC */
+  EnableIRQ(BAT_IRQN);
+}
+
+/***********************************************************************************************************************
+ * COM initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'COM'
+- type: 'lpuart'
+- mode: 'edma'
+- custom_name_enabled: 'true'
+- type_id: 'lpuart_54a65a580e3462acdbacefd5299e0cac'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'LPUART4'
+- config_sets:
+  - lpuartConfig_t:
+    - lpuartConfig:
+      - clockSource: 'LpuartClock'
+      - lpuartSrcClkFreq: 'BOARD_BootClockRUN'
+      - baudRate_Bps: '460800'
+      - parityMode: 'kLPUART_ParityDisabled'
+      - dataBitsCount: 'kLPUART_EightDataBits'
+      - isMsb: 'false'
+      - stopBitCount: 'kLPUART_OneStopBit'
+      - txFifoWatermark: '0'
+      - rxFifoWatermark: '1'
+      - enableRxRTS: 'false'
+      - enableTxCTS: 'false'
+      - txCtsSource: 'kLPUART_CtsSourcePin'
+      - txCtsConfig: 'kLPUART_CtsSampleAtStart'
+      - rxIdleType: 'kLPUART_IdleTypeStopBit'
+      - rxIdleConfig: 'kLPUART_IdleCharacter16'
+      - enableTx: 'true'
+      - enableRx: 'true'
+  - edmaCfg:
+    - edma_channels:
+      - enable_rx_edma_channel: 'true'
+      - edma_rx_channel:
+        - eDMAn: '2'
+        - eDMA_source: 'kDmaRequestMuxLPUART4Rx'
+        - enableTriggerPIT: 'false'
+        - init_channel_priority: 'false'
+        - edma_channel_Preemption:
+          - enableChannelPreemption: 'false'
+          - enablePreemptAbility: 'false'
+          - channelPriority: '0'
+        - enable_custom_name: 'false'
+      - enable_tx_edma_channel: 'true'
+      - edma_tx_channel:
+        - eDMAn: '1'
+        - eDMA_source: 'kDmaRequestMuxLPUART4Tx'
+        - enableTriggerPIT: 'false'
+        - init_channel_priority: 'false'
+        - edma_channel_Preemption:
+          - enableChannelPreemption: 'false'
+          - enablePreemptAbility: 'false'
+          - channelPriority: '0'
+        - enable_custom_name: 'false'
+    - lpuart_edma_handle:
+      - enable_custom_name: 'false'
+      - init_callback: 'false'
+      - callback_fcn: ''
+      - user_data: ''
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+const lpuart_config_t COM_config = {
+  .baudRate_Bps = 460800,
+  .parityMode = kLPUART_ParityDisabled,
+  .dataBitsCount = kLPUART_EightDataBits,
+  .isMsb = false,
+  .stopBitCount = kLPUART_OneStopBit,
+  .txFifoWatermark = 0,
+  .rxFifoWatermark = 1,
+  .enableRxRTS = false,
+  .enableTxCTS = false,
+  .txCtsSource = kLPUART_CtsSourcePin,
+  .txCtsConfig = kLPUART_CtsSampleAtStart,
+  .rxIdleType = kLPUART_IdleTypeStopBit,
+  .rxIdleConfig = kLPUART_IdleCharacter16,
+  .enableTx = true,
+  .enableRx = true
+};
+edma_handle_t COM_RX_Handle;
+edma_handle_t COM_TX_Handle;
+lpuart_edma_handle_t COM_LPUART_eDMA_Handle;
+
+void COM_init(void) {
+  LPUART_Init(COM_PERIPHERAL, &COM_config, COM_CLOCK_SOURCE);
+  /* Set the source kDmaRequestMuxLPUART4Rx request in the DMAMUX */
+  DMAMUX_SetSource(COM_RX_DMAMUX_BASEADDR, COM_RX_DMA_CHANNEL, COM_RX_DMA_REQUEST);
+  /* Enable the channel 2 in the DMAMUX */
+  DMAMUX_EnableChannel(COM_RX_DMAMUX_BASEADDR, COM_RX_DMA_CHANNEL);
+  /* Set the source kDmaRequestMuxLPUART4Tx request in the DMAMUX */
+  DMAMUX_SetSource(COM_TX_DMAMUX_BASEADDR, COM_TX_DMA_CHANNEL, COM_TX_DMA_REQUEST);
+  /* Enable the channel 1 in the DMAMUX */
+  DMAMUX_EnableChannel(COM_TX_DMAMUX_BASEADDR, COM_TX_DMA_CHANNEL);
+  /* Create the eDMA COM_RX_Handle handle */
+  EDMA_CreateHandle(&COM_RX_Handle, COM_RX_DMA_BASEADDR, COM_RX_DMA_CHANNEL);
+  /* Create the eDMA COM_TX_Handle handle */
+  EDMA_CreateHandle(&COM_TX_Handle, COM_TX_DMA_BASEADDR, COM_TX_DMA_CHANNEL);
+  /* Create the LPUART eDMA handle */
+  LPUART_TransferCreateHandleEDMA(COM_PERIPHERAL, &COM_LPUART_eDMA_Handle, NULL, NULL, &COM_TX_Handle, &COM_RX_Handle);
+}
+
+/***********************************************************************************************************************
+ * GPIO1 initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'GPIO1'
+- type: 'igpio'
+- mode: 'GPIO'
+- custom_name_enabled: 'false'
+- type_id: 'igpio_b1c1fa279aa7069dca167502b8589cb7'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'GPIO1'
+- config_sets:
+  - fsl_gpio:
+    - enable_irq_comb_0_15: 'true'
+    - gpio_interrupt_comb_0_15:
+      - IRQn: 'GPIO1_Combined_0_15_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+    - enable_irq_comb_16_31: 'true'
+    - gpio_interrupt_comb_16_31:
+      - IRQn: 'GPIO1_Combined_16_31_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+    - enable_irq_int0: 'false'
+    - gpio_interrupt_int0:
+      - IRQn: 'GPIO1_INT0_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+    - enable_irq_int1: 'false'
+    - gpio_interrupt_int1:
+      - IRQn: 'GPIO1_INT1_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+    - enable_irq_int2: 'false'
+    - gpio_interrupt_int2:
+      - IRQn: 'GPIO1_INT2_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+    - enable_irq_int3: 'false'
+    - gpio_interrupt_int3:
+      - IRQn: 'GPIO1_INT3_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+    - enable_irq_int4: 'false'
+    - gpio_interrupt_int4:
+      - IRQn: 'GPIO1_INT4_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+    - enable_irq_int5: 'false'
+    - gpio_interrupt_int5:
+      - IRQn: 'GPIO1_INT5_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+    - enable_irq_int6: 'false'
+    - gpio_interrupt_int6:
+      - IRQn: 'GPIO1_INT6_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+    - enable_irq_int7: 'false'
+    - gpio_interrupt_int7:
+      - IRQn: 'GPIO1_INT7_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+
+void GPIO1_init(void) {
+  /* Make sure, the clock gate for GPIO1 is enabled (e. g. in pin_mux.c) */
+  /* Enable interrupt GPIO1_Combined_0_15_IRQn request in the NVIC */
+  EnableIRQ(GPIO1_Combined_0_15_IRQn);
+  /* Enable interrupt GPIO1_Combined_16_31_IRQn request in the NVIC */
+  EnableIRQ(GPIO1_Combined_16_31_IRQn);
+}
+
+/***********************************************************************************************************************
+ * GPIO3 initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'GPIO3'
+- type: 'igpio'
+- mode: 'GPIO'
+- custom_name_enabled: 'false'
+- type_id: 'igpio_b1c1fa279aa7069dca167502b8589cb7'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'GPIO3'
+- config_sets:
+  - fsl_gpio:
+    - enable_irq_comb_0_15: 'true'
+    - gpio_interrupt_comb_0_15:
+      - IRQn: 'GPIO3_Combined_0_15_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+    - enable_irq_comb_16_31: 'true'
+    - gpio_interrupt_comb_16_31:
+      - IRQn: 'GPIO3_Combined_16_31_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+
+void GPIO3_init(void) {
+  /* Make sure, the clock gate for GPIO3 is enabled (e. g. in pin_mux.c) */
+  /* Enable interrupt GPIO3_Combined_0_15_IRQn request in the NVIC */
+  EnableIRQ(GPIO3_Combined_0_15_IRQn);
+  /* Enable interrupt GPIO3_Combined_16_31_IRQn request in the NVIC */
+  EnableIRQ(GPIO3_Combined_16_31_IRQn);
+}
+
+/***********************************************************************************************************************
+ * PGA initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'PGA'
+- type: 'lpi2c'
+- mode: 'master'
+- custom_name_enabled: 'true'
+- type_id: 'lpi2c_db68d4f4f06a22e25ab51fe9bd6db4d2'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'LPI2C1'
+- config_sets:
+  - main:
+    - clockSource: 'Lpi2cClock'
+    - clockSourceFreq: 'BOARD_BootClockRUN'
+    - interrupt:
+      - IRQn: 'LPI2C1_IRQn'
+      - enable_priority: 'false'
+      - priority: '0'
+      - enable_custom_name: 'false'
+    - quick_selection: 'qs_interrupt'
+  - master:
+    - mode: 'polling'
+    - config:
+      - enableMaster: 'true'
+      - enableDoze: 'true'
+      - debugEnable: 'false'
+      - ignoreAck: 'false'
+      - pinConfig: 'kLPI2C_2PinOpenDrain'
+      - baudRate_Hz: '400000'
+      - busIdleTimeout_ns: '0'
+      - pinLowTimeout_ns: '0'
+      - sdaGlitchFilterWidth_ns: '0'
+      - sclGlitchFilterWidth_ns: '0'
+      - hostRequest:
+        - enable: 'false'
+        - source: 'kLPI2C_HostRequestExternalPin'
+        - polarity: 'kLPI2C_HostRequestPinActiveHigh'
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+const lpi2c_master_config_t PGA_masterConfig = {
+  .enableMaster = true,
+  .enableDoze = true,
+  .debugEnable = false,
+  .ignoreAck = false,
+  .pinConfig = kLPI2C_2PinOpenDrain,
+  .baudRate_Hz = 400000,
+  .busIdleTimeout_ns = 0,
+  .pinLowTimeout_ns = 0,
+  .sdaGlitchFilterWidth_ns = 0,
+  .sclGlitchFilterWidth_ns = 0,
+  .hostRequest = {
+    .enable = false,
+    .source = kLPI2C_HostRequestExternalPin,
+    .polarity = kLPI2C_HostRequestPinActiveHigh
+  }
 };
 
-void GPT2_init(void) {
-  /* GPT device and channels initialization */
-  GPT_Init(GPT2_PERIPHERAL, &GPT2_config);
-  GPT_SetOscClockDivider(GPT2_PERIPHERAL, 1);
-  GPT_SetOutputCompareValue(GPT2_PERIPHERAL, kGPT_OutputCompare_Channel1, 1000);
-  GPT_SetOutputOperationMode(GPT2_PERIPHERAL, kGPT_OutputCompare_Channel1, kGPT_OutputOperation_Disconnected);
-  /* Enable GPT interrupt sources */
-  GPT_EnableInterrupts(GPT2_PERIPHERAL, kGPT_OutputCompare1InterruptEnable);
-  /* Interrupt vector GPT2_IRQn priority settings in the NVIC */
-  NVIC_SetPriority(GPT2_GPT_IRQN, GPT2_GPT_IRQ_PRIORITY);
-  /* Enable interrupt GPT2_IRQn request in the NVIC */
-  EnableIRQ(GPT2_GPT_IRQN);
-  /* Start the GPT timer */ 
-  GPT_StartTimer(GPT2_PERIPHERAL);
+void PGA_init(void) {
+  LPI2C_MasterInit(PGA_PERIPHERAL, &PGA_masterConfig, PGA_CLOCK_FREQ);
 }
 
 /***********************************************************************************************************************
@@ -236,7 +473,7 @@ instance:
         - channel: 'kQTMR_Channel_0'
         - primarySource: 'kQTMR_ClockCounter0InputPin'
         - primarySourceFreq: '1'
-        - secondarySource: 'kQTMR_Counter1InputPin'
+        - secondarySource: 'kQTMR_Counter2InputPin'
         - countingMode: 'kQTMR_PriSrcRiseEdgeSecDir'
         - enableMasterMode: 'false'
         - enableExternalForce: 'false'
@@ -251,9 +488,9 @@ instance:
         - dmaIntMode: 'polling'
       - 1:
         - channel_prefix_id: 'Channel_2'
-        - channel: 'kQTMR_Channel_2'
-        - primarySource: 'kQTMR_ClockCounter2InputPin'
-        - primarySourceFreq: '10'
+        - channel: 'kQTMR_Channel_1'
+        - primarySource: 'kQTMR_ClockCounter1InputPin'
+        - primarySourceFreq: '1'
         - secondarySource: 'kQTMR_Counter3InputPin'
         - countingMode: 'kQTMR_PriSrcRiseEdgeSecDir'
         - enableMasterMode: 'false'
@@ -278,7 +515,7 @@ instance:
 /* clang-format on */
 const qtmr_config_t PulseEncoder_Channel_0_config = {
   .primarySource = kQTMR_ClockCounter0InputPin,
-  .secondarySource = kQTMR_Counter1InputPin,
+  .secondarySource = kQTMR_Counter2InputPin,
   .enableMasterMode = false,
   .enableExternalForce = false,
   .faultFilterCount = 0,
@@ -286,7 +523,7 @@ const qtmr_config_t PulseEncoder_Channel_0_config = {
   .debugMode = kQTMR_RunNormalInDebug
 };
 const qtmr_config_t PulseEncoder_Channel_2_config = {
-  .primarySource = kQTMR_ClockCounter2InputPin,
+  .primarySource = kQTMR_ClockCounter1InputPin,
   .secondarySource = kQTMR_Counter3InputPin,
   .enableMasterMode = false,
   .enableExternalForce = false,
@@ -299,7 +536,7 @@ void PulseEncoder_init(void) {
   /* Quad timer channel Channel_0 peripheral initialization */
   QTMR_Init(PULSEENCODER_PERIPHERAL, PULSEENCODER_CHANNEL_0_CHANNEL, &PulseEncoder_Channel_0_config);
   /* Setup the Input capture mode of the timer channel */
-  QTMR_SetupInputCapture(PULSEENCODER_PERIPHERAL, PULSEENCODER_CHANNEL_0_CHANNEL, kQTMR_Counter1InputPin, false, false, kQTMR_NoCapture);
+  QTMR_SetupInputCapture(PULSEENCODER_PERIPHERAL, PULSEENCODER_CHANNEL_0_CHANNEL, kQTMR_Counter2InputPin, false, false, kQTMR_NoCapture);
   /* Quad timer channel Channel_2 peripheral initialization */
   QTMR_Init(PULSEENCODER_PERIPHERAL, PULSEENCODER_CHANNEL_2_CHANNEL, &PulseEncoder_Channel_2_config);
   /* Setup the Input capture mode of the timer channel */
@@ -308,6 +545,102 @@ void PulseEncoder_init(void) {
   QTMR_StartTimer(PULSEENCODER_PERIPHERAL, PULSEENCODER_CHANNEL_0_CHANNEL, kQTMR_PriSrcRiseEdgeSecDir);
   /* Start the timer - select the timer counting mode */
   QTMR_StartTimer(PULSEENCODER_PERIPHERAL, PULSEENCODER_CHANNEL_2_CHANNEL, kQTMR_PriSrcRiseEdgeSecDir);
+}
+
+/***********************************************************************************************************************
+ * SLAVE initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'SLAVE'
+- type: 'lpuart'
+- mode: 'edma'
+- custom_name_enabled: 'true'
+- type_id: 'lpuart_54a65a580e3462acdbacefd5299e0cac'
+- functional_group: 'BOARD_InitPeripherals'
+- peripheral: 'LPUART8'
+- config_sets:
+  - lpuartConfig_t:
+    - lpuartConfig:
+      - clockSource: 'LpuartClock'
+      - lpuartSrcClkFreq: 'BOARD_BootClockRUN'
+      - baudRate_Bps: '921600'
+      - parityMode: 'kLPUART_ParityEven'
+      - dataBitsCount: 'kLPUART_EightDataBits'
+      - isMsb: 'false'
+      - stopBitCount: 'kLPUART_OneStopBit'
+      - txFifoWatermark: '0'
+      - rxFifoWatermark: '0'
+      - enableRxRTS: 'false'
+      - enableTxCTS: 'false'
+      - txCtsSource: 'kLPUART_CtsSourcePin'
+      - txCtsConfig: 'kLPUART_CtsSampleAtStart'
+      - rxIdleType: 'kLPUART_IdleTypeStopBit'
+      - rxIdleConfig: 'kLPUART_IdleCharacter1'
+      - enableTx: 'true'
+      - enableRx: 'true'
+  - edmaCfg:
+    - edma_channels:
+      - enable_rx_edma_channel: 'true'
+      - edma_rx_channel:
+        - eDMAn: '0'
+        - eDMA_source: 'kDmaRequestMuxLPUART8Rx'
+        - enableTriggerPIT: 'false'
+        - init_channel_priority: 'false'
+        - edma_channel_Preemption:
+          - enableChannelPreemption: 'false'
+          - enablePreemptAbility: 'false'
+          - channelPriority: '0'
+        - enable_custom_name: 'false'
+      - enable_tx_edma_channel: 'false'
+      - edma_tx_channel:
+        - eDMAn: '1'
+        - eDMA_source: 'kDmaRequestMuxLPUART8Tx'
+        - enableTriggerPIT: 'false'
+        - init_channel_priority: 'false'
+        - edma_channel_Preemption:
+          - enableChannelPreemption: 'false'
+          - enablePreemptAbility: 'false'
+          - channelPriority: '0'
+        - enable_custom_name: 'false'
+    - lpuart_edma_handle:
+      - enable_custom_name: 'false'
+      - init_callback: 'true'
+      - callback_fcn: 'SlaveCallback'
+      - user_data: ''
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+const lpuart_config_t SLAVE_config = {
+  .baudRate_Bps = 921600,
+  .parityMode = kLPUART_ParityEven,
+  .dataBitsCount = kLPUART_EightDataBits,
+  .isMsb = false,
+  .stopBitCount = kLPUART_OneStopBit,
+  .txFifoWatermark = 0,
+  .rxFifoWatermark = 0,
+  .enableRxRTS = false,
+  .enableTxCTS = false,
+  .txCtsSource = kLPUART_CtsSourcePin,
+  .txCtsConfig = kLPUART_CtsSampleAtStart,
+  .rxIdleType = kLPUART_IdleTypeStopBit,
+  .rxIdleConfig = kLPUART_IdleCharacter1,
+  .enableTx = true,
+  .enableRx = true
+};
+edma_handle_t SLAVE_RX_Handle;
+lpuart_edma_handle_t SLAVE_LPUART_eDMA_Handle;
+
+void SLAVE_init(void) {
+  LPUART_Init(SLAVE_PERIPHERAL, &SLAVE_config, SLAVE_CLOCK_SOURCE);
+  /* Set the source kDmaRequestMuxLPUART8Rx request in the DMAMUX */
+  DMAMUX_SetSource(SLAVE_RX_DMAMUX_BASEADDR, SLAVE_RX_DMA_CHANNEL, SLAVE_RX_DMA_REQUEST);
+  /* Enable the channel 0 in the DMAMUX */
+  DMAMUX_EnableChannel(SLAVE_RX_DMAMUX_BASEADDR, SLAVE_RX_DMA_CHANNEL);
+  /* Create the eDMA SLAVE_RX_Handle handle */
+  EDMA_CreateHandle(&SLAVE_RX_Handle, SLAVE_RX_DMA_BASEADDR, SLAVE_RX_DMA_CHANNEL);
+  /* Create the LPUART eDMA handle */
+  LPUART_TransferCreateHandleEDMA(SLAVE_PERIPHERAL, &SLAVE_LPUART_eDMA_Handle, SlaveCallback, NULL, NULL, &SLAVE_RX_Handle);
 }
 
 /***********************************************************************************************************************
@@ -365,226 +698,83 @@ void TEMPMON_init(void) {
 }
 
 /***********************************************************************************************************************
- * TMR2 initialization code
+ * PIT initialization code
  **********************************************************************************************************************/
 /* clang-format off */
 /* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 instance:
-- name: 'TMR2'
-- type: 'qtmr'
-- mode: 'general'
+- name: 'PIT'
+- type: 'pit'
+- mode: 'LPTMR_GENERAL'
 - custom_name_enabled: 'false'
-- type_id: 'qtmr_460dd7aa3f3371843c2548acd54252b0'
+- type_id: 'pit_a4782ba5223c8a2527ba91aeb2bc4159'
 - functional_group: 'BOARD_InitPeripherals'
-- peripheral: 'TMR2'
+- peripheral: 'PIT'
 - config_sets:
-  - fsl_qtmr:
-    - clockSource: 'BusInterfaceClock'
-    - clockSourceFreq: 'BOARD_BootClockRUN'
-    - qtmr_channels:
-      - 0:
-        - channel_prefix_id: 'Channel_3'
-        - channel: 'kQTMR_Channel_3'
-        - primarySource: 'kQTMR_ClockDivide_8'
-        - secondarySource: 'kQTMR_Counter3InputPin'
-        - countingMode: 'kQTMR_PriSrcRiseEdge'
-        - enableMasterMode: 'true'
-        - enableExternalForce: 'false'
-        - faultFilterCount: '3'
-        - faultFilterPeriod: '0'
-        - debugMode: 'kQTMR_RunNormalInDebug'
-        - timerModeInit: 'pwmOutput'
-        - pwmMode:
-          - freq_value_str: '1kHz'
-          - dutyCyclePercent: '0'
-          - outputPolarity: 'false'
-        - dmaIntMode: 'polling'
-    - interruptVector:
-      - enable_irq: 'false'
-      - interrupt:
-        - IRQn: 'TMR2_IRQn'
-        - enable_priority: 'false'
-        - priority: '0'
-        - enable_custom_name: 'false'
- * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
-/* clang-format on */
-const qtmr_config_t TMR2_Channel_3_config = {
-  .primarySource = kQTMR_ClockDivide_8,
-  .secondarySource = kQTMR_Counter3InputPin,
-  .enableMasterMode = true,
-  .enableExternalForce = false,
-  .faultFilterCount = 0,
-  .faultFilterPeriod = 0,
-  .debugMode = kQTMR_RunNormalInDebug
-};
-
-void TMR2_init(void) {
-  /* Quad timer channel Channel_3 peripheral initialization */
-  QTMR_Init(TMR2_PERIPHERAL, TMR2_CHANNEL_3_CHANNEL, &TMR2_Channel_3_config);
-  /* Setup the PWM mode of the timer channel */
-  QTMR_SetupPwm(TMR2_PERIPHERAL, TMR2_CHANNEL_3_CHANNEL, 1000UL, 0U, false, TMR2_CHANNEL_3_CLOCK_SOURCE);
-  /* Start the timer - select the timer counting mode */
-  QTMR_StartTimer(TMR2_PERIPHERAL, TMR2_CHANNEL_3_CHANNEL, kQTMR_PriSrcRiseEdge);
-}
-
-/***********************************************************************************************************************
- * communicate initialization code
- **********************************************************************************************************************/
-/* clang-format off */
-/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-instance:
-- name: 'communicate'
-- type: 'lpuart'
-- mode: 'edma'
-- custom_name_enabled: 'true'
-- type_id: 'lpuart_54a65a580e3462acdbacefd5299e0cac'
-- functional_group: 'BOARD_InitPeripherals'
-- peripheral: 'LPUART5'
-- config_sets:
-  - lpuartConfig_t:
-    - lpuartConfig:
-      - clockSource: 'LpuartClock'
-      - lpuartSrcClkFreq: 'BOARD_BootClockRUN'
-      - baudRate_Bps: '460800'
-      - parityMode: 'kLPUART_ParityEven'
-      - dataBitsCount: 'kLPUART_EightDataBits'
-      - isMsb: 'false'
-      - stopBitCount: 'kLPUART_OneStopBit'
-      - txFifoWatermark: '0'
-      - rxFifoWatermark: '1'
-      - enableRxRTS: 'false'
-      - enableTxCTS: 'false'
-      - txCtsSource: 'kLPUART_CtsSourceMatchResult'
-      - txCtsConfig: 'kLPUART_CtsSampleAtStart'
-      - rxIdleType: 'kLPUART_IdleTypeStopBit'
-      - rxIdleConfig: 'kLPUART_IdleCharacter2'
-      - enableTx: 'true'
-      - enableRx: 'true'
-  - edmaCfg:
-    - edma_channels:
-      - enable_rx_edma_channel: 'true'
-      - edma_rx_channel:
-        - eDMAn: '5'
-        - eDMA_source: 'kDmaRequestMuxLPUART5Rx'
-        - enableTriggerPIT: 'false'
-        - init_channel_priority: 'false'
-        - edma_channel_Preemption:
-          - enableChannelPreemption: 'false'
-          - enablePreemptAbility: 'false'
-          - channelPriority: '0'
-        - enable_custom_name: 'false'
-      - enable_tx_edma_channel: 'true'
-      - edma_tx_channel:
-        - eDMAn: '6'
-        - eDMA_source: 'kDmaRequestMuxLPUART5Tx'
-        - enableTriggerPIT: 'false'
-        - init_channel_priority: 'false'
-        - edma_channel_Preemption:
-          - enableChannelPreemption: 'false'
-          - enablePreemptAbility: 'false'
-          - channelPriority: '0'
-        - enable_custom_name: 'false'
-    - lpuart_edma_handle:
+  - fsl_pit:
+    - enableRunInDebug: 'false'
+    - enableSharedInterrupt: 'true'
+    - sharedInterrupt:
+      - IRQn: 'PIT_IRQn'
+      - enable_priority: 'true'
+      - priority: '2'
       - enable_custom_name: 'false'
-      - init_callback: 'true'
-      - callback_fcn: 'com_callback'
-      - user_data: ''
+    - timingConfig:
+      - clockSource: 'BusInterfaceClock'
+      - clockSourceFreq: 'BOARD_BootClockRUN'
+    - channels:
+      - 0:
+        - channel_id: 'ENCODER_CH'
+        - channelNumber: '0'
+        - enableChain: 'false'
+        - timerPeriod: '3Ms'
+        - startTimer: 'true'
+        - enableInterrupt: 'true'
+      - 1:
+        - channel_id: 'MOTOR_CH'
+        - channelNumber: '1'
+        - enableChain: 'false'
+        - timerPeriod: '6Ms'
+        - startTimer: 'true'
+        - enableInterrupt: 'true'
+      - 2:
+        - channel_id: 'STEER_CH'
+        - channelNumber: '2'
+        - enableChain: 'false'
+        - timerPeriod: '10Ms'
+        - startTimer: 'true'
+        - enableInterrupt: 'true'
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
-const lpuart_config_t communicate_config = {
-  .baudRate_Bps = 460800,
-  .parityMode = kLPUART_ParityEven,
-  .dataBitsCount = kLPUART_EightDataBits,
-  .isMsb = false,
-  .stopBitCount = kLPUART_OneStopBit,
-  .txFifoWatermark = 0,
-  .rxFifoWatermark = 1,
-  .enableRxRTS = false,
-  .enableTxCTS = false,
-  .txCtsSource = kLPUART_CtsSourceMatchResult,
-  .txCtsConfig = kLPUART_CtsSampleAtStart,
-  .rxIdleType = kLPUART_IdleTypeStopBit,
-  .rxIdleConfig = kLPUART_IdleCharacter2,
-  .enableTx = true,
-  .enableRx = true
-};
-edma_handle_t communicate_RX_Handle;
-edma_handle_t communicate_TX_Handle;
-lpuart_edma_handle_t communicate_LPUART_eDMA_Handle;
-
-void communicate_init(void) {
-  LPUART_Init(COMMUNICATE_PERIPHERAL, &communicate_config, COMMUNICATE_CLOCK_SOURCE);
-  /* Set the source kDmaRequestMuxLPUART5Rx request in the DMAMUX */
-  DMAMUX_SetSource(COMMUNICATE_RX_DMAMUX_BASEADDR, COMMUNICATE_RX_DMA_CHANNEL, COMMUNICATE_RX_DMA_REQUEST);
-  /* Enable the channel 5 in the DMAMUX */
-  DMAMUX_EnableChannel(COMMUNICATE_RX_DMAMUX_BASEADDR, COMMUNICATE_RX_DMA_CHANNEL);
-  /* Set the source kDmaRequestMuxLPUART5Tx request in the DMAMUX */
-  DMAMUX_SetSource(COMMUNICATE_TX_DMAMUX_BASEADDR, COMMUNICATE_TX_DMA_CHANNEL, COMMUNICATE_TX_DMA_REQUEST);
-  /* Enable the channel 6 in the DMAMUX */
-  DMAMUX_EnableChannel(COMMUNICATE_TX_DMAMUX_BASEADDR, COMMUNICATE_TX_DMA_CHANNEL);
-  /* Create the eDMA communicate_RX_Handle handle */
-  EDMA_CreateHandle(&communicate_RX_Handle, COMMUNICATE_RX_DMA_BASEADDR, COMMUNICATE_RX_DMA_CHANNEL);
-  /* Create the eDMA communicate_TX_Handle handle */
-  EDMA_CreateHandle(&communicate_TX_Handle, COMMUNICATE_TX_DMA_BASEADDR, COMMUNICATE_TX_DMA_CHANNEL);
-  /* Create the LPUART eDMA handle */
-  LPUART_TransferCreateHandleEDMA(COMMUNICATE_PERIPHERAL, &communicate_LPUART_eDMA_Handle, com_callback, NULL, &communicate_TX_Handle, &communicate_RX_Handle);
-}
-
-/***********************************************************************************************************************
- * SConsole initialization code
- **********************************************************************************************************************/
-/* clang-format off */
-/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-instance:
-- name: 'SConsole'
-- type: 'lpuart'
-- mode: 'polling'
-- custom_name_enabled: 'true'
-- type_id: 'lpuart_54a65a580e3462acdbacefd5299e0cac'
-- functional_group: 'BOARD_InitPeripherals'
-- peripheral: 'LPUART1'
-- config_sets:
-  - lpuartConfig_t:
-    - lpuartConfig:
-      - clockSource: 'LpuartClock'
-      - lpuartSrcClkFreq: 'BOARD_BootClockRUN'
-      - baudRate_Bps: '921600'
-      - parityMode: 'kLPUART_ParityDisabled'
-      - dataBitsCount: 'kLPUART_EightDataBits'
-      - isMsb: 'false'
-      - stopBitCount: 'kLPUART_OneStopBit'
-      - txFifoWatermark: '0'
-      - rxFifoWatermark: '1'
-      - enableRxRTS: 'false'
-      - enableTxCTS: 'false'
-      - txCtsSource: 'kLPUART_CtsSourceMatchResult'
-      - txCtsConfig: 'kLPUART_CtsSampleAtStart'
-      - rxIdleType: 'kLPUART_IdleTypeStartBit'
-      - rxIdleConfig: 'kLPUART_IdleCharacter1'
-      - enableTx: 'true'
-      - enableRx: 'true'
- * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
-/* clang-format on */
-const lpuart_config_t SConsole_config = {
-  .baudRate_Bps = 921600,
-  .parityMode = kLPUART_ParityDisabled,
-  .dataBitsCount = kLPUART_EightDataBits,
-  .isMsb = false,
-  .stopBitCount = kLPUART_OneStopBit,
-  .txFifoWatermark = 0,
-  .rxFifoWatermark = 1,
-  .enableRxRTS = false,
-  .enableTxCTS = false,
-  .txCtsSource = kLPUART_CtsSourceMatchResult,
-  .txCtsConfig = kLPUART_CtsSampleAtStart,
-  .rxIdleType = kLPUART_IdleTypeStartBit,
-  .rxIdleConfig = kLPUART_IdleCharacter1,
-  .enableTx = true,
-  .enableRx = true
+const pit_config_t PIT_config = {
+  .enableRunInDebug = false
 };
 
-void SConsole_init(void) {
-  LPUART_Init(SCONSOLE_PERIPHERAL, &SConsole_config, SCONSOLE_CLOCK_SOURCE);
+void PIT_init(void) {
+  /* Initialize the PIT. */
+  PIT_Init(PIT_PERIPHERAL, &PIT_config);
+  /* Set channel 0 period to 3 ms (75000 ticks). */
+  PIT_SetTimerPeriod(PIT_PERIPHERAL, PIT_ENCODER_CH, PIT_ENCODER_CH_TICKS);
+  /* Set channel 1 period to 6 ms (150000 ticks). */
+  PIT_SetTimerPeriod(PIT_PERIPHERAL, PIT_MOTOR_CH, PIT_MOTOR_CH_TICKS);
+  /* Set channel 2 period to 10 ms (250000 ticks). */
+  PIT_SetTimerPeriod(PIT_PERIPHERAL, PIT_STEER_CH, PIT_STEER_CH_TICKS);
+  /* Enable interrupts from channel 0. */
+  PIT_EnableInterrupts(PIT_PERIPHERAL, PIT_ENCODER_CH, kPIT_TimerInterruptEnable);
+  /* Enable interrupts from channel 1. */
+  PIT_EnableInterrupts(PIT_PERIPHERAL, PIT_MOTOR_CH, kPIT_TimerInterruptEnable);
+  /* Enable interrupts from channel 2. */
+  PIT_EnableInterrupts(PIT_PERIPHERAL, PIT_STEER_CH, kPIT_TimerInterruptEnable);
+  /* Interrupt vector PIT_IRQN priority settings in the NVIC */
+  NVIC_SetPriority(PIT_IRQN, PIT_IRQ_PRIORITY);
+  /* Enable interrupt PIT_IRQN request in the NVIC */
+  EnableIRQ(PIT_IRQN);
+  /* Start channel 0. */
+  PIT_StartTimer(PIT_PERIPHERAL, PIT_ENCODER_CH);
+  /* Start channel 1. */
+  PIT_StartTimer(PIT_PERIPHERAL, PIT_MOTOR_CH);
+  /* Start channel 2. */
+  PIT_StartTimer(PIT_PERIPHERAL, PIT_STEER_CH);
 }
 
 /***********************************************************************************************************************
@@ -598,13 +788,15 @@ void BOARD_InitPeripherals(void)
 
   /* Initialize components */
   DMA0_init();
-  DCP_init();
-  GPT2_init();
+  BAT_init();
+  COM_init();
+  GPIO1_init();
+  GPIO3_init();
+  PGA_init();
   PulseEncoder_init();
+  SLAVE_init();
   TEMPMON_init();
-  TMR2_init();
-  communicate_init();
-  SConsole_init();
+  PIT_init();
 }
 
 /***********************************************************************************************************************

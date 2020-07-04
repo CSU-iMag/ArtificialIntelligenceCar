@@ -16,7 +16,7 @@
 //                         0.5,0.2,0.2,MOTOR_MIN,MOTOR_MAX,MOTOR_MIN);
 //-------------------------------------------------------------------------------------------------------------------
 Encoder::Encoder(qtmr_channel_selection_t QTIMER_Channel)
-    : Channel(QTIMER_Channel), filter_moving(3) {}
+    : Channel(QTIMER_Channel), filter_moving(3), distance(0) {}
 
 //-------------------------------------------------------------------------------------------------------------------
 //  @name     获取速度（单位cm/s）
@@ -48,7 +48,7 @@ void pulse_encoder_schedule() {
 //    filter_fir_speedR.filter_fir();
     CRITICAL_REGION_EXIT();
 
-    Car.EncoderL.speed = -Car.EncoderL.speed;
+    // Car.EncoderL.speed = -Car.EncoderL.speed;
     Car.EncoderL.CalDistance();
     Car.EncoderR.CalDistance();
     if (IS_STEADY)

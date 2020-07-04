@@ -1,6 +1,8 @@
 #ifndef MUSIC_H
 #define MUSIC_H
 
+#ifdef BEEP_ENABLED
+
 #include "timer.hpp"
 #include <utility>
 #include <vector>
@@ -36,5 +38,7 @@ struct MusicPlayer {
 };
 
 extern MusicPlayer SongOfJoy;
+
+#endif
 
 #endif

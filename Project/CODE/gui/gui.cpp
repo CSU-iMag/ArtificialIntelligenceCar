@@ -1,5 +1,5 @@
 #include "gui.hpp"
-#include "SEEKFREE_MPU6050.h"
+#include "zf_pit.h"
 #include "car.hpp"
 #include "fsl_gpt.h"
 #include "music.hpp"
@@ -12,10 +12,8 @@
 SECTION_SDRAM BackGround gui_background;
 SECTION_SDRAM HomePage gui_home;
 SECTION_SDRAM DebugInfo gui_debug;
-SECTION_SDRAM AttitudeDat gui_attitude;
 SECTION_SDRAM Resistance gui_resistance;
 SECTION_SDRAM MagadcDat gui_magadcDat;
-SECTION_SDRAM HC06AT gui_hc06;
 SECTION_SDRAM SteeringConfig gui_steering;
 SECTION_SDRAM ControlPanel gui_control;
 SECTION_SDRAM ComEnable gui_communication;
@@ -63,7 +61,7 @@ void BackGround::KeyDownPush() { Car.Pause(); }
 HomePage::HomePage()
     : ListLayout(&tree, its, " 主菜单",
                  {"调试信息", "控制面板", "后轮电机", "方向控制", "通信使能",
-                  "模型选择", "数字电位器", "ADC raw", " 姿态", "HC06"}) {
+                  "模型选择", "数字电位器", "ADC raw", }) {
     tree.Children = {(LayoutBase *)&gui_debug,
                      (LayoutBase *)&gui_control,
                      (LayoutBase *)&gui_motor,
@@ -71,9 +69,7 @@ HomePage::HomePage()
                      (LayoutBase *)&gui_communication,
                      (LayoutBase *)&gui_model,
                      (LayoutBase *)&gui_resistance,
-                     (LayoutBase *)&gui_magadcDat,
-                     (LayoutBase *)&gui_attitude,
-                     (LayoutBase *)&gui_hc06}; //!< 注意顺序要与上面字符串相对应
+                     (LayoutBase *)&gui_magadcDat}; //!< 注意顺序要与上面字符串相对应
 }
 
 //! @brief 打开子菜单
@@ -81,13 +77,6 @@ void HomePage::KeyEnterPush() {
     if (tree.Children.size() <= ListObject.stItems.iSelection)
         return;
     ActiveLayout = tree.Children[ListObject.stItems.iSelection];
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void AttitudeDat::UpdateValue() {
-    get_accdata();
-    Items[0].UpdateValue(std::to_string(mpu_acc_x));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -152,84 +141,10 @@ void MagadcDat::KeyEnterPush() {
                 Car.MagList[i]->MaxRawData = 0;
         }
         Items[0].UpdateValue(SaveMaxEnabled ? " ing..." : " ");
+#ifdef BEEP_ENABLED
         Car.beep0.BeepFreqDelay(5555, SaveMaxEnabled ? 999 : 333);
+#endif
     }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-void HC06AT::UpdateValue() {
-    Items[0].UpdateValue(Car.Hc06.rx_buffer);
-    Items[2].UpdateValue(std::to_string(Car.Hc06.baud->baudrate));
-    Items[3].UpdateValue(Car.Hc06.password);
-    Items[4].UpdateValue(Car.Hc06.isMaster ? "true" : "false");
-    Items[5].UpdateValue(std::to_string(Car.Hc06.parity_bit));
-}
-
-void HC06AT::KeyLeftPush() {
-    switch (ListObject.stItems.iSelection) {
-    case 2:
-        Car.Hc06.ModifyBaud(-1);
-        break;
-    case 4:
-        Car.Hc06.SetRole(-1);
-        break;
-    case 5:
-        Car.Hc06.ModifyValid(-1);
-        break;
-    default:
-        CAR_ERROR_CHECK(ListObject.stItems.iSelection < Hc06Num);
-        break;
-    }
-    UpdateValue();
-}
-
-void HC06AT::KeyRightPush() {
-    switch (ListObject.stItems.iSelection) {
-    case 2:
-        Car.Hc06.ModifyBaud(1);
-        break;
-    case 4:
-        Car.Hc06.SetRole(1);
-        break;
-    case 5:
-        Car.Hc06.ModifyValid(1);
-        break;
-    default:
-        CAR_ERROR_CHECK(ListObject.stItems.iSelection < Hc06Num);
-        break;
-    }
-    UpdateValue();
-}
-
-void HC06AT::KeyEnterPush() {
-    switch (ListObject.stItems.iSelection) {
-    case 0:
-        Car.Hc06.TestComunication();
-        break;
-    case 1:
-        Car.Hc06.TestComunication();
-        break;
-    case 2:
-        Car.Hc06.ModifyBaud(0);
-        break;
-    case 3:
-        Car.Hc06.SendPassword();
-        break;
-    case 4:
-        Car.Hc06.SetRole(0);
-        break;
-    case 5:
-        Car.Hc06.ModifyValid(0);
-        break;
-    case 6:
-        Car.Hc06.GetVersion();
-        break;
-    default:
-        CAR_ERROR_CHECK(ListObject.stItems.iSelection < Hc06Num);
-        break;
-    }
-    UpdateValue();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -241,7 +156,7 @@ void SteeringConfig::UpdateValue(uint8_t row, int8_t inc) {
         Items[0].UpdateValue(std::to_string(STEER_K(p)));
         break;
     case 1:
-        Car.Steer3010.steerCtrl.SetK('i', inc);
+        Car.Steer3010.steerCtrl.SetK('i', 0.02f * inc);
         Items[1].UpdateValue(std::to_string(STEER_K(i)));
         break;
     case 2:
@@ -286,9 +201,9 @@ void SteeringConfig::KeyEnterPush() {
     case 2:
         SteeringEnabled = !SteeringEnabled;
         if (SteeringEnabled)
-            pit_interrupt_ms(STEER_CHANNEL, STEER_PERIOD);
+            PIT_StartTimer(PIT, PIT_STEER_CH);
         else
-            pit_close(STEER_CHANNEL);
+            pit_close(PIT_STEER_CH);
         break;
     case 3:
         ActiveLayout = &err_curve;
@@ -317,7 +232,9 @@ ControlPanel::ControlPanel()
 void ControlPanel::KeyEnterPush() {
     switch (ListObject.stItems.iSelection) {
     case 0:
+#ifdef BEEP_ENABLED
         Car.beep0.BeepFreq(MUSIC_RE);
+#endif
         Car.LaunchTimer.Start(1200);
         ActiveLayout = &gui_background;
         break;
@@ -390,6 +307,7 @@ void MotorConfig::UpdateValue(sched_event_data_t dat) {
     gui_motor.Items[2].UpdateValue(std::to_string(Car.EncoderR.GetSpeed()));
     gui_motor.Items[3].UpdateValue(std::to_string(Car.EncoderL.GetDistance()));
     gui_motor.Items[4].UpdateValue(std::to_string(Car.EncoderR.GetDistance()));
+    gui_motor.Items[7].UpdateValue(std::to_string(Car.Deceleration));
     gui_motor.Repaint();
 }
 
@@ -415,6 +333,8 @@ void MotorConfig::KeyRightPush() {
         break;
     case 6:
         UpdateDuty(-5);
+    case 7:
+        Car.Deceleration -= 0.05;
         break;
     }
 }
@@ -426,6 +346,8 @@ void MotorConfig::KeyLeftPush() {
         break;
     case 6:
         UpdateDuty(5);
+    case 7:
+        Car.Deceleration += 0.05;
         break;
     }
 }

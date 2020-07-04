@@ -1,6 +1,8 @@
 #include "music.hpp"
 #include "car.hpp"
 
+#ifdef BEEP_ENABLED
+
 #define MUSIC_BUZZER Car.beep0
 
 const static music_t SoJ{
@@ -22,3 +24,5 @@ void MusicPlayer::Play(sched_event_data_t dat) {
 }
 
 void MusicPlayer::Start() { tmr.Start(tim); }
+
+#endif

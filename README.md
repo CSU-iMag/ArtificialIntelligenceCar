@@ -1,6 +1,11 @@
 # :zap:电磁AI智能车
-![GitHub language count](https://img.shields.io/github/languages/count/CSU-iMag/ArtificialIntelligenceCar) ![stars](https://img.shields.io/github/stars/CSU-iMag/ArtificialIntelligenceCar)
-![GitHub repo size](https://img.shields.io/github/repo-size/CSU-iMag/ArtificialIntelligenceCar?style=plastic) ![GitHub last commit](https://img.shields.io/github/last-commit/CSU-iMag/ArtificialIntelligenceCar?style=flat-square)
+![GitHub language count](https://img.shields.io/github/languages/count/CSU-iMag/ArtificialIntelligenceCar)
+![stars](https://img.shields.io/github/stars/CSU-iMag/ArtificialIntelligenceCar)
+![GitHub repo size](https://img.shields.io/github/repo-size/CSU-iMag/ArtificialIntelligenceCar?style=plastic)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/c6cbaef75e714a8387990f974cd1c991)](https://www.codacy.com/gh/CSU-iMag/ArtificialIntelligenceCar?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=CSU-iMag/ArtificialIntelligenceCar&amp;utm_campaign=Badge_Grade)
+
+![GitHub last commit](https://img.shields.io/github/last-commit/CSU-iMag/ArtificialIntelligenceCar?style=for-the-badge)
+![GitHub commits since latest release (by date) for a branch](https://img.shields.io/github/commits-since/CSU-iMag/ArtificialIntelligenceCar/v1.0?style=for-the-badge)
 
 采集数据发送至上位机、运行训练好的模型
 # :sparkles:FEATURE
@@ -24,34 +29,34 @@
 ![print](Pictures/print.png)
 ## 开始
 > 图中柱子是电池电量，数字是“CPU占用率”
-<img src="Pictures/IMG_20200511_130902.jpg" style="transform:rotate(180deg);">
+<img src="Pictures/IMG_20200511_130902.jpg">
 
 ## 主页
 > 右上角数字代表“CPU占用率”的位数
-<img src="Pictures/IMG_20200511_130913.jpg" style="transform:rotate(180deg);">
+<img src="Pictures/IMG_20200511_130913.jpg">
 
 ## 模型选择
-<img src="Pictures/IMG_20200511_131122.jpg" style="transform:rotate(180deg);">
+<img src="Pictures/IMG_20200511_131122.jpg">
 
 > 预存了3个model.nncu.c，可在运行时切换。
 ## 控制面板
-<img src="Pictures/IMG_20200511_130925.jpg" style="transform:rotate(180deg);">
-<img src="Pictures/IMG_20200511_130935.jpg" style="transform:rotate(180deg);">
+<img src="Pictures/IMG_20200511_130925.jpg">
+<img src="Pictures/IMG_20200511_130935.jpg">
 
 ## 电机设置
-<img src="Pictures/IMG_20200511_131010.jpg" style="transform:rotate(180deg);">
-<img src="Pictures/IMG_20200511_131000.jpg" style="transform:rotate(180deg);">
+<img src="Pictures/IMG_20200511_131010.jpg">
+<img src="Pictures/IMG_20200511_131000.jpg">
 
 ## 方向控制
 <img src="Pictures/IMG_20200511_131032.jpg" style="transform:rotate(180deg);">
 
 ## 数字电位器
-<img src="Pictures/IMG_20200511_131148.jpg" style="transform:rotate(180deg);">
+<img src="Pictures/IMG_20200511_131148.jpg">
 
 > 通过按键加减阻值，急速自动校准。
 ## 电磁传感器
 <img src="Pictures/IMG_20200511_205727.jpg">
-<img src="Pictures/IMG_20200511_164132.jpg">
+<img src="Pictures/IMG_20200511_164132.jpg" style="transform:rotate(180deg);">
 
 > 单击切换显示方式
 ## 显示波形

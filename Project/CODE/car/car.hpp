@@ -11,8 +11,6 @@
 #include "timer.hpp"
 #include "deep.hpp"
 #pragma region bsp
-#include "beep.hpp"
-#include "bluetooth.hpp"
 #include "encoder.hpp"
 #include "key.hpp"
 #include "led.hpp"
@@ -24,8 +22,10 @@
 
 /**
  * @brief Speed PID
- * @note SPEED_K(L, p) == Car.MotorL.speedCtrl.instance.Kp
- *       SPEED_K(R, d) == Car.MotorR.speedCtrl.instance.Kd
+ * @code
+ *      SPEED_K(L, p) == Car.MotorL.speedCtrl.instance.Kp
+ *      SPEED_K(R, d) == Car.MotorR.speedCtrl.instance.Kd
+ * @endcode
  */
 #define SPEED_K(LR, pid) ((Car.Motor##LR).speedCtrl.instance.K##pid)
 
@@ -53,10 +53,19 @@ enum class ControlMode { PID, AI };
 
 class iMagCar { // 什么时候该用friend？什么时候public？
   public:
+    //! @brief 神经网络模型
     const unsigned char *Model = model1;
-    ControlMode CtrlMode;
 
-    //! @brief
+    //! @brief 方向控制模式
+    ControlMode CtrlMode = ControlMode::PID;
+
+    //! @brief 转向时减速
+    float Deceleration = 0.26;
+
+    //! @brief 转向时差速
+    float MotorDiffer = 0;
+
+    //! @brief 状态机
     CarMachine Machine;
 
     //! @brief 目标速度
@@ -77,13 +86,11 @@ class iMagCar { // 什么时候该用friend？什么时候public？
     //! @brief 舵机
     Steer Steer3010;
 
-    Beep beep0;
-    HardLED ledBlue, ledCore;
-    SoftLED ledWhite, ledGreen;
-    Bluetooth Hc06;
-
     //! @brief
     SoftTimer LaunchTimer;
+
+    //! @brief 核心板蓝灯
+    SoftLED CoreLED;
 
     //! @warning 这里不能有任何操作硬件的代码！
     iMagCar()
@@ -93,9 +100,7 @@ class iMagCar { // 什么时候该用friend？什么时候public？
           EncoderR(PULSEENCODER_CHANNEL_2_CHANNEL),
           Steer3010(S3010_PWM, STEER_MIN - STEER_CENTER,
                     STEER_MAX - STEER_CENTER),
-          ledGreen(LED_PWM1), ledBlue(LED_PIN3), ledWhite(LED_PWM2),
-          ledCore(LED_PIN0), Hc06(HC06_UART, HC06_TX, HC06_RX),
-          LaunchTimer(LaunchDelaySchedule, 1) {}
+          LaunchTimer(LaunchDelaySchedule, 1), CoreLED(LED_PWM) {}
     ~iMagCar();
 
     //! @brief 开机
