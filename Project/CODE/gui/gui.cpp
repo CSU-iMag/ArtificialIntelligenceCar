@@ -2,7 +2,6 @@
 #include "zf_pit.h"
 #include "car.hpp"
 #include "fsl_gpt.h"
-#include "music.hpp"
 #include "package.hpp"
 #include "storage.hpp"
 #include "timer.hpp"
@@ -12,7 +11,6 @@
 SECTION_SDRAM BackGround gui_background;
 SECTION_SDRAM HomePage gui_home;
 SECTION_SDRAM DebugInfo gui_debug;
-SECTION_SDRAM Resistance gui_resistance;
 SECTION_SDRAM MagadcDat gui_magadcDat;
 SECTION_SDRAM SteeringConfig gui_steering;
 SECTION_SDRAM ControlPanel gui_control;
@@ -61,14 +59,13 @@ void BackGround::KeyDownPush() { Car.Pause(); }
 HomePage::HomePage()
     : ListLayout(&tree, its, " 主菜单",
                  {"调试信息", "控制面板", "后轮电机", "方向控制", "通信使能",
-                  "模型选择", "数字电位器", "ADC raw", }) {
+                  "模型选择", "ADC raw", }) {
     tree.Children = {(LayoutBase *)&gui_debug,
                      (LayoutBase *)&gui_control,
                      (LayoutBase *)&gui_motor,
                      (LayoutBase *)&gui_steering,
                      (LayoutBase *)&gui_communication,
                      (LayoutBase *)&gui_model,
-                     (LayoutBase *)&gui_resistance,
                      (LayoutBase *)&gui_magadcDat}; //!< 注意顺序要与上面字符串相对应
 }
 
@@ -81,54 +78,16 @@ void HomePage::KeyEnterPush() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void Resistance::UpdateValue(uint8_t i) {
-    CAR_ERROR_CHECK(i < Items.size());
-    Items[i].UpdateValue(std::to_string(
-        uint8_t(dynamic_cast<MagSensorPGA *>(Car.MagList[i])->Gain)));
-}
-
-void Resistance::KeyLeftPush() {
-    dynamic_cast<MagSensorPGA *>(Car.MagList[ListObject.stItems.iSelection])
-        ->Gain += -1;
-    UpdateValue(ListObject.stItems.iSelection);
-}
-
-void Resistance::KeyRightPush() {
-    dynamic_cast<MagSensorPGA *>(Car.MagList[ListObject.stItems.iSelection])
-        ->Gain += 1;
-    UpdateValue(ListObject.stItems.iSelection);
-}
-
-void Resistance::KeyEnterPush() {
-    dynamic_cast<MagSensorPGA *>(Car.MagList[ListObject.stItems.iSelection])
-        ->Calibrate();
-    UpdateValue(ListObject.stItems.iSelection);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 void MagadcDat::UpdateValue() {
     if (this != ActiveLayout)
         return;
     for (int i(0); i < ADC_CNT; ++i)
         if (FigureMode) {
-            Items[i + 1].UpdateValue(std::to_string(Car.MagList[i]->GetRaw()));
+            Items[i + 1].UpdateValue(std::to_string(Car.MagList[i].GetRaw()));
         } else
             Items[i + 1].UpdateValue(
-                std::string(Car.MagList[i]->GetNormalized() / 6, '#'));
+                std::string(Car.MagList[i].GetNormalized() / 12, '#'));
     Repaint();
-}
-
-void MagadcDat::KeyLeftPush() {
-    if (ListObject.stItems.iSelection < PGA_CNT)
-        dynamic_cast<MagSensorPGA *>(Car.MagList[ListObject.stItems.iSelection])
-            ->Gain += -1;
-}
-
-void MagadcDat::KeyRightPush() {
-    if (ListObject.stItems.iSelection < PGA_CNT)
-        dynamic_cast<MagSensorPGA *>(Car.MagList[ListObject.stItems.iSelection])
-            ->Gain += 1;
 }
 
 void MagadcDat::KeyEnterPush() {
@@ -138,12 +97,9 @@ void MagadcDat::KeyEnterPush() {
         SaveMaxEnabled = !SaveMaxEnabled;
         if (SaveMaxEnabled) {
             for (int i(0); i < ADC_CNT; ++i)
-                Car.MagList[i]->MaxRawData = 0;
+               Car.MagList[i].ClearMax();
         }
         Items[0].UpdateValue(SaveMaxEnabled ? " ing..." : " ");
-#ifdef BEEP_ENABLED
-        Car.beep0.BeepFreqDelay(5555, SaveMaxEnabled ? 999 : 333);
-#endif
     }
 }
 
@@ -232,9 +188,6 @@ ControlPanel::ControlPanel()
 void ControlPanel::KeyEnterPush() {
     switch (ListObject.stItems.iSelection) {
     case 0:
-#ifdef BEEP_ENABLED
-        Car.beep0.BeepFreq(MUSIC_RE);
-#endif
         Car.LaunchTimer.Start(1200);
         ActiveLayout = &gui_background;
         break;
@@ -279,15 +232,15 @@ void ComEnable::KeyEnterPush() {
     Items[row].UpdateValue(enabled[row] ? "发送中…" : "已关闭");
 
     if (enabled[0]) {
-        SendAiTim.Start(STEER_PERIOD);
+        SET_BIT(Car.Enabled, SW_MASK_SEND_AI);
     } else {
-        SendAiTim.Stop();
+        CLR_BIT(Car.Enabled, SW_MASK_SEND_AI);
     }
 
     if (enabled[1]) {
-        SendSpeedTim.Start(912);
+        SET_BIT(Car.Enabled, SW_MASK_SEND_MOTOR);
     } else {
-        SendSpeedTim.Stop();
+        CLR_BIT(Car.Enabled, SW_MASK_SEND_MOTOR);
     }
 
     if (enabled[2]) {

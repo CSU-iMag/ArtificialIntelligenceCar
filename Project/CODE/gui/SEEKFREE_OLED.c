@@ -44,7 +44,7 @@
 #error "OLED_DISPLAY_DIR 定义错误"
 #endif
 
-#define Brightness 0x7f //设置OLED亮度  越大越亮    范围0-0XFF
+#define Brightness 0xff //设置OLED亮度  越大越亮    范围0-0XFF
 #define XLevelL 0x00
 #define XLevelH 0x10
 #define XLevel ((XLevelH & 0x0F) * 16 + XLevelL)

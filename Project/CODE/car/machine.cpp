@@ -2,6 +2,7 @@
 #include "car.hpp"
 #include "timer.hpp"
 #include "util.h"
+#include "communication.hpp"
 
 void CarMachine::Halt(void) {
     // given the Halt event, transition to a new state based upon
@@ -93,24 +94,24 @@ void CarMachine::Stopped() {
 }
 
 void CarMachine::ST_Idle(EventData *) {
-    DEBUG_LOG("Idle\n");
+    com_log("Idle\n");
     Car.Pause();
 }
 
 void CarMachine::ST_Launch(CarData *dat) {
-    DEBUG_LOG("Launch\n");
+    com_log("Launch\n");
     Car.Launch();
 }
 
-void CarMachine::ST_Running(CarData *) { DEBUG_LOG("Running\n"); }
+void CarMachine::ST_Running(CarData *) { com_log("Running\n"); }
 
 void CarMachine::ST_Brake(CarData *) {
-    DEBUG_LOG("Brake\n");
+    com_log("Brake\n");
     Car.Pause();
 }
 
 void CarMachine::ST_Exception(CarData *) {
-    DEBUG_LOG("Exception\n");
+    com_log("Exception\n");
 #ifdef BEEP_ENABLED
     Car.beep0.BeepFreq(0xBAD);
 #endif
@@ -118,7 +119,7 @@ void CarMachine::ST_Exception(CarData *) {
 }
 
 void CarMachine::ST_Recover(CarData *) {
-    DEBUG_LOG("Recover\n");
+    com_log("Recover\n");
 #ifdef BEEP_ENABLED
     Car.beep0.BeepFreqDelay(5555, 111);
 #endif

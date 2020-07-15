@@ -23,13 +23,13 @@ void bat_init() {
     bat_tim.Start(999);
 }
 
-void BAT_IRQHANDLER(void) {
+extern "C" void BAT_IRQHANDLER(void) {
     uint32_t bat_val = ADC_GetChannelConversionValue(BAT_PERIPHERAL, 0U);
     CAR_ERROR_CHECK(bat_val < (1 << 13));  // 12bit ADC
 
-    static filter_movAve_t filter_battery(3);
-    bat_val = filter_battery.Moving(bat_val);
-    bat_val = battery_level_in_percent(ADC12b_TO_mV(bat_val));
+    //    static filter_movAve_t filter_battery(3);
+    //    bat_val = filter_battery.Moving(bat_val);
+     bat_val = battery_level_in_percent(ADC12b_TO_mV(bat_val));
     //    CAR_ERROR_CHECK(bat_val != lim(bat_val, 3, 9));
 
     gui_background.UpdateValue(bat_val);

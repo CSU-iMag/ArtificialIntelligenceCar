@@ -10,8 +10,9 @@
 #include "timer.hpp"
 #include "usage.hpp"
 #include "util.h"
-#include "zf_pit.h"
 #include "zf_flash.h"
+#include "zf_pit.h"
+#include "zf_uart.h"
 
 //! @warning 全局唯一！
 AT_SDRAM_SECTION(iMagCar Car);
@@ -19,24 +20,18 @@ AT_SDRAM_SECTION(iMagCar Car);
 void iMagCar::Startup() {
     DisableGlobalIRQ();
     board_init(); //!< before all
-    //    DEBUG_LOG("\n\r SRC: %d \n", SRC_GetResetStatusFlags(SRC));
     CAR_ERROR_CHECK(flash_init() == 0);
     led_init();
     key_init();
-    CarOLED.fnInitialize(); //!< after key
+    CarOLED.fnInitialize();  //!< after key
     ActiveLayout->Repaint(); //!< after oled
     MotorL.Init();
     MotorR.Init();
     Steer3010.Init();
     bat_init();
-    com_init();
     deep_init();
-    magnet_init();
+       magnet_init();
     cpu_usage_init();
-    simiic_init();
-    MCP4452_all_init(); //!< after i2c
-    DEBUG_LOG("MCP4452 Check: %d\n", MCP4452_self_check());
-
     EnableGlobalIRQ(0);
     storage_load(SLN_DEBUG_SECTOR, SLN_DEBUG_PAGE); //!< after MCP4452
     gui_motor.upd_tmr.Start(62);

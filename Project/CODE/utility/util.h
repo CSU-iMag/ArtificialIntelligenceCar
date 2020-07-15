@@ -8,11 +8,14 @@
 
 //! @brief 从QTIMER读到的脉冲数转换成车速cm/s
 #define PULSE_TO_CM_S(rawSpeed)                                                \
-    ((float)rawSpeed * 9 / 1024 / ENCODER_PERIOD * 1000)
+    ((float)(rawSpeed) * 9 / 1024 / TICKS_TO_MS(PIT_ENCODER_CH_TICKS, PIT_CLK_FREQ) * 1000)
 
 //! @brief 浮点数百分比转定时器Compare
-#define PERCENT_TO_TICKS(percent) ((uint32)(percent * PWM_DUTY_MAX / 100))
+#define PERCENT_TO_TICKS(percent) ((uint32)((percent)*PWM_DUTY_MAX / 100))
 
+    //! @brief 
+    #define TICKS_TO_MS(ticks, freq) ((float)ticks * 1000 / freq)
+    
 //! @brief 12位ADC转毫伏
 #define ADC12b_TO_mV(bit12) ((float)bit12 * 3.30 / 4.09600)
 
@@ -29,10 +32,6 @@
     EnableGlobalIRQ(primask);                                                  \
     }                                                                          \
     while (0)
-
-#define DEBUG_LOG(...)                                                         \
-    if (!BLUETOOTH_ENABLED && SDK_DEBUGCONSOLE != DEBUGCONSOLE_DISABLE)        \
-    PRINTF(__VA_ARGS__)
 
 #define SECTION_SDRAM __attribute__((section(".bss.SDRAM_CACHE")))
 #define SECTION_NONCACHE __attribute__((section("NonCacheable.init")))
@@ -228,6 +227,19 @@ static __inline uint16_t crc16_compute(uint8_t const *p_data, uint32_t size,
 }
 
 /**
+ * @brief 将buf中的所有字节累加，计算parity
+ * @param[in]  buf        需要累加的字节数组的首地址
+ * @param[in]  cnt        需要累加的字节数
+ * @return  函数执行结果
+ */
+__STATIC_INLINE uint8_t AccParity(const uint8_t *buf, uint8_t cnt) {
+    uint8_t sum = 0;
+    while (cnt--)
+        sum += buf[cnt];
+    return sum;
+}
+
+/**
  * @brief Macro for checking if an integer is a power of two.
  *
  * @param[in]   A   Number to be tested.
@@ -306,15 +318,6 @@ static __INLINE uint8_t uint32_big_encode(uint32_t value,
 #define lim(_val, _min, _max) MAX(_min, MIN(_max, _val))
 
 #define LIMITING(_val, _min, _max) (_val = lim(_val, _min, _max))
-
-//! @brief err == 0 时停车报错
-#define CAR_ERROR_CHECK(err)                                                   \
-    if (!(err)) {                                                              \
-        DisableGlobalIRQ();                                                    \
-        PRINTF("CAR ASSERT ERROR \" %s \": file \"%s\" Line \"%d\" \n", #err,  \
-               __FILE__, __LINE__);                                            \
-        __BKPT(0);                                                             \
-    }
 
 //! @brief 一个字是32位
 typedef union {

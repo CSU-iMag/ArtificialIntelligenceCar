@@ -48,34 +48,34 @@ void BOARD_InitBootPins(void);
 #define BOARD_INITPINS_HAL1_PIN                                              12U   /*!< GPIO1 pin index: 12 */
 
 /* GPIO_AD_B1_02 (coord L11), KEY */
-#define BOARD_INITPINS_K1_GPIO                                             GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_K1_PORT                                             GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_K1_PIN                                                18U   /*!< GPIO1 pin index: 18 */
+#define BOARD_INITPINS_K_BACK_GPIO                                         GPIO1   /*!< GPIO device name: GPIO1 */
+#define BOARD_INITPINS_K_BACK_PORT                                         GPIO1   /*!< PORT device name: GPIO1 */
+#define BOARD_INITPINS_K_BACK_PIN                                            18U   /*!< GPIO1 pin index: 18 */
 
 /* GPIO_AD_B1_03 (coord M12), KEY */
-#define BOARD_INITPINS_K3_GPIO                                             GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_K3_PORT                                             GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_K3_PIN                                                19U   /*!< GPIO1 pin index: 19 */
+#define BOARD_INITPINS_K_LEFT_GPIO                                         GPIO1   /*!< GPIO device name: GPIO1 */
+#define BOARD_INITPINS_K_LEFT_PORT                                         GPIO1   /*!< PORT device name: GPIO1 */
+#define BOARD_INITPINS_K_LEFT_PIN                                            19U   /*!< GPIO1 pin index: 19 */
 
 /* GPIO_AD_B0_01 (coord H10), KEY */
-#define BOARD_INITPINS_K2_GPIO                                             GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_K2_PORT                                             GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_K2_PIN                                                 1U   /*!< GPIO1 pin index: 1 */
+#define BOARD_INITPINS_K_RIGHT_GPIO                                        GPIO1   /*!< GPIO device name: GPIO1 */
+#define BOARD_INITPINS_K_RIGHT_PORT                                        GPIO1   /*!< PORT device name: GPIO1 */
+#define BOARD_INITPINS_K_RIGHT_PIN                                            1U   /*!< GPIO1 pin index: 1 */
 
 /* GPIO_AD_B0_03 (coord G11), KEY */
-#define BOARD_INITPINS_K6_GPIO                                             GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_K6_PORT                                             GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_K6_PIN                                                 3U   /*!< GPIO1 pin index: 3 */
+#define BOARD_INITPINS_K_UP_GPIO                                           GPIO1   /*!< GPIO device name: GPIO1 */
+#define BOARD_INITPINS_K_UP_PORT                                           GPIO1   /*!< PORT device name: GPIO1 */
+#define BOARD_INITPINS_K_UP_PIN                                               3U   /*!< GPIO1 pin index: 3 */
 
 /* GPIO_AD_B0_15 (coord L10), KEY */
-#define BOARD_INITPINS_K5_GPIO                                             GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_K5_PORT                                             GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_K5_PIN                                                15U   /*!< GPIO1 pin index: 15 */
+#define BOARD_INITPINS_K_OK_GPIO                                           GPIO1   /*!< GPIO device name: GPIO1 */
+#define BOARD_INITPINS_K_OK_PORT                                           GPIO1   /*!< PORT device name: GPIO1 */
+#define BOARD_INITPINS_K_OK_PIN                                              15U   /*!< GPIO1 pin index: 15 */
 
 /* GPIO_AD_B0_14 (coord H14), KEY */
-#define BOARD_INITPINS_K4_GPIO                                             GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_K4_PORT                                             GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_K4_PIN                                                14U   /*!< GPIO1 pin index: 14 */
+#define BOARD_INITPINS_K_DOWN_GPIO                                         GPIO1   /*!< GPIO device name: GPIO1 */
+#define BOARD_INITPINS_K_DOWN_PORT                                         GPIO1   /*!< PORT device name: GPIO1 */
+#define BOARD_INITPINS_K_DOWN_PIN                                            14U   /*!< GPIO1 pin index: 14 */
 
 /* GPIO_SD_B1_01 (coord M5), COM */
 #define BOARD_INITPINS_RXD_PERIPHERAL                                    LPUART4   /*!< Device name: LPUART4 */

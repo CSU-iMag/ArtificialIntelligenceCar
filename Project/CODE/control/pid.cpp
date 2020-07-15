@@ -1,6 +1,8 @@
 #include "pid.hpp"
 #include "util.h"
+#include "communication.hpp"
 #include <string>
+
 extern "C" {
 void arm_pid_reset_f32(arm_pid_instance_f32 *);
 void arm_pid_init_f32(arm_pid_instance_f32 *, int32_t);
@@ -35,7 +37,7 @@ void PID::SetK(char index, float32_t varia) {
         instance.Kd += varia;
         break;
     default:
-        DEBUG_LOG("Invalid parameters!\n");
+        com_log("Invalid parameters!\n");
         return;
     }
     arm_pid_init_f32(&instance, 0);

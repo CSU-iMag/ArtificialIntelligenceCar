@@ -17,6 +17,13 @@
 #include "route.h"
 #pragma endregion
 
+#define SW_MASK_STEER 0u
+#define SW_MASK_SPEED 1u
+#define SW_MASK_AUTO_STOP 2u
+#define SW_MASK_SEND_MOTOR 3u
+#define SW_MASK_SEND_DIR 5u
+#define SW_MASK_SEND_AI 6u
+
 //! @brief Steer PID
 #define STEER_K(pid) (Car.Steer3010.steerCtrl.instance.K##pid)
 
@@ -31,9 +38,9 @@
 
 //! @brief 运行状态判定
 #define IS_DERAIL                                                              \
-    (Car.MagList[MagL_FRONT]->GetNormalized() +                                \
-         Car.MagList[MagM_FRONT]->GetNormalized() +                            \
-         Car.MagList[MagR_FRONT]->GetNormalized() <                            \
+    (Car.MagList[MagFrontL].GetNormalized() +                                \
+         Car.MagList[MagFrontM].GetNormalized() +                            \
+         Car.MagList[MagFrontR].GetNormalized() <                            \
      MAG_DERAIL_THRESHOLD)
 
 //! @warning need critial region protect
@@ -47,12 +54,25 @@
     (_IS_STEADY_(Car.EncoderL.GetSpeed()) &&                                   \
      _IS_STEADY_(Car.EncoderR.GetSpeed()))
 
+//! @brief err == 0 时停车报错
+#define CAR_ERROR_CHECK(err)                                                   \
+    if (!(err)) {                                                              \
+        Car.Pause();                                                           \
+        DisableGlobalIRQ();                                                    \
+        PRINTF("CAR ASSERT ERROR \" %s \": file \"%s\" Line \"%d\" \n", #err,  \
+               __FILE__, __LINE__);                                            \
+        __BKPT(0);                                                             \
+    }
+
 void LaunchDelaySchedule(sched_event_data_t dat);
 
 enum class ControlMode { PID, AI };
 
 class iMagCar { // 什么时候该用friend？什么时候public？
   public:
+    //! @brief 8 Switches
+    uint8_t Enabled;
+
     //! @brief 神经网络模型
     const unsigned char *Model = model1;
 
@@ -72,7 +92,7 @@ class iMagCar { // 什么时候该用friend？什么时候public？
     float TargetSpeed;
 
     //! @brief 12路电磁传感器
-    static MagSensor *MagList[ADC_CNT];
+    static std::vector<MagSensor> MagList;
 
     //! @brief key pad
     static std::vector<Button> Keypad;
@@ -90,17 +110,17 @@ class iMagCar { // 什么时候该用friend？什么时候public？
     SoftTimer LaunchTimer;
 
     //! @brief 核心板蓝灯
-    SoftLED CoreLED;
+    HardLED CoreLED;
 
     //! @warning 这里不能有任何操作硬件的代码！
     iMagCar()
-        : TargetSpeed(TARGET_SPEED), MotorL(MOTOR_L, MOTOR_MIN, MOTOR_MAX),
+        : TargetSpeed(69), MotorL(MOTOR_L, MOTOR_MIN, MOTOR_MAX),
           MotorR(MOTOR_R, MOTOR_MIN, MOTOR_MAX),
-          EncoderL(PULSEENCODER_CHANNEL_0_CHANNEL),
-          EncoderR(PULSEENCODER_CHANNEL_2_CHANNEL),
+          EncoderL(PULSEENCODER_CHANNEL_2_CHANNEL),
+          EncoderR(PULSEENCODER_CHANNEL_0_CHANNEL),
           Steer3010(S3010_PWM, STEER_MIN - STEER_CENTER,
                     STEER_MAX - STEER_CENTER),
-          LaunchTimer(LaunchDelaySchedule, 1), CoreLED(LED_PWM) {}
+          LaunchTimer(LaunchDelaySchedule, 1), CoreLED(B9, 0) {}
     ~iMagCar();
 
     //! @brief 开机

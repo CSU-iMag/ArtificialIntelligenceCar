@@ -33,7 +33,7 @@ __INLINE void Encoder::CalSpeed() {
 //  @Sample   MotorL.GetSpeed();
 //-------------------------------------------------------------------------------------------------------------------
 inline void Encoder::CalDistance() {
-    distance += speed * ENCODER_PERIOD / 1000;
+    distance += speed * TICKS_TO_MS(PIT_ENCODER_CH_TICKS, PIT_CLK_FREQ) / 1000;
 }
 
 /** -------------------------------------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ void pulse_encoder_schedule() {
 //    filter_fir_speedR.filter_fir();
     CRITICAL_REGION_EXIT();
 
-    // Car.EncoderL.speed = -Car.EncoderL.speed;
+    Car.EncoderL.speed = -Car.EncoderL.speed;
     Car.EncoderL.CalDistance();
     Car.EncoderR.CalDistance();
     if (IS_STEADY)

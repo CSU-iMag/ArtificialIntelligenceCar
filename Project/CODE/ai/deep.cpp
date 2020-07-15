@@ -11,17 +11,17 @@ static const CI_OutMetricInfo *pOM;
 void deep_init() {
     pOM = CI_GetOutMetricInfo(0);
     CI_GetModelInfoXIP(Car.Model, &info);
-    DEBUG_LOG("model info: %d , %s\n", info.quantBits, info.pszString);
+//    DEBUG_LOG("model info: %d , %s\n", info.quantBits, info.pszString);
 }
 
 __STATIC_INLINE void GetData() {
-    cie_data[0] = Car.MagList[MagL_ROW2]->GetNormalized() - 128;
-    cie_data[1] = Car.MagList[MagLM_ROW2]->GetNormalized() - 128;
-    cie_data[2] = Car.MagList[MagM_ROW2]->GetNormalized() - 128;
-    cie_data[3] = Car.MagList[MagRM_ROW2]->GetNormalized() - 128;
-    cie_data[4] = Car.MagList[MagR_ROW2]->GetNormalized() - 128;
-    cie_data[5] = Car.MagList[MagL_ROW3]->GetNormalized() - 128;
-    cie_data[6] = Car.MagList[MagR_ROW3]->GetNormalized() - 128;
+    // cie_data[0] = Car.MagList[MagL_ROW2].GetNormalized() - 128;
+    // cie_data[1] = Car.MagList[MagLM_ROW2].GetNormalized() - 128;
+    // cie_data[2] = Car.MagList[MagM_ROW2].GetNormalized() - 128;
+    // cie_data[3] = Car.MagList[MagRM_ROW2].GetNormalized() - 128;
+    // cie_data[4] = Car.MagList[MagR_ROW2].GetNormalized() - 128;
+    // cie_data[5] = Car.MagList[MagL_ROW3].GetNormalized() - 128;
+    // cie_data[6] = Car.MagList[MagR_ROW3].GetNormalized() - 128;
 }
 
 float deep_predict() {

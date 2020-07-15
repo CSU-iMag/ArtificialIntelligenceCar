@@ -1,8 +1,6 @@
 #ifndef FILTER_H
 #define FILTER_H
 
-#include "route.h"
-#include "util.h"
 #include <algorithm>
 #include <arm_math.h>
 #include <cstdint>
@@ -67,17 +65,17 @@ struct filter_kalman {
  * @return  滤波后
  * @warning 元素个数必须是奇数！
  */
-template <typename T>
-static __inline T filter_median(std::vector<T> &e, uint8_t len) {
-    CAR_ERROR_CHECK(len % 2);
-    CAR_ERROR_CHECK(e.size() % 2);
-    CAR_ERROR_CHECK(e.size() >= len);
+// template <typename T>
+// static __inline T filter_median(std::vector<T> &e, uint8_t len) {
+//     CAR_ERROR_CHECK(len % 2);
+//     CAR_ERROR_CHECK(e.size() % 2);
+//     CAR_ERROR_CHECK(e.size() >= len);
 
-    std::sort(e.begin(), e.end());
-    auto mid(e.begin() + e.size() / 2u);
-    double sum(std::accumulate(mid - len / 2u, mid + len / 2u + 1, 0.00000f));
-    return sum / len;
-};
+//     std::sort(e.begin(), e.end());
+//     auto mid(e.begin() + e.size() / 2u);
+//     double sum(std::accumulate(mid - len / 2u, mid + len / 2u + 1, 0.00000f));
+//     return sum / len;
+// };
 
 /**
  * @brief fir滤波器

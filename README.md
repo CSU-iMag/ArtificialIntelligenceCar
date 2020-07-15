@@ -15,7 +15,6 @@
 - :boom:**一键**切换AI模式与PID模式！
 - :card_file_box:可在*运行时*切换AI模型
 - :wrench:在Keil中通过GUI配置全车参数
-- :zap:采用*二分法*控制数字电位器自动校准增益
 - :zap:PID采用CMSIS-DSP库实现
 - :zap:兼顾效率与灵活性的滑动平均滤波器
 - :lock:运行时错误检查：`CAR_ERROR_CHECK`
@@ -29,34 +28,33 @@
 ![print](Pictures/print.png)
 ## 开始
 > 图中柱子是电池电量，数字是“CPU占用率”
-<img src="Pictures/IMG_20200511_130902.jpg">
+<img src="Pictures/IMG_20200511_130902.jpg" style="transform:rotate(180deg);">
 
 ## 主页
 > 右上角数字代表“CPU占用率”的位数
-<img src="Pictures/IMG_20200511_130913.jpg">
+<img src="Pictures/IMG_20200511_130913.jpg" style="transform:rotate(180deg);">
 
 ## 模型选择
-<img src="Pictures/IMG_20200511_131122.jpg">
+<img src="Pictures/IMG_20200511_131122.jpg" style="transform:rotate(180deg);">
 
 > 预存了3个model.nncu.c，可在运行时切换。
 ## 控制面板
-<img src="Pictures/IMG_20200511_130925.jpg">
-<img src="Pictures/IMG_20200511_130935.jpg">
+<img src="Pictures/IMG_20200511_130925.jpg" style="transform:rotate(180deg);">
+<img src="Pictures/IMG_20200511_130935.jpg" style="transform:rotate(180deg);">
 
 ## 电机设置
-<img src="Pictures/IMG_20200511_131010.jpg">
-<img src="Pictures/IMG_20200511_131000.jpg">
+<img src="Pictures/IMG_20200511_131010.jpg" style="transform:rotate(180deg);">
+<img src="Pictures/IMG_20200511_131000.jpg" style="transform:rotate(180deg);">
 
 ## 方向控制
-<img src="Pictures/IMG_20200511_131032.jpg" style="transform:rotate(180deg);">
+<img src="Pictures/IMG_20200511_131032.jpg">
 
 ## 数字电位器
-<img src="Pictures/IMG_20200511_131148.jpg">
+<img src="Pictures/IMG_20200511_131148.jpg" style="transform:rotate(180deg);">
 
-> 通过按键加减阻值，急速自动校准。
 ## 电磁传感器
 <img src="Pictures/IMG_20200511_205727.jpg">
-<img src="Pictures/IMG_20200511_164132.jpg" style="transform:rotate(180deg);">
+<img src="Pictures/IMG_20200511_164132.jpg">
 
 > 单击切换显示方式
 ## 显示波形

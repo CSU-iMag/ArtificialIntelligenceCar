@@ -1,5 +1,5 @@
 #include "timer.hpp"
-#include "fsl_gpt.h"
+#include "peripherals.h"
 #include "util.h"
 #include <queue>
 
@@ -9,7 +9,9 @@ struct TimeComparer {
     bool operator()(SoftTimer *lhs, SoftTimer *rhs) { return !(*lhs < *rhs); }
 };
 
-SECTION_SDRAM static std::priority_queue<SoftTimer *, std::vector<SoftTimer *>, TimeComparer>_q; //!< 这是一棵平衡树
+SECTION_SDRAM static std::priority_queue<SoftTimer *, std::vector<SoftTimer *>,
+                                         TimeComparer>
+    _q; //!< 这是一棵平衡树
 
 void SoftTimer::Restart() {
     timeout = period + _timer_ticks;
@@ -46,10 +48,10 @@ void timer_tick() {
     }
 }
 
-extern "C" void GPT2_IRQHandler(void) {
-    if (GPT_GetStatusFlags(GPT2, kGPT_OutputCompare1Flag)) {
+extern "C" void SOFTTIMER_GPT_IRQHANDLER(void) {
+    if (GPT_GetStatusFlags(SOFTTIMER_PERIPHERAL, kGPT_OutputCompare1Flag)) {
         timer_tick();
-        GPT_ClearStatusFlags(GPT2, kGPT_OutputCompare1Flag);
+        GPT_ClearStatusFlags(SOFTTIMER_PERIPHERAL, kGPT_OutputCompare1Flag);
     }
     __DSB();
 }

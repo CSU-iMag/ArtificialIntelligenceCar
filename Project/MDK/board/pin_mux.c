@@ -31,18 +31,18 @@ pin_labels:
 - {pin_num: D14, pin_signal: GPIO_B1_13, label: WDOG_B, identifier: WDOG_B;UART5_RX}
 - {pin_num: B14, pin_signal: GPIO_B1_15, label: MOTOR, identifier: BACKLIGHT_CTL;LED2;STEER}
 - {pin_num: M14, pin_signal: GPIO_AD_B0_00, label: 'USB_HOST_OC/J24[10]', identifier: CS}
-- {pin_num: H10, pin_signal: GPIO_AD_B0_01, label: KEY, identifier: D1;K2}
+- {pin_num: H10, pin_signal: GPIO_AD_B0_01, label: KEY, identifier: D1;K2;K_RIGHT}
 - {pin_num: M11, pin_signal: GPIO_AD_B0_02, label: 'USB_OTG1_PWR/J24[2]', identifier: D0}
-- {pin_num: G11, pin_signal: GPIO_AD_B0_03, label: KEY, identifier: DC;K6}
+- {pin_num: G11, pin_signal: GPIO_AD_B0_03, label: KEY, identifier: DC;K6;K_UP}
 - {pin_num: G13, pin_signal: GPIO_AD_B0_10, label: MOTOR, identifier: INT1_COMBO;RIGHT}
 - {pin_num: G10, pin_signal: GPIO_AD_B0_11, label: MOTOR, identifier: INT2_COMBO;LEFT}
 - {pin_num: K14, pin_signal: GPIO_AD_B0_12, label: HAL, identifier: UART1_TXD;HAL1}
-- {pin_num: H14, pin_signal: GPIO_AD_B0_14, label: KEY, identifier: CAN2_TX;AD_CH2;K4}
-- {pin_num: L10, pin_signal: GPIO_AD_B0_15, label: KEY, identifier: CAN2_RX;AD_CH3;K5}
+- {pin_num: H14, pin_signal: GPIO_AD_B0_14, label: KEY, identifier: CAN2_TX;AD_CH2;K4;DOWN;K_DOWN}
+- {pin_num: L10, pin_signal: GPIO_AD_B0_15, label: KEY, identifier: CAN2_RX;AD_CH3;K5;OKEY;K_OK}
 - {pin_num: J11, pin_signal: GPIO_AD_B1_00, label: IIC, identifier: I2C_SCL_FXOS8700CQ;CSI_I2C_SCL;AD_CH4;SCL}
 - {pin_num: K11, pin_signal: GPIO_AD_B1_01, label: IIC, identifier: I2C_SDA_FXOS8700CQ;CSI_I2C_SDA;AD_CH5;SDA}
-- {pin_num: L11, pin_signal: GPIO_AD_B1_02, label: KEY, identifier: SPDIF_OUT;AD_CH7;K1}
-- {pin_num: M12, pin_signal: GPIO_AD_B1_03, label: KEY, identifier: SPDIF_IN;AD_CH6;K3}
+- {pin_num: L11, pin_signal: GPIO_AD_B1_02, label: KEY, identifier: SPDIF_OUT;AD_CH7;K1;K_BACK}
+- {pin_num: M12, pin_signal: GPIO_AD_B1_03, label: KEY, identifier: SPDIF_IN;AD_CH6;K3;LEFT;K_LEFT}
 - {pin_num: H13, pin_signal: GPIO_AD_B1_08, label: 'AUD_INT/CSI_D9//J35[13]/J22[4]', identifier: CSI_D9;AD_CH11}
 - {pin_num: M13, pin_signal: GPIO_AD_B1_09, label: 'SAI1_MCLK/CSI_D8/J35[11]', identifier: CSI_D8;AD_CH12}
 - {pin_num: L13, pin_signal: GPIO_AD_B1_10, label: K66, identifier: CSI_D7;AD_BAT;MTSR}
@@ -82,21 +82,21 @@ void BOARD_InitBootPins(void) {
 BOARD_InitPins:
 - options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
 - pin_list:
-  - {pin_num: P2, peripheral: GPIO3, signal: 'gpio_io, 04', pin_signal: GPIO_SD_B1_04, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: no_init,
-    pull_keeper_enable: Disable, slew_rate: Fast}
-  - {pin_num: K14, peripheral: GPIO1, signal: 'gpio_io, 12', pin_signal: GPIO_AD_B0_12, identifier: HAL1, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: no_init,
-    pull_keeper_enable: Disable, slew_rate: Fast}
-  - {pin_num: L11, peripheral: GPIO1, signal: 'gpio_io, 18', pin_signal: GPIO_AD_B1_02, identifier: K1, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
+  - {pin_num: P2, peripheral: GPIO3, signal: 'gpio_io, 04', pin_signal: GPIO_SD_B1_04, direction: INPUT, gpio_interrupt: kGPIO_IntFallingEdge, hysteresis_enable: Enable,
+    pull_up_down_config: no_init, pull_keeper_enable: Disable, slew_rate: Fast}
+  - {pin_num: K14, peripheral: GPIO1, signal: 'gpio_io, 12', pin_signal: GPIO_AD_B0_12, identifier: HAL1, direction: INPUT, gpio_interrupt: kGPIO_IntFallingEdge,
+    hysteresis_enable: Enable, pull_up_down_config: no_init, pull_keeper_enable: Disable, slew_rate: Fast}
+  - {pin_num: L11, peripheral: GPIO1, signal: 'gpio_io, 18', pin_signal: GPIO_AD_B1_02, identifier: K_BACK, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
     pull_keeper_select: Pull}
-  - {pin_num: M12, peripheral: GPIO1, signal: 'gpio_io, 19', pin_signal: GPIO_AD_B1_03, identifier: K3, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
+  - {pin_num: M12, peripheral: GPIO1, signal: 'gpio_io, 19', pin_signal: GPIO_AD_B1_03, identifier: K_LEFT, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
     pull_keeper_select: Pull}
-  - {pin_num: H10, peripheral: GPIO1, signal: 'gpio_io, 01', pin_signal: GPIO_AD_B0_01, identifier: K2, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
+  - {pin_num: H10, peripheral: GPIO1, signal: 'gpio_io, 01', pin_signal: GPIO_AD_B0_01, identifier: K_RIGHT, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
     pull_keeper_select: Pull}
-  - {pin_num: G11, peripheral: GPIO1, signal: 'gpio_io, 03', pin_signal: GPIO_AD_B0_03, identifier: K6, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
+  - {pin_num: G11, peripheral: GPIO1, signal: 'gpio_io, 03', pin_signal: GPIO_AD_B0_03, identifier: K_UP, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
     pull_keeper_select: Pull}
-  - {pin_num: L10, peripheral: GPIO1, signal: 'gpio_io, 15', pin_signal: GPIO_AD_B0_15, identifier: K5, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
+  - {pin_num: L10, peripheral: GPIO1, signal: 'gpio_io, 15', pin_signal: GPIO_AD_B0_15, identifier: K_OK, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
     pull_keeper_select: Pull}
-  - {pin_num: H14, peripheral: GPIO1, signal: 'gpio_io, 14', pin_signal: GPIO_AD_B0_14, identifier: K4, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
+  - {pin_num: H14, peripheral: GPIO1, signal: 'gpio_io, 14', pin_signal: GPIO_AD_B0_14, identifier: K_DOWN, direction: INPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Up_47K_Ohm,
     pull_keeper_select: Pull}
   - {pin_num: M5, peripheral: LPUART4, signal: RX, pin_signal: GPIO_SD_B1_01, identifier: RXD, speed: MHZ_100, slew_rate: Fast}
   - {pin_num: L5, peripheral: LPUART4, signal: TX, pin_signal: GPIO_SD_B1_00, identifier: TXD, slew_rate: Fast}
@@ -132,68 +132,70 @@ BOARD_InitPins:
 void BOARD_InitPins(void) {
   CLOCK_EnableClock(kCLOCK_Iomuxc);           /* iomuxc clock (iomuxc_clk_enable): 0x03U */
 
-  /* GPIO configuration of K2 on GPIO_AD_B0_01 (pin H10) */
-  gpio_pin_config_t K2_config = {
+  /* GPIO configuration of K_RIGHT on GPIO_AD_B0_01 (pin H10) */
+  gpio_pin_config_t K_RIGHT_config = {
       .direction = kGPIO_DigitalInput,
       .outputLogic = 0U,
       .interruptMode = kGPIO_NoIntmode
   };
   /* Initialize GPIO functionality on GPIO_AD_B0_01 (pin H10) */
-  GPIO_PinInit(GPIO1, 1U, &K2_config);
+  GPIO_PinInit(GPIO1, 1U, &K_RIGHT_config);
 
-  /* GPIO configuration of K6 on GPIO_AD_B0_03 (pin G11) */
-  gpio_pin_config_t K6_config = {
+  /* GPIO configuration of K_UP on GPIO_AD_B0_03 (pin G11) */
+  gpio_pin_config_t K_UP_config = {
       .direction = kGPIO_DigitalInput,
       .outputLogic = 0U,
       .interruptMode = kGPIO_NoIntmode
   };
   /* Initialize GPIO functionality on GPIO_AD_B0_03 (pin G11) */
-  GPIO_PinInit(GPIO1, 3U, &K6_config);
+  GPIO_PinInit(GPIO1, 3U, &K_UP_config);
 
   /* GPIO configuration of HAL1 on GPIO_AD_B0_12 (pin K14) */
   gpio_pin_config_t HAL1_config = {
       .direction = kGPIO_DigitalInput,
       .outputLogic = 0U,
-      .interruptMode = kGPIO_NoIntmode
+      .interruptMode = kGPIO_IntFallingEdge
   };
   /* Initialize GPIO functionality on GPIO_AD_B0_12 (pin K14) */
   GPIO_PinInit(GPIO1, 12U, &HAL1_config);
+  /* Enable GPIO pin interrupt on GPIO_AD_B0_12 (pin K14) */
+  GPIO_PortEnableInterrupts(GPIO1, 1U << 12U);
 
-  /* GPIO configuration of K4 on GPIO_AD_B0_14 (pin H14) */
-  gpio_pin_config_t K4_config = {
+  /* GPIO configuration of K_DOWN on GPIO_AD_B0_14 (pin H14) */
+  gpio_pin_config_t K_DOWN_config = {
       .direction = kGPIO_DigitalInput,
       .outputLogic = 0U,
       .interruptMode = kGPIO_NoIntmode
   };
   /* Initialize GPIO functionality on GPIO_AD_B0_14 (pin H14) */
-  GPIO_PinInit(GPIO1, 14U, &K4_config);
+  GPIO_PinInit(GPIO1, 14U, &K_DOWN_config);
 
-  /* GPIO configuration of K5 on GPIO_AD_B0_15 (pin L10) */
-  gpio_pin_config_t K5_config = {
+  /* GPIO configuration of K_OK on GPIO_AD_B0_15 (pin L10) */
+  gpio_pin_config_t K_OK_config = {
       .direction = kGPIO_DigitalInput,
       .outputLogic = 0U,
       .interruptMode = kGPIO_NoIntmode
   };
   /* Initialize GPIO functionality on GPIO_AD_B0_15 (pin L10) */
-  GPIO_PinInit(GPIO1, 15U, &K5_config);
+  GPIO_PinInit(GPIO1, 15U, &K_OK_config);
 
-  /* GPIO configuration of K1 on GPIO_AD_B1_02 (pin L11) */
-  gpio_pin_config_t K1_config = {
+  /* GPIO configuration of K_BACK on GPIO_AD_B1_02 (pin L11) */
+  gpio_pin_config_t K_BACK_config = {
       .direction = kGPIO_DigitalInput,
       .outputLogic = 0U,
       .interruptMode = kGPIO_NoIntmode
   };
   /* Initialize GPIO functionality on GPIO_AD_B1_02 (pin L11) */
-  GPIO_PinInit(GPIO1, 18U, &K1_config);
+  GPIO_PinInit(GPIO1, 18U, &K_BACK_config);
 
-  /* GPIO configuration of K3 on GPIO_AD_B1_03 (pin M12) */
-  gpio_pin_config_t K3_config = {
+  /* GPIO configuration of K_LEFT on GPIO_AD_B1_03 (pin M12) */
+  gpio_pin_config_t K_LEFT_config = {
       .direction = kGPIO_DigitalInput,
       .outputLogic = 0U,
       .interruptMode = kGPIO_NoIntmode
   };
   /* Initialize GPIO functionality on GPIO_AD_B1_03 (pin M12) */
-  GPIO_PinInit(GPIO1, 19U, &K3_config);
+  GPIO_PinInit(GPIO1, 19U, &K_LEFT_config);
 
   /* GPIO configuration of MOSI on GPIO_AD_B1_13 (pin H11) */
   gpio_pin_config_t MOSI_config = {
@@ -244,10 +246,12 @@ void BOARD_InitPins(void) {
   gpio_pin_config_t HAL2_config = {
       .direction = kGPIO_DigitalInput,
       .outputLogic = 0U,
-      .interruptMode = kGPIO_NoIntmode
+      .interruptMode = kGPIO_IntFallingEdge
   };
   /* Initialize GPIO functionality on GPIO_SD_B1_04 (pin P2) */
   GPIO_PinInit(GPIO3, 4U, &HAL2_config);
+  /* Enable GPIO pin interrupt on GPIO_SD_B1_04 (pin P2) */
+  GPIO_PortEnableInterrupts(GPIO3, 1U << 4U);
 
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_AD_B0_01_GPIO1_IO01,        /* GPIO_AD_B0_01 is configured as GPIO1_IO01 */

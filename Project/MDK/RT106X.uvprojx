@@ -313,7 +313,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>6</Optim>
+            <Optim>2</Optim>
             <oTime>0</oTime>
             <SplitLS>1</SplitLS>
             <OneElfS>1</OneElfS>
@@ -1238,6 +1238,11 @@
               <FileName>filter.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\CODE\utility\filter.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>hall.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\CODE\control\hall.cpp</FilePath>
             </File>
           </Files>
         </Group>

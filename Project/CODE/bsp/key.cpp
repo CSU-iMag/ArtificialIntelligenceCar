@@ -27,7 +27,6 @@ void Button::evt_handle() {
 
     case ButtonState::press_armed:
         state = value ? ButtonState::idle : ButtonState::press_detected;
-        //    DEBUG_LOG("%d\n", state);
         break;
 
     case ButtonState::press_detected:
@@ -148,12 +147,12 @@ void key_timer_schedule(sched_event_data_t dat) {
 static SoftTimer key_timer(key_timer_schedule);
 
 void key_init() {
-#define KEYPAD_ASSIGN_EVT(id, evt) Car.Keypad.emplace_back(ButtonList[id], evt)
-    KEYPAD_ASSIGN_EVT(BUTTON_UP_ID, btnUpHandler);
-    KEYPAD_ASSIGN_EVT(BUTTON_DOWN_ID, btnDownHandler);
-    KEYPAD_ASSIGN_EVT(BUTTON_LEFT_ID, btnLeftHandler);
-    KEYPAD_ASSIGN_EVT(BUTTON_RIGHT_ID, btnRightHandler);
-    KEYPAD_ASSIGN_EVT(BUTTON_ENTER_ID, btnEnterHandler);
-    KEYPAD_ASSIGN_EVT(BUTTON_ESCAPE_ID, btnEscapeHandler);
+#define KEYPAD_ASSIGN_EVT(id, evt) Car.Keypad.emplace_back(id, evt)
+    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_UP_PIN, btnUpHandler);
+    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_DOWN_PIN, btnDownHandler);
+    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_LEFT_PIN, btnLeftHandler);
+    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_RIGHT_PIN, btnRightHandler);
+    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_OK_PIN, btnEnterHandler);
+    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_BACK_PIN, btnEscapeHandler);
     key_timer.Start(KEY_SCAN_PERIOD);
 }

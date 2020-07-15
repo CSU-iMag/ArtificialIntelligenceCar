@@ -38,7 +38,7 @@ struct HomePage : ListLayout {
     HomePage();
 
   private:
-    static const int ChildrenCnt = 8;
+    static const int ChildrenCnt = 7;
     struct TreeNode tree = {.Parent = &gui_background};
     SGUI_ITEMS_ITEM its[ChildrenCnt];
 
@@ -51,8 +51,8 @@ struct DebugInfo : ListLayout {
 
     //! @brief 更新第i行显示的字符串
     __inline void UpdateValue(unsigned id, std::string str) {
-        if (this != ActiveLayout)
-            return;
+//        if (this != ActiveLayout)
+//            return;
         Items[id].UpdateValue(str);
         Repaint();
     }
@@ -61,30 +61,6 @@ struct DebugInfo : ListLayout {
     static const int ChildrenCnt = 3;
     struct TreeNode tree = {.Parent = &gui_home};
     SGUI_ITEMS_ITEM its[ChildrenCnt];
-};
-
-struct Resistance : ListLayout {
-    Resistance()
-        : ListLayout(&tree, its, "-数字电位器",
-                     {"R_A1 = ", "R_A2 = ", "R_A3 = ", "R_A4 = ", "R_B1 = ",
-                      "R_B2 = ", "R_B3 = ", "R_B4 = "}) {}
-
-    //! @brief 更新第几个电阻值
-    void UpdateValue(uint8_t sel);
-
-  private:
-    static const uint8_t ResNum = PGA_CNT;
-    struct TreeNode tree = {.Parent = &gui_home};
-    SGUI_ITEMS_ITEM its[ResNum];
-
-    //! @brief R--
-    virtual void KeyLeftPush();
-
-    //! @brief R++
-    virtual void KeyRightPush();
-
-    //! @brief Calibrate
-    virtual void KeyEnterPush();
 };
 
 struct MagadcDat : ListLayout {
@@ -99,12 +75,6 @@ struct MagadcDat : ListLayout {
     static const uint8_t AdcNum = ADC_CNT + 1;
     struct TreeNode tree = {.Parent = &gui_home};
     SGUI_ITEMS_ITEM its[AdcNum];
-
-    //! @brief R--
-    virtual void KeyLeftPush();
-
-    //! @brief R++
-    virtual void KeyRightPush();
 
     //! @brief Switch display mode: figure or graph
     virtual void KeyEnterPush();
@@ -198,8 +168,6 @@ struct ModelSelect : MenuLayout {
 };
 
 static __inline void gui_reloadVal() {
-    for (uint8_t i(0); i < PGA_CNT; ++i)
-        gui_resistance.UpdateValue(i);
     for (uint8_t i(0); i < gui_steering.ConfigNum; ++i)
         gui_steering.UpdateValue(i, 0);
 }
