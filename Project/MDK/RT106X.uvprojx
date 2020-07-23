@@ -337,7 +337,7 @@
             <v6Rtti>1</v6Rtti>
             <VariousControls>
               <MiscControls>-fno-common  -fdata-sections  -fno-builtin  -mthumb -Wno-invalid-source-encoding</MiscControls>
-              <Define>CPU_MIMXRT1064DVL6A,SKIP_SYSCLK_INIT,XIP_EXTERNAL_FLASH=1, XIP_BOOT_HEADER_DCD_ENABLE =1, XIP_BOOT_HEADER_ENABLE =1,PRINTF_FLOAT_ENABLE=1, SCANF_FLOAT_ENABLE=1, PRINTF_ADVANCED_ENABLE=1, SCANF_ADVANCED_ENABLE=1, FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ=0,USB_STACK_BM, __FPU_PRESENT=1 __TARGET_FPU_VFP __ARM_FP=0xe</Define>
+              <Define>CPU_MIMXRT1064DVL6A,SKIP_SYSCLK_INIT,XIP_EXTERNAL_FLASH=1, XIP_BOOT_HEADER_DCD_ENABLE =1, XIP_BOOT_HEADER_ENABLE =1,PRINTF_FLOAT_ENABLE=1, SCANF_FLOAT_ENABLE=1, PRINTF_ADVANCED_ENABLE=1, SCANF_ADVANCED_ENABLE=1, FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ=0,USB_STACK_BM, SERIAL_PORT_TYPE_UART, SDK_DEBUGCONSOLE=0,  __FPU_PRESENT=1 __TARGET_FPU_VFP __ARM_FP=0xe</Define>
               <Undefine></Undefine>
               <IncludePath>..\CODE;..\..\Libraries\seekfree_libraries;..\..\Libraries\nxp_libraries\CMSIS\Include;..\..\Libraries\nxp_libraries\cmsis_drivers;..\..\Libraries\nxp_libraries\drives;..\..\Libraries\nxp_libraries\startup;..\..\Libraries\nxp_libraries\startup\MDK-ARM;..\..\Libraries\nxp_libraries\utilities;..\..\Libraries\nxp_libraries\utilities\debug_console;..\..\Libraries\nxp_libraries\utilities\str;..\..\Libraries\nxp_libraries\xip;..\..\Libraries\nxp_libraries\deceive;..\..\Libraries\nxp_libraries\components\serial_manager;..\..\Libraries\nxp_libraries\components\uart;..\..\Libraries\nxp_libraries\components\lists;..\..\Libraries\nxp_libraries\components\osa;..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter;..\..\Libraries\nxp_libraries\middleware\usb\include;..\..\Libraries\nxp_libraries\middleware\usb\phy;..\..\Libraries\nxp_libraries\middleware\usb\device;..\..\Libraries\nxp_libraries\middleware\sdmmc\inc;..\..\Libraries\nxp_libraries\middleware\sdmmc\port;..\..\Libraries\nxp_libraries\middleware\sdmmc\port\usdhc;..\..\Libraries\nxp_libraries\middleware\sdmmc\port\usdhc\interrupt;..\..\Libraries\nxp_libraries\middleware\sdmmc\src;..\..\Libraries\nxp_libraries\middleware\fatfs\source;..\..\Libraries\nxp_libraries\middleware\fatfs\source\fsl_sd_disk;..\..\Libraries\seekfree_libraries\common;..\..\Libraries\seekfree_peripheral;..\CODE\control;..\CODE;..\CODE\car;..\CODE\utility;..\CODE\bsp;.\board;..\..\Libraries\SimpleGUI\inc;..\CODE\gui;..\..\Libraries\StateMachineCompact;..\..\Libraries\nncu;..\..\Libraries\nncu\aiann;..\..\Libraries\nncu\cmsis_nn\Include;..\CODE\ai;.\RTE\_nor_sdram_zf_dtcm_v6</IncludePath>
             </VariousControls>
@@ -443,31 +443,6 @@
               <FileType>1</FileType>
               <FilePath>..\..\Libraries\nxp_libraries\components\uart\lpuart_adapter.c</FilePath>
             </File>
-            <File>
-              <FileName>uart.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\components\uart\uart.h</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_os_abstraction.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\components\osa\fsl_os_abstraction.h</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_os_abstraction_bm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\components\osa\fsl_os_abstraction_bm.c</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_os_abstraction_bm.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\components\osa\fsl_os_abstraction_bm.h</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_os_abstraction_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\components\osa\fsl_os_abstraction_config.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -501,21 +476,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>doc</GroupName>
-          <Files>
-            <File>
-              <FileName>read me.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\doc\read me.txt</FilePath>
-            </File>
-            <File>
-              <FileName>version.txt</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\doc\version.txt</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>drives</GroupName>
           <Files>
             <File>
@@ -527,11 +487,6 @@
               <FileName>fsl_adc.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_adc.h</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_adc_etc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_adc_etc.h</FilePath>
             </File>
             <File>
               <FileName>fsl_cache.c</FileName>
@@ -564,16 +519,6 @@
               <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_common.h</FilePath>
             </File>
             <File>
-              <FileName>fsl_dcp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_dcp.c</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_dcp.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_dcp.h</FilePath>
-            </File>
-            <File>
               <FileName>fsl_dmamux.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_dmamux.c</FilePath>
@@ -592,66 +537,6 @@
               <FileName>fsl_edma.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_edma.h</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_flexio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_flexio.c</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_flexio.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_flexio.h</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_flexio_i2c_master.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_flexio_i2c_master.c</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_flexio_i2c_master.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_flexio_i2c_master.h</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_flexio_spi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_flexio_spi.c</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_flexio_spi.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_flexio_spi.h</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_flexio_spi_edma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_flexio_spi_edma.c</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_flexio_spi_edma.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_flexio_spi_edma.h</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_flexio_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_flexio_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_flexio_uart.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_flexio_uart.h</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_flexio_uart_edma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_flexio_uart_edma.c</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_flexio_uart_edma.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_flexio_uart_edma.h</FilePath>
             </File>
             <File>
               <FileName>fsl_flexram.c</FileName>
@@ -699,26 +584,6 @@
               <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_iomuxc.h</FilePath>
             </File>
             <File>
-              <FileName>fsl_lpi2c.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_lpi2c.c</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_lpi2c.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_lpi2c.h</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_lpi2c_edma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_lpi2c_edma.c</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_lpi2c_edma.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_lpi2c_edma.h</FilePath>
-            </File>
-            <File>
               <FileName>fsl_lpspi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_lpspi.c</FilePath>
@@ -727,16 +592,6 @@
               <FileName>fsl_lpspi.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_lpspi.h</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_lpspi_edma.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_lpspi_edma.c</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_lpspi_edma.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_lpspi_edma.h</FilePath>
             </File>
             <File>
               <FileName>fsl_lpuart.c</FileName>
@@ -789,16 +644,6 @@
               <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_qtmr.h</FilePath>
             </File>
             <File>
-              <FileName>fsl_rtwdog.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_rtwdog.c</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_rtwdog.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_rtwdog.h</FilePath>
-            </File>
-            <File>
               <FileName>fsl_src.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_src.c</FilePath>
@@ -818,31 +663,11 @@
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_tempmon.h</FilePath>
             </File>
-            <File>
-              <FileName>fsl_wdog.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_wdog.c</FilePath>
-            </File>
-            <File>
-              <FileName>fsl_wdog.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\nxp_libraries\drives\fsl_wdog.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>seekfree_libraries</GroupName>
           <Files>
-            <File>
-              <FileName>zf_adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\seekfree_libraries\zf_adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>zf_adc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\seekfree_libraries\zf_adc.h</FilePath>
-            </File>
             <File>
               <FileName>zf_flash.c</FileName>
               <FileType>1</FileType>
@@ -864,16 +689,6 @@
               <FilePath>..\..\Libraries\seekfree_libraries\zf_gpio.h</FilePath>
             </File>
             <File>
-              <FileName>zf_iic.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\seekfree_libraries\zf_iic.c</FilePath>
-            </File>
-            <File>
-              <FileName>zf_iic.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\seekfree_libraries\zf_iic.h</FilePath>
-            </File>
-            <File>
               <FileName>zf_iomuxc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Libraries\seekfree_libraries\zf_iomuxc.c</FilePath>
@@ -882,11 +697,6 @@
               <FileName>zf_iomuxc.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\seekfree_libraries\zf_iomuxc.h</FilePath>
-            </File>
-            <File>
-              <FileName>zf_pit.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\seekfree_libraries\zf_pit.c</FilePath>
             </File>
             <File>
               <FileName>zf_pit.h</FileName>
@@ -902,16 +712,6 @@
               <FileName>zf_pwm.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\seekfree_libraries\zf_pwm.h</FilePath>
-            </File>
-            <File>
-              <FileName>zf_qtimer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\seekfree_libraries\zf_qtimer.c</FilePath>
-            </File>
-            <File>
-              <FileName>zf_qtimer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\seekfree_libraries\zf_qtimer.h</FilePath>
             </File>
             <File>
               <FileName>zf_rom_api.c</FileName>
@@ -944,16 +744,6 @@
               <FilePath>..\..\Libraries\seekfree_libraries\zf_systick.h</FilePath>
             </File>
             <File>
-              <FileName>zf_uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\seekfree_libraries\zf_uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>zf_uart.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\seekfree_libraries\zf_uart.h</FilePath>
-            </File>
-            <File>
               <FileName>common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Libraries\seekfree_libraries\common\common.c</FilePath>
@@ -964,14 +754,9 @@
               <FilePath>..\..\Libraries\seekfree_libraries\common\common.h</FilePath>
             </File>
             <File>
-              <FileName>SEEKFREE_PRINTF.c</FileName>
+              <FileName>zf_pit.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\Libraries\seekfree_libraries\common\SEEKFREE_PRINTF.c</FilePath>
-            </File>
-            <File>
-              <FileName>SEEKFREE_PRINTF.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\seekfree_libraries\common\SEEKFREE_PRINTF.h</FilePath>
+              <FilePath>..\..\Libraries\seekfree_libraries\zf_pit.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -997,16 +782,6 @@
               <FileName>SEEKFREE_IIC.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_IIC.h</FilePath>
-            </File>
-            <File>
-              <FileName>SEEKFREE_MPU6050.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_MPU6050.c</FilePath>
-            </File>
-            <File>
-              <FileName>SEEKFREE_MPU6050.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\Libraries\seekfree_peripheral\SEEKFREE_MPU6050.h</FilePath>
             </File>
             <File>
               <FileName>SEEKFREE_VIRSCO.c</FileName>
@@ -1132,11 +907,6 @@
               <FileName>usage.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\CODE\utility\usage.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>pga.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\CODE\control\pga.cpp</FilePath>
             </File>
             <File>
               <FileName>storage.cpp</FileName>
@@ -1354,11 +1124,6 @@
               <FileType>8</FileType>
               <FilePath>..\CODE\utility\filter.hpp</FilePath>
             </File>
-            <File>
-              <FileName>pga.hpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\CODE\control\pga.hpp</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -1484,11 +1249,6 @@
               <FileType>1</FileType>
               <FilePath>..\..\Libraries\SimpleGUI\src\SGUI_Text.c</FilePath>
             </File>
-            <File>
-              <FileName>SGUI_VariableBox.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\SimpleGUI\src\SGUI_VariableBox.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -1533,11 +1293,6 @@
               <FileName>arm_fir_q15.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Libraries\dspSource\FilteringFunctions\arm_fir_q15.c</FilePath>
-            </File>
-            <File>
-              <FileName>arm_rms_q15.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\Libraries\dspSource\StatisticsFunctions\arm_rms_q15.c</FilePath>
             </File>
             <File>
               <FileName>arm_sqrt_q15.c</FileName>

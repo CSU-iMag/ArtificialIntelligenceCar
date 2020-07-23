@@ -38,143 +38,132 @@ extern "C" {
 void BOARD_InitBootPins(void);
 
 /* GPIO_SD_B1_04 (coord P2), HAL */
-#define BOARD_INITPINS_HAL2_GPIO                                           GPIO3   /*!< GPIO device name: GPIO3 */
-#define BOARD_INITPINS_HAL2_PORT                                           GPIO3   /*!< PORT device name: GPIO3 */
-#define BOARD_INITPINS_HAL2_PIN                                               4U   /*!< GPIO3 pin index: 4 */
 
-/* GPIO_AD_B0_12 (coord K14), HAL */
-#define BOARD_INITPINS_HAL1_GPIO                                           GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_HAL1_PORT                                           GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_HAL1_PIN                                              12U   /*!< GPIO1 pin index: 12 */
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_HAL2_GPIO                                           GPIO3   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_HAL2_GPIO_PIN                                          4U   /*!< GPIO pin number */
+#define BOARD_INITPINS_HAL2_GPIO_PIN_MASK                             (1U << 4U)   /*!< GPIO pin mask */
 
 /* GPIO_AD_B1_02 (coord L11), KEY */
-#define BOARD_INITPINS_K_BACK_GPIO                                         GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_K_BACK_PORT                                         GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_K_BACK_PIN                                            18U   /*!< GPIO1 pin index: 18 */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_K_BACK_GPIO                                         GPIO1   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_K_BACK_GPIO_PIN                                       18U   /*!< GPIO pin number */
+#define BOARD_INITPINS_K_BACK_GPIO_PIN_MASK                          (1U << 18U)   /*!< GPIO pin mask */
 
 /* GPIO_AD_B1_03 (coord M12), KEY */
-#define BOARD_INITPINS_K_LEFT_GPIO                                         GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_K_LEFT_PORT                                         GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_K_LEFT_PIN                                            19U   /*!< GPIO1 pin index: 19 */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_K_LEFT_GPIO                                         GPIO1   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_K_LEFT_GPIO_PIN                                       19U   /*!< GPIO pin number */
+#define BOARD_INITPINS_K_LEFT_GPIO_PIN_MASK                          (1U << 19U)   /*!< GPIO pin mask */
 
 /* GPIO_AD_B0_01 (coord H10), KEY */
-#define BOARD_INITPINS_K_RIGHT_GPIO                                        GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_K_RIGHT_PORT                                        GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_K_RIGHT_PIN                                            1U   /*!< GPIO1 pin index: 1 */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_K_RIGHT_GPIO                                        GPIO1   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_K_RIGHT_GPIO_PIN                                       1U   /*!< GPIO pin number */
+#define BOARD_INITPINS_K_RIGHT_GPIO_PIN_MASK                          (1U << 1U)   /*!< GPIO pin mask */
 
 /* GPIO_AD_B0_03 (coord G11), KEY */
-#define BOARD_INITPINS_K_UP_GPIO                                           GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_K_UP_PORT                                           GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_K_UP_PIN                                               3U   /*!< GPIO1 pin index: 3 */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_K_UP_GPIO                                           GPIO1   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_K_UP_GPIO_PIN                                          3U   /*!< GPIO pin number */
+#define BOARD_INITPINS_K_UP_GPIO_PIN_MASK                             (1U << 3U)   /*!< GPIO pin mask */
 
 /* GPIO_AD_B0_15 (coord L10), KEY */
-#define BOARD_INITPINS_K_OK_GPIO                                           GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_K_OK_PORT                                           GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_K_OK_PIN                                              15U   /*!< GPIO1 pin index: 15 */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_K_OK_GPIO                                           GPIO1   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_K_OK_GPIO_PIN                                         15U   /*!< GPIO pin number */
+#define BOARD_INITPINS_K_OK_GPIO_PIN_MASK                            (1U << 15U)   /*!< GPIO pin mask */
 
 /* GPIO_AD_B0_14 (coord H14), KEY */
-#define BOARD_INITPINS_K_DOWN_GPIO                                         GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_K_DOWN_PORT                                         GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_K_DOWN_PIN                                            14U   /*!< GPIO1 pin index: 14 */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_K_DOWN_GPIO                                         GPIO1   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_K_DOWN_GPIO_PIN                                       14U   /*!< GPIO pin number */
+#define BOARD_INITPINS_K_DOWN_GPIO_PIN_MASK                          (1U << 14U)   /*!< GPIO pin mask */
 
 /* GPIO_SD_B1_01 (coord M5), COM */
-#define BOARD_INITPINS_RXD_PERIPHERAL                                    LPUART4   /*!< Device name: LPUART4 */
-#define BOARD_INITPINS_RXD_SIGNAL                                             RX   /*!< LPUART4 signal: RX */
 
 /* GPIO_SD_B1_00 (coord L5), COM */
-#define BOARD_INITPINS_TXD_PERIPHERAL                                    LPUART4   /*!< Device name: LPUART4 */
-#define BOARD_INITPINS_TXD_SIGNAL                                             TX   /*!< LPUART4 signal: TX */
 
 /* GPIO_B0_00 (coord D7), LSB */
-#define BOARD_INITPINS_LSB2_PERIPHERAL                                      TMR1   /*!< Device name: TMR1 */
-#define BOARD_INITPINS_LSB2_SIGNAL                                         TIMER   /*!< TMR1 signal: TIMER */
-#define BOARD_INITPINS_LSB2_CHANNEL                                           0U   /*!< TMR1 TIMER channel: 0 */
 
 /* GPIO_B0_01 (coord E7), LSB */
-#define BOARD_INITPINS_LSB1_PERIPHERAL                                      TMR1   /*!< Device name: TMR1 */
-#define BOARD_INITPINS_LSB1_SIGNAL                                         TIMER   /*!< TMR1 signal: TIMER */
-#define BOARD_INITPINS_LSB1_CHANNEL                                           1U   /*!< TMR1 TIMER channel: 1 */
 
 /* GPIO_B0_02 (coord E8), DIR */
-#define BOARD_INITPINS_DIR2_PERIPHERAL                                      TMR1   /*!< Device name: TMR1 */
-#define BOARD_INITPINS_DIR2_SIGNAL                                         TIMER   /*!< TMR1 signal: TIMER */
-#define BOARD_INITPINS_DIR2_CHANNEL                                           2U   /*!< TMR1 TIMER channel: 2 */
 
 /* GPIO_B1_08 (coord A12), DIR */
-#define BOARD_INITPINS_DIR1_PERIPHERAL                                      TMR1   /*!< Device name: TMR1 */
-#define BOARD_INITPINS_DIR1_SIGNAL                                         TIMER   /*!< TMR1 signal: TIMER */
-#define BOARD_INITPINS_DIR1_CHANNEL                                           3U   /*!< TMR1 TIMER channel: 3 */
-
-/* GPIO_AD_B1_00 (coord J11), IIC */
-#define BOARD_INITPINS_SCL_PERIPHERAL                                     LPI2C1   /*!< Device name: LPI2C1 */
-#define BOARD_INITPINS_SCL_SIGNAL                                            SCL   /*!< LPI2C1 signal: SCL */
-
-/* GPIO_AD_B1_01 (coord K11), IIC */
-#define BOARD_INITPINS_SDA_PERIPHERAL                                     LPI2C1   /*!< Device name: LPI2C1 */
-#define BOARD_INITPINS_SDA_SIGNAL                                            SDA   /*!< LPI2C1 signal: SDA */
 
 /* GPIO_AD_B1_10 (coord L13), K66 */
-#define BOARD_INITPINS_MTSR_PERIPHERAL                                   LPUART8   /*!< Device name: LPUART8 */
-#define BOARD_INITPINS_MTSR_SIGNAL                                            TX   /*!< LPUART8 signal: TX */
 
 /* GPIO_AD_B1_11 (coord J13), K66 */
-#define BOARD_INITPINS_MRST_PERIPHERAL                                   LPUART8   /*!< Device name: LPUART8 */
-#define BOARD_INITPINS_MRST_SIGNAL                                            RX   /*!< LPUART8 signal: RX */
 
 /* GPIO_AD_B1_15 (coord J14), MOTOR */
-#define BOARD_INITPINS_DIRECT_GPIO                                         GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_DIRECT_PORT                                         GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_DIRECT_PIN                                            31U   /*!< GPIO1 pin index: 31 */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_DIRECT_GPIO                                         GPIO1   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_DIRECT_GPIO_PIN                                       31U   /*!< GPIO pin number */
+#define BOARD_INITPINS_DIRECT_GPIO_PIN_MASK                          (1U << 31U)   /*!< GPIO pin mask */
 
 /* GPIO_AD_B0_10 (coord G13), MOTOR */
-#define BOARD_INITPINS_RIGHT_PERIPHERAL                                     PWM1   /*!< Device name: PWM1 */
-#define BOARD_INITPINS_RIGHT_SIGNAL                                            A   /*!< PWM1 signal: A */
-#define BOARD_INITPINS_RIGHT_CHANNEL                                          3U   /*!< PWM1 A channel: 3 */
 
 /* GPIO_AD_B0_11 (coord G10), MOTOR */
-#define BOARD_INITPINS_LEFT_PERIPHERAL                                      PWM1   /*!< Device name: PWM1 */
-#define BOARD_INITPINS_LEFT_SIGNAL                                             B   /*!< PWM1 signal: B */
-#define BOARD_INITPINS_LEFT_CHANNEL                                           3U   /*!< PWM1 B channel: 3 */
 
 /* GPIO_B1_15 (coord B14), MOTOR */
-#define BOARD_INITPINS_STEER_PERIPHERAL                                     PWM4   /*!< Device name: PWM4 */
-#define BOARD_INITPINS_STEER_SIGNAL                                            A   /*!< PWM4 signal: A */
-#define BOARD_INITPINS_STEER_CHANNEL                                          3U   /*!< PWM4 A channel: 3 */
-
-/* GPIO_B1_00 (coord A11), BEEP */
-#define BOARD_INITPINS_BEEP_PERIPHERAL                                   FLEXIO2   /*!< Device name: FLEXIO2 */
-#define BOARD_INITPINS_BEEP_SIGNAL                                            IO   /*!< FLEXIO2 signal: IO */
-#define BOARD_INITPINS_BEEP_CHANNEL                                          16U   /*!< FLEXIO2 IO channel: 16 */
 
 /* GPIO_B1_11 (coord C13), OLED */
-#define BOARD_INITPINS_DC_GPIO                                             GPIO2   /*!< GPIO device name: GPIO2 */
-#define BOARD_INITPINS_DC_PORT                                             GPIO2   /*!< PORT device name: GPIO2 */
-#define BOARD_INITPINS_DC_PIN                                                27U   /*!< GPIO2 pin index: 27 */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_DC_GPIO                                             GPIO2   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_DC_GPIO_PIN                                           27U   /*!< GPIO pin number */
+#define BOARD_INITPINS_DC_GPIO_PIN_MASK                              (1U << 27U)   /*!< GPIO pin mask */
 
 /* GPIO_B1_12 (coord D13), OLED */
-#define BOARD_INITPINS_RES_GPIO                                            GPIO2   /*!< GPIO device name: GPIO2 */
-#define BOARD_INITPINS_RES_PORT                                            GPIO2   /*!< PORT device name: GPIO2 */
-#define BOARD_INITPINS_RES_PIN                                               28U   /*!< GPIO2 pin index: 28 */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_RES_GPIO                                            GPIO2   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_RES_GPIO_PIN                                          28U   /*!< GPIO pin number */
+#define BOARD_INITPINS_RES_GPIO_PIN_MASK                             (1U << 28U)   /*!< GPIO pin mask */
 
 /* GPIO_AD_B1_14 (coord G12), OLED */
-#define BOARD_INITPINS_CLK_GPIO                                            GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_CLK_PORT                                            GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_CLK_PIN                                               30U   /*!< GPIO1 pin index: 30 */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_CLK_GPIO                                            GPIO1   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_CLK_GPIO_PIN                                          30U   /*!< GPIO pin number */
+#define BOARD_INITPINS_CLK_GPIO_PIN_MASK                             (1U << 30U)   /*!< GPIO pin mask */
 
 /* GPIO_AD_B1_13 (coord H11), OLED */
-#define BOARD_INITPINS_MOSI_GPIO                                           GPIO1   /*!< GPIO device name: GPIO1 */
-#define BOARD_INITPINS_MOSI_PORT                                           GPIO1   /*!< PORT device name: GPIO1 */
-#define BOARD_INITPINS_MOSI_PIN                                              29U   /*!< GPIO1 pin index: 29 */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_MOSI_GPIO                                           GPIO1   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_MOSI_GPIO_PIN                                         29U   /*!< GPIO pin number */
+#define BOARD_INITPINS_MOSI_GPIO_PIN_MASK                            (1U << 29U)   /*!< GPIO pin mask */
 
 /* GPIO_AD_B1_04 (coord L12), BAT */
-#define BOARD_INITPINS_BAT_PERIPHERAL                                       ADC1   /*!< Device name: ADC1 */
-#define BOARD_INITPINS_BAT_SIGNAL                                             IN   /*!< ADC1 signal: IN */
-#define BOARD_INITPINS_BAT_CHANNEL                                            9U   /*!< ADC1 IN channel: 9 */
 
 /* GPIO_B0_09 (coord C9), LED */
-#define BOARD_INITPINS_LED_PERIPHERAL                                       PWM2   /*!< Device name: PWM2 */
-#define BOARD_INITPINS_LED_SIGNAL                                              B   /*!< PWM2 signal: B */
-#define BOARD_INITPINS_LED_CHANNEL                                            1U   /*!< PWM2 B channel: 1 */
+
+/* GPIO_AD_B1_00 (coord J11), IIC */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_SCL_GPIO                                            GPIO1   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_SCL_GPIO_PIN                                          16U   /*!< GPIO pin number */
+#define BOARD_INITPINS_SCL_GPIO_PIN_MASK                             (1U << 16U)   /*!< GPIO pin mask */
+
+/* GPIO_AD_B1_01 (coord K11), IIC */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_SDA_GPIO                                            GPIO1   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_SDA_GPIO_PIN                                          17U   /*!< GPIO pin number */
+#define BOARD_INITPINS_SDA_GPIO_PIN_MASK                             (1U << 17U)   /*!< GPIO pin mask */
+
+/* GPIO_B1_02 (coord C11), LCDIF_D14 */
+
+/* GPIO_AD_B0_12 (coord K14), CON */
 
 
 /*!

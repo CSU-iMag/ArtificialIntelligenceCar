@@ -3,6 +3,7 @@
 #include "communication.hpp"
 #include "layout.hpp"
 #include "timer.hpp"
+#include "pin_mux.h"
 
 std::vector<Button> iMagCar::Keypad;
 
@@ -148,11 +149,11 @@ static SoftTimer key_timer(key_timer_schedule);
 
 void key_init() {
 #define KEYPAD_ASSIGN_EVT(id, evt) Car.Keypad.emplace_back(id, evt)
-    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_UP_PIN, btnUpHandler);
-    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_DOWN_PIN, btnDownHandler);
-    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_LEFT_PIN, btnLeftHandler);
-    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_RIGHT_PIN, btnRightHandler);
-    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_OK_PIN, btnEnterHandler);
-    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_BACK_PIN, btnEscapeHandler);
+    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_UP_GPIO_PIN, btnUpHandler);
+    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_DOWN_GPIO_PIN, btnDownHandler);
+    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_LEFT_GPIO_PIN, btnLeftHandler);
+    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_RIGHT_GPIO_PIN, btnRightHandler);
+    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_OK_GPIO_PIN, btnEnterHandler);
+    KEYPAD_ASSIGN_EVT(BOARD_INITPINS_K_BACK_GPIO_PIN, btnEscapeHandler);
     key_timer.Start(KEY_SCAN_PERIOD);
 }

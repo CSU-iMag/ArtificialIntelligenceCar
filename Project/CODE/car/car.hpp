@@ -2,6 +2,7 @@
 #define CAR_H
 
 #include "car_config.h"
+#include "deep.hpp"
 #include "machine.hpp"
 #include "magnet.hpp"
 #include "motor.hpp"
@@ -9,7 +10,6 @@
 #include "pid.hpp"
 #include "steer.hpp"
 #include "timer.hpp"
-#include "deep.hpp"
 #pragma region bsp
 #include "encoder.hpp"
 #include "key.hpp"
@@ -17,12 +17,12 @@
 #include "route.h"
 #pragma endregion
 
-#define SW_MASK_STEER 0u
-#define SW_MASK_SPEED 1u
-#define SW_MASK_AUTO_STOP 2u
-#define SW_MASK_SEND_MOTOR 3u
-#define SW_MASK_SEND_DIR 5u
-#define SW_MASK_SEND_AI 6u
+#define SW_STEER 0u
+#define SW_SPEED 1u
+#define SW_AUTO_STOP 2u
+#define SW_SEND_MOTOR 3u
+#define SW_SEND_DIR 5u
+#define SW_SEND_AI 6u
 
 //! @brief Steer PID
 #define STEER_K(pid) (Car.Steer3010.steerCtrl.instance.K##pid)
@@ -38,9 +38,9 @@
 
 //! @brief 运行状态判定
 #define IS_DERAIL                                                              \
-    (Car.MagList[MagFrontL].GetNormalized() +                                \
-         Car.MagList[MagFrontM].GetNormalized() +                            \
-         Car.MagList[MagFrontR].GetNormalized() <                            \
+    (Car.MagList[MagFrontL].GetNormalized() +                                  \
+         Car.MagList[MagFrontM].GetNormalized() +                              \
+         Car.MagList[MagFrontR].GetNormalized() <                              \
      MAG_DERAIL_THRESHOLD)
 
 //! @warning need critial region protect
@@ -66,18 +66,18 @@
 
 void LaunchDelaySchedule(sched_event_data_t dat);
 
-enum class ControlMode { PID, AI };
+enum class ControlMode { AI, PID };
 
 class iMagCar { // 什么时候该用friend？什么时候public？
   public:
     //! @brief 8 Switches
-    uint8_t Enabled;
+    uint8_t Enabled = BIT(SW_AUTO_STOP);
 
     //! @brief 神经网络模型
     const unsigned char *Model = model1;
 
     //! @brief 方向控制模式
-    ControlMode CtrlMode = ControlMode::PID;
+    ControlMode CtrlMode;
 
     //! @brief 转向时减速
     float Deceleration = 0.26;
@@ -112,6 +112,10 @@ class iMagCar { // 什么时候该用friend？什么时候public？
     //! @brief 核心板蓝灯
     HardLED CoreLED;
 
+    //! @brief 4个ADC结构体阈值
+    RingThreshold RingLoader = {
+        .island = 150, .straightR = 51, .straightL = 57, .straightM = 50};
+    
     //! @warning 这里不能有任何操作硬件的代码！
     iMagCar()
         : TargetSpeed(69), MotorL(MOTOR_L, MOTOR_MIN, MOTOR_MAX),

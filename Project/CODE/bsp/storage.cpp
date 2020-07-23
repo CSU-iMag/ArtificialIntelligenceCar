@@ -10,8 +10,7 @@
 
 using std::to_string;
 struct StorageData {
-    uint8_t Gain[8];
-    uint16_t MagMax[ADC_CNT];
+    uint16_t MagMax[ADC_CNT], MagMin[ADC_CNT];
     float32_t TargetSpeed, SteerOffset;
     pid_coefficient_t SteerCoeff, SpeedCoeff;
 } __PACKED;
@@ -28,8 +27,10 @@ union Saver {
 
 void storage_save(uint32 sector, uint32 page) {
     CRITICAL_REGION_ENTER();
-    for (int i(0); i < ADC_CNT; ++i)
+    for (int i(0); i < ADC_CNT; ++i) {
         store.data.MagMax[i] = Car.MagList[i].GetMax();
+        store.data.MagMin[i] = Car.MagList[i].GetMin();
+    }
     store.data.TargetSpeed = Car.TargetSpeed;
     store.data.SteerOffset = Car.Steer3010.steerOffset;
     store.data.SteerCoeff.Kp = Car.Steer3010.steerCtrl.instance.Kp;
@@ -41,7 +42,7 @@ void storage_save(uint32 sector, uint32 page) {
     CRITICAL_REGION_EXIT();
 
     flash_erase_sector(sector);
-    flash_page_program(sector, page, store.buffer, storage_size);
+    flash_page_program(sector, page, store.buffer, storage_size / 4);
 }
 
 void storage_load(uint32 sector, uint32 page) {
@@ -49,8 +50,10 @@ void storage_load(uint32 sector, uint32 page) {
     flash_read_page(sector, page, store.buffer, storage_size / 4);
 
     CRITICAL_REGION_ENTER();
-    for (int i(0); i < ADC_CNT; ++i)
-        Car.MagList[i].MaxRawData = store.data.MagMax[i];
+    for (int i(0); i < ADC_CNT; ++i) {
+        Car.MagList[i].MaxRaw = store.data.MagMax[i];
+        Car.MagList[i].MinRaw = store.data.MagMin[i];
+    }
     Car.TargetSpeed = store.data.TargetSpeed;
     Car.Steer3010.steerOffset = store.data.SteerOffset;
     Car.Steer3010.steerCtrl.SetPID(store.data.SteerCoeff.Kp,
@@ -79,8 +82,8 @@ void storage_load(uint32 sector, uint32 page) {
     com_log(to_string(SPEED_K(L, p)) + ' ');
     com_log(to_string(SPEED_K(L, i)) + ' ');
     com_log(to_string(SPEED_K(L, d)) + ' ');
-    com_log("\nRawMax:");
-    for (int i(0); i < ADC_CNT; ++i)
-        com_log(to_string(Car.MagList[i].MaxRawData) + ' ');
+    // com_log("\nRawMax:");
+    // for (int i(0); i < ADC_CNT; ++i)
+    //     com_log(to_string(Car.MagList[i].MaxRaw) + ' ');
     com_log("\n==============\n", LogBlue);
 }

@@ -4,7 +4,6 @@
 #include "fsl_iomuxc.h"
 #include "peripherals.h"
 #include "pin_mux.h"
-#include "zf_uart.h"
 
 /* Get debug console frequency. */
 uint32_t BOARD_DebugConsoleSrcFreq(void) {
@@ -168,10 +167,10 @@ void BOARD_ConfigMPU(void) {
 }
 
 void board_init(void) {
-    BOARD_ConfigMPU();    //³õÊ¼»¯ÄÚ´æ±£»¤µ¥Ôª
-    BOARD_BootClockRUN(); //³õÊ¼»¯¿ª·¢°åÊ±ÖÓ
-    BOARD_InitBootPins(); //³õÊ¼»¯¿ª·¢°åÒı½Å
+    BOARD_ConfigMPU();    //åˆå§‹åŒ–å†…å­˜ä¿æŠ¤å•å…ƒ
+    BOARD_BootClockRUN(); //åˆå§‹åŒ–å¼€å‘æ¿æ—¶é’Ÿ
+    BOARD_InitBootPins(); //åˆå§‹åŒ–å¼€å‘æ¿å¼•è„š
     BOARD_InitPeripherals();
     // BOARD_InitDebugConsole();
-    NVIC_SetPriorityGrouping(((uint32_t)0x3)); //ÉèÖÃÖĞ¶ÏÓÅÏÈ¼¶·Ö×é
+    NVIC_SetPriorityGrouping(((uint32_t)0x3)); //è®¾ç½®ä¸­æ–­ä¼˜å…ˆçº§åˆ†ç»„
 }

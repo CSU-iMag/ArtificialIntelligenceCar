@@ -1,14 +1,18 @@
 #include "motor.hpp"
 #include "car.hpp"
+#include "gui.hpp"
+#include "communication.hpp"
 #include "route.h"
 #include "util.h"
-#include "communication.hpp"
 #include "zf_qtimer.h"
 
 Motor::Motor(PWMCH_enum ch, float OutMin, float OutMax)
     : duty(0), PWM_Channel(ch), speedCtrl(std::make_pair(OutMin, OutMax)) {}
 
-void Motor::Init() { pwm_init(PWM_Channel, MOTOR_FREQ, 0); }
+void Motor::Init() {
+    pwm_init(PWM_Channel, MOTOR_FREQ, 0);
+    Stop();
+}
 
 /**
  * @name   设置电机PWM
@@ -23,16 +27,16 @@ void Motor::SetDuty(float Duty) {
 }
 
 void Motor::Stop(void) {
-    pwm_duty(PWM_Channel, 0);
+    SetDuty(35);
     speedCtrl.Reset();
 }
 
 void motor_pid_schedule() {
     CRITICAL_REGION_ENTER();
-    auto dutyL =
-        Car.MotorL.speedCtrl.Realize(Car.MotorL.target - Car.EncoderL.GetSpeed());
-    auto dutyR =
-        Car.MotorR.speedCtrl.Realize(Car.MotorR.target - Car.EncoderR.GetSpeed());
+    auto dutyL = Car.MotorL.speedCtrl.Realize(Car.MotorL.target -
+                                              Car.EncoderL.GetSpeed());
+    auto dutyR = Car.MotorR.speedCtrl.Realize(Car.MotorR.target -
+                                             Car.EncoderR.GetSpeed());
     Car.MotorL.SetDuty(dutyL);
     Car.MotorR.SetDuty(dutyR);
     CRITICAL_REGION_EXIT();

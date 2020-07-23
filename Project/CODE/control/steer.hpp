@@ -12,12 +12,11 @@ class Steer {
   public:
     float steerOffset;
     PID steerCtrl;
-    uint8_t steerDutyforAI;
     Steer(PWMCH_enum ch, float OutMin, float OutMax);
     void Init();
     void ModifyOffset(int8 varia);
     void DutySet(float duty);
-    __inline void WidthSet(uint16_t us) { DutySet(PULSE_TO_PERCENT(us)); }
+    __inline void WidthSet(uint16_t us) { DutySet(100 - PULSE_TO_PERCENT(us)); }
 };
 
 void steer_schedule(sched_event_data_t);

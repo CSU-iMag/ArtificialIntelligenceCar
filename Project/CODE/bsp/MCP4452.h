@@ -1,10 +1,10 @@
 /*
-    Êı×ÖµçÎ»Æ÷£ºMCP4452_103e
+    æ•°å­—ç”µä½å™¨ï¼šMCP4452_103e
     I2C
-    ½ÓÏß¶¨Òå£º
+    æ¥çº¿å®šä¹‰ï¼š
     ------------------------------------
-        SCL       B28 ²é¿´SEEKFREE_IICÎÄ¼şÄÚµÄSEEKFREE_SCLºê¶¨Òå
-        SDA       B29 ²é¿´SEEKFREE_IICÎÄ¼şÄÚµÄSEEKFREE_SDAºê¶¨Òå
+        SCL       B28 æŸ¥çœ‹SEEKFREE_IICæ–‡ä»¶å†…çš„SEEKFREE_SCLå®å®šä¹‰
+        SDA       B29 æŸ¥çœ‹SEEKFREE_IICæ–‡ä»¶å†…çš„SEEKFREE_SDAå®å®šä¹‰
         A0 0 A1 0/1
     ------------------------------------
 */
@@ -14,12 +14,13 @@
 
 #include "common.h"
 
-// Control Byte  ¡®01011¡¯+A1+A0+W/R
-// Á½Æ¬µÄµØÖ·£º
+// Control Byte  â€˜01011â€™+A1+A0+W/R
+// ä¸¤ç‰‡çš„åœ°å€ï¼š
 // A1.A0=00	A1.A0=10
-// Write£º0	Read£º1
+// Writeï¼š0	Readï¼š1
 #define MCP4452_ADDR_0 0x2C // 0101 100
 #define MCP4452_ADDR_1 0x2E // 0101 110
+#define MCP4452_ADDR_2 0x2D // 0101 101
 
 #define Res1234 (MCP4452_ADDR_0)
 #define Res5678 (MCP4452_ADDR_1)
@@ -31,8 +32,8 @@ Wiper1+TCON0	P1A,W,B
 Wiper2+TCON1	P2A,W,B
 Wiper3+TCON1	P3A,W,B
 */
-// ¶¨ÒåÄÚ²¿µØÖ·
-// ÉèÖÃ×èÖµ´óĞ¡µÄ¼Ä´æÆ÷µØÖ·
+// å®šä¹‰å†…éƒ¨åœ°å€
+// è®¾ç½®é˜»å€¼å¤§å°çš„å¯„å­˜å™¨åœ°å€
 // the volatile wiper registers(AD3:AD0 = 00h, 01h, 06h, and 07h)
 // Wiper:Full Scale
 #define VWR_0_W_F 0x01 // 0b0000 0001
@@ -55,14 +56,14 @@ Wiper3+TCON1	P3A,W,B
 //#define VWR_2_R 0x6D // 0b0110 1101
 //#define VWR_3_R 0x7D // 0b0111 1101
 
-// ÉèÖÃµç×èÄ£Ê½µÄ¼Ä´æÆ÷µØÖ·
+// è®¾ç½®ç”µé˜»æ¨¡å¼çš„å¯„å­˜å™¨åœ°å€
 // the TCON registers (AD3:AD0 = 04h and 0Ah)
 #define TCON_0_W 0x41 // 0b0100 0001
 #define TCON_1_W 0xA1 // 0b1010 0001
 #define TCON_0_R 0x4C // 0b0100 1100
 #define TCON_1_R 0xAC // 0b1010 1100
 
-typedef enum { // Ã¶¾Ù
+typedef enum { // æšä¸¾
     R0_ON = 0x0F,
     R0_OFF = 0x00,
     R1_ON = 0xF0,
@@ -77,7 +78,7 @@ typedef enum { // Ã¶¾Ù
     R3R2_ALL_OFF = 0x00,
 } Res_enum;
 
-// µç×èÄ£Ê½
+// ç”µé˜»æ¨¡å¼
 /*
 #define R0_ON 0x0F
 #define R0_OFF 0x00
@@ -95,8 +96,8 @@ typedef enum { // Ã¶¾Ù
 
 typedef enum { Scale0, Scale1, Scale2 } ResVal_enum;
 
-// ´øÓĞ4µÄÊÇ¶ÔÒ»Æ¬MCP4452½øĞĞ³õÊ¼»¯
-// ´øÓĞallµÄÊÇÍ¬Ê±¶ÔÁ½Æ¬MCP4452½øĞĞ³õÊ¼»¯
+// å¸¦æœ‰4çš„æ˜¯å¯¹ä¸€ç‰‡MCP4452è¿›è¡Œåˆå§‹åŒ–
+// å¸¦æœ‰allçš„æ˜¯åŒæ—¶å¯¹ä¸¤ç‰‡MCP4452è¿›è¡Œåˆå§‹åŒ–
 
 #ifdef __cplusplus
 extern "C" {
@@ -104,27 +105,29 @@ extern "C" {
 
 uint8 MCP4452_self_check(void);
 
-// gpio³õÊ¼»¯
-void MCP4452_init(uint8 MCP4452_ADDR); //¶ÔÒ»Æ¬³õÊ¼»¯
-void MCP4452_all_init();               //Á½Æ¬Í¬Ê±³õÊ¼»¯
+// gpioåˆå§‹åŒ–
+void MCP4452_init(uint8 MCP4452_ADDR); //å¯¹ä¸€ç‰‡åˆå§‹åŒ–
+void MCP4452_all_init();               //ä¸¤ç‰‡åŒæ—¶åˆå§‹åŒ–
 
-//ÉèÖÃµç×è¿ª/¹Ø
+//è®¾ç½®ç”µé˜»å¼€/å…³
 void MCP4452_set_mode(uint8 MCP4452_ADDR, uint8 sel, Res_enum mode);
 void MCP4452_set_4on(uint8 MCP4452_ADDR);
 void MCP4452_set_all_on();
 
-//ÉèÖÃµç×è×èÖµ´óĞ¡
+//è®¾ç½®ç”µé˜»é˜»å€¼å¤§å°
 void MCP4452_set_val(uint8 MCP4452_ADDR, uint8 sel, uint8 val);
 void MCP4452_set_4FScale(uint8 MCP4452_ADDR);
 void MCP4452_set_4ZScale(uint8 MCP4452_ADDR);
 void MCP4452_set_all_FScale();
 
 uint8 MCP4452_self_check(void);
-//µç×è×èÖµ³õÊ¼»¯
+//ç”µé˜»é˜»å€¼åˆå§‹åŒ–
 void MCP4452_val_4init(uint8 MCP4452_ADDR, uint8 val0, uint8 val1, uint8 val2,
                        uint8 val3);
 void MCP4452_val_ALL_init(uint8 val00, uint8 val01, uint8 val02, uint8 val03,
                           uint8 val10, uint8 val11, uint8 val12, uint8 val13);
+
+void mcp_init(void);
 
 #ifdef __cplusplus
 }

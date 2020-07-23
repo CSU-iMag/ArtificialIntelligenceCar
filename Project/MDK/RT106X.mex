@@ -22,7 +22,7 @@
             <file path="board/pin_mux.h" update_enabled="true"/>
          </generated_project_files>
          <pins_profile>
-            <processor_version>7.0.1</processor_version>
+            <processor_version>8.0.1</processor_version>
             <power_domains/>
             <pin_labels>
                <pin_label pin_num="D7" pin_signal="GPIO_B0_00" label="LSB" identifier="LCDIF_CLK;LSB1;LSB2"/>
@@ -31,7 +31,7 @@
                <pin_label pin_num="C9" pin_signal="GPIO_B0_09" label="LED" identifier="LCDIF_D5;LED"/>
                <pin_label pin_num="A11" pin_signal="GPIO_B1_00" label="BEEP" identifier="LCDIF_D12;MOTOR_L;BEEP"/>
                <pin_label pin_num="B11" pin_signal="GPIO_B1_01" label="LCDIF_D13" identifier="LCDIF_D13;MOTOR_R"/>
-               <pin_label pin_num="C11" pin_signal="GPIO_B1_02" label="LCDIF_D14" identifier="LCDIF_D14;HAL"/>
+               <pin_label pin_num="C11" pin_signal="GPIO_B1_02" label="LCDIF_D14" identifier="LCDIF_D14;HAL;BEEP"/>
                <pin_label pin_num="D11" pin_signal="GPIO_B1_03" label="LCDIF_D15" identifier="LCDIF_D15;LED1"/>
                <pin_label pin_num="E12" pin_signal="GPIO_B1_04" label="ENET_RXD0" identifier="ENET_RXD0;MOTOR_EN"/>
                <pin_label pin_num="D12" pin_signal="GPIO_B1_05" label="ENET_RXD1" identifier="ENET_RXD1;SW6;SW5;INT"/>
@@ -48,7 +48,7 @@
                <pin_label pin_num="G11" pin_signal="GPIO_AD_B0_03" label="KEY" identifier="DC;K6;K_UP"/>
                <pin_label pin_num="G13" pin_signal="GPIO_AD_B0_10" label="MOTOR" identifier="INT1_COMBO;RIGHT"/>
                <pin_label pin_num="G10" pin_signal="GPIO_AD_B0_11" label="MOTOR" identifier="INT2_COMBO;LEFT"/>
-               <pin_label pin_num="K14" pin_signal="GPIO_AD_B0_12" label="HAL" identifier="UART1_TXD;HAL1"/>
+               <pin_label pin_num="K14" pin_signal="GPIO_AD_B0_12" label="CON" identifier="UART1_TXD;HAL1"/>
                <pin_label pin_num="H14" pin_signal="GPIO_AD_B0_14" label="KEY" identifier="CAN2_TX;AD_CH2;K4;DOWN;K_DOWN"/>
                <pin_label pin_num="L10" pin_signal="GPIO_AD_B0_15" label="KEY" identifier="CAN2_RX;AD_CH3;K5;OKEY;K_OK"/>
                <pin_label pin_num="J11" pin_signal="GPIO_AD_B1_00" label="IIC" identifier="I2C_SCL_FXOS8700CQ;CSI_I2C_SCL;AD_CH4;SCL"/>
@@ -102,11 +102,6 @@
                         <data>true</data>
                      </feature>
                   </dependency>
-                  <dependency resourceType="Peripheral" resourceId="LPI2C1" description="Peripheral LPI2C1 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
-                     <feature name="initialized" evaluation="equal">
-                        <data>true</data>
-                     </feature>
-                  </dependency>
                   <dependency resourceType="Peripheral" resourceId="LPUART8" description="Peripheral LPUART8 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
                      <feature name="initialized" evaluation="equal">
                         <data>true</data>
@@ -122,17 +117,17 @@
                         <data>true</data>
                      </feature>
                   </dependency>
-                  <dependency resourceType="Peripheral" resourceId="FLEXIO2" description="Peripheral FLEXIO2 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
-                     <feature name="initialized" evaluation="equal">
-                        <data>true</data>
-                     </feature>
-                  </dependency>
                   <dependency resourceType="Peripheral" resourceId="ADC1" description="Peripheral ADC1 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
                      <feature name="initialized" evaluation="equal">
                         <data>true</data>
                      </feature>
                   </dependency>
                   <dependency resourceType="Peripheral" resourceId="PWM2" description="Peripheral PWM2 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
+                     <feature name="initialized" evaluation="equal">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="Peripheral" resourceId="LPUART1" description="Peripheral LPUART1 is not initialized" problem_level="1" source="Pins:BOARD_InitPins">
                      <feature name="initialized" evaluation="equal">
                         <data>true</data>
                      </feature>
@@ -156,17 +151,6 @@
                <pins>
                   <pin peripheral="GPIO3" signal="gpio_io, 04" pin_num="P2" pin_signal="GPIO_SD_B1_04">
                      <pin_features>
-                        <pin_feature name="direction" value="INPUT"/>
-                        <pin_feature name="gpio_interrupt" value="kGPIO_IntFallingEdge"/>
-                        <pin_feature name="hysteresis_enable" value="Enable"/>
-                        <pin_feature name="pull_up_down_config" value="no_init"/>
-                        <pin_feature name="pull_keeper_enable" value="Disable"/>
-                        <pin_feature name="slew_rate" value="Fast"/>
-                     </pin_features>
-                  </pin>
-                  <pin peripheral="GPIO1" signal="gpio_io, 12" pin_num="K14" pin_signal="GPIO_AD_B0_12">
-                     <pin_features>
-                        <pin_feature name="identifier" value="HAL1"/>
                         <pin_feature name="direction" value="INPUT"/>
                         <pin_feature name="gpio_interrupt" value="kGPIO_IntFallingEdge"/>
                         <pin_feature name="hysteresis_enable" value="Enable"/>
@@ -264,18 +248,6 @@
                         <pin_feature name="identifier" value="DIR1"/>
                      </pin_features>
                   </pin>
-                  <pin peripheral="LPI2C1" signal="SCL" pin_num="J11" pin_signal="GPIO_AD_B1_00">
-                     <pin_features>
-                        <pin_feature name="identifier" value="SCL"/>
-                        <pin_feature name="slew_rate" value="Fast"/>
-                     </pin_features>
-                  </pin>
-                  <pin peripheral="LPI2C1" signal="SDA" pin_num="K11" pin_signal="GPIO_AD_B1_01">
-                     <pin_features>
-                        <pin_feature name="identifier" value="SDA"/>
-                        <pin_feature name="slew_rate" value="Fast"/>
-                     </pin_features>
-                  </pin>
                   <pin peripheral="LPUART8" signal="TX" pin_num="L13" pin_signal="GPIO_AD_B1_10">
                      <pin_features>
                         <pin_feature name="identifier" value="MTSR"/>
@@ -322,14 +294,6 @@
                         <pin_feature name="pull_keeper_enable" value="Disable"/>
                      </pin_features>
                   </pin>
-                  <pin peripheral="FLEXIO2" signal="IO, 16" pin_num="A11" pin_signal="GPIO_B1_00">
-                     <pin_features>
-                        <pin_feature name="identifier" value="BEEP"/>
-                        <pin_feature name="direction" value="OUTPUT"/>
-                        <pin_feature name="speed" value="MHZ_200"/>
-                        <pin_feature name="slew_rate" value="Fast"/>
-                     </pin_features>
-                  </pin>
                   <pin peripheral="GPIO2" signal="gpio_io, 27" pin_num="C13" pin_signal="GPIO_B1_11">
                      <pin_features>
                         <pin_feature name="identifier" value="DC"/>
@@ -374,6 +338,34 @@
                         <pin_feature name="speed" value="MHZ_50"/>
                      </pin_features>
                   </pin>
+                  <pin peripheral="GPIO1" signal="gpio_io, 16" pin_num="J11" pin_signal="GPIO_AD_B1_00">
+                     <pin_features>
+                        <pin_feature name="identifier" value="SCL"/>
+                        <pin_feature name="direction" value="OUTPUT"/>
+                        <pin_feature name="gpio_init_state" value="true"/>
+                        <pin_feature name="pull_keeper_enable" value="Disable"/>
+                        <pin_feature name="open_drain" value="Enable"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="GPIO1" signal="gpio_io, 17" pin_num="K11" pin_signal="GPIO_AD_B1_01">
+                     <pin_features>
+                        <pin_feature name="identifier" value="SDA"/>
+                        <pin_feature name="direction" value="OUTPUT"/>
+                        <pin_feature name="gpio_init_state" value="true"/>
+                        <pin_feature name="pull_keeper_enable" value="Disable"/>
+                        <pin_feature name="open_drain" value="Enable"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="PWM2" signal="A, 3" pin_num="C11" pin_signal="GPIO_B1_02">
+                     <pin_features>
+                        <pin_feature name="identifier" value="BEEP"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="LPUART1" signal="TX" pin_num="K14" pin_signal="GPIO_AD_B0_12">
+                     <pin_features>
+                        <pin_feature name="identifier" value="UART1_TXD"/>
+                     </pin_features>
+                  </pin>
                </pins>
             </function>
          </functions_list>
@@ -384,7 +376,7 @@
             <file path="board/clock_config.h" update_enabled="true"/>
          </generated_project_files>
          <clocks_profile>
-            <processor_version>7.0.1</processor_version>
+            <processor_version>8.0.1</processor_version>
          </clocks_profile>
          <clock_configurations>
             <clock_configuration name="BOARD_BootClockRUN">
@@ -694,7 +686,7 @@
                </feature>
             </dependency>
             <dependency resourceType="SWComponent" resourceId="platform.drivers.lpuart" description="工具链/IDE工程不支持LPUART Driver版本。所需值: ${required_value}, 实际值: ${actual_value}. 工程可能没有被正确编译。" problem_level="1" source="Peripherals">
-               <feature name="version" evaluation="equivalent">
+               <feature name="version" evaluation="greaterOrEqual">
                   <data type="Version">2.2.8</data>
                </feature>
             </dependency>
@@ -706,6 +698,16 @@
             <dependency resourceType="SWComponent" resourceId="platform.drivers.edma" description="工具链/IDE工程不支持EDMA Driver版本。所需值: ${required_value}, 实际值: ${actual_value}. 工程可能没有被正确编译。" problem_level="1" source="Peripherals">
                <feature name="version" evaluation="equivalent">
                   <data type="Version">2.3.0</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="utility.debug_console" description="工具链/IDE工程中未找到Utility debug_console。工程不会被编译！" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="utility.debug_console" description="工具链/IDE工程不支持Utility debug_console版本。所需值: ${required_value}, 实际值: ${actual_value}. 工程可能没有被正确编译。" problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">1.0.0</data>
                </feature>
             </dependency>
             <dependency resourceType="SWComponent" resourceId="platform.drivers.igpio" description="工具链/IDE工程中未找到igpio。工程不会被编译！" problem_level="2" source="Peripherals">
@@ -760,11 +762,12 @@
             </dependency>
          </dependencies>
          <generated_project_files>
+            <file path="../../Libraries/nxp_libraries/utilities/debug_console/fsl_debug_console_conf.h" update_enabled="true"/>
             <file path="board/peripherals.c" update_enabled="true"/>
             <file path="board/peripherals.h" update_enabled="true"/>
          </generated_project_files>
          <peripherals_profile>
-            <processor_version>7.0.1</processor_version>
+            <processor_version>8.0.1</processor_version>
          </peripherals_profile>
          <functional_groups>
             <functional_group name="BOARD_InitPeripherals" uuid="807635b5-074f-4250-b1e8-d8001ebce3f1" called_from_default_init="true" id_prefix="" core="core0">
@@ -885,6 +888,7 @@
                         <setting name="enableInterrupt" value="true"/>
                         <struct name="adc_interrupt">
                            <setting name="IRQn" value="ADC1_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="false"/>
                            <setting name="priority" value="6"/>
                            <setting name="enable_custom_name" value="false"/>
@@ -905,8 +909,8 @@
                         <struct name="lpuartConfig">
                            <setting name="clockSource" value="LpuartClock"/>
                            <setting name="lpuartSrcClkFreq" value="BOARD_BootClockRUN"/>
-                           <setting name="baudRate_Bps" value="115200"/>
-                           <setting name="parityMode" value="kLPUART_ParityEven"/>
+                           <setting name="baudRate_Bps" value="460800"/>
+                           <setting name="parityMode" value="kLPUART_ParityDisabled"/>
                            <setting name="dataBitsCount" value="kLPUART_EightDataBits"/>
                            <setting name="isMsb" value="false"/>
                            <setting name="stopBitCount" value="kLPUART_OneStopBit"/>
@@ -922,18 +926,18 @@
                            <setting name="enableRx" value="true"/>
                         </struct>
                      </config_set>
-                     <config_set name="transferCfg" quick_selection="QuickSelection1">
+                     <config_set name="transferCfg">
                         <struct name="transfer">
                            <setting name="init_rx_transfer" value="true"/>
                            <struct name="rx_transfer">
-                              <setting name="data_size" value="10"/>
+                              <setting name="data_size" value="30"/>
                            </struct>
-                           <setting name="init_tx_transfer" value="true"/>
+                           <setting name="init_tx_transfer" value="false"/>
                            <struct name="tx_transfer">
                               <setting name="data_size" value="10"/>
                            </struct>
-                           <setting name="init_callback" value="false"/>
-                           <setting name="callback_fcn" value=""/>
+                           <setting name="init_callback" value="true"/>
+                           <setting name="callback_fcn" value="com_callback"/>
                            <setting name="user_data" value=""/>
                         </struct>
                      </config_set>
@@ -952,6 +956,7 @@
                            <setting name="enableErrInterrupt" value="false"/>
                            <struct name="errorInterrupt">
                               <setting name="IRQn" value="DMA_ERROR_IRQn"/>
+                              <setting name="enable_interrrupt" value="enabled"/>
                               <setting name="enable_priority" value="false"/>
                               <setting name="priority" value="0"/>
                               <setting name="enable_custom_name" value="false"/>
@@ -959,11 +964,34 @@
                         </struct>
                      </config_set>
                   </instance>
+                  <instance name="DebugConsole" uuid="aac256ce-70ed-44eb-a049-eb46482da2ce" type="debug_console" type_id="debug_console_51864e4f3ac859dae7b603e07bc4ae33" mode="general" enabled="true" comment="" custom_name_enabled="false">
+                     <config_set name="fsl_debug_console">
+                        <struct name="config">
+                           <setting name="SDK_DEBUGCONSOLE" value="DEBUGCONSOLE_REDIRECT_TO_TOOLCHAIN"/>
+                           <setting name="SDK_DEBUGCONSOLE_UART" value="semihost"/>
+                           <setting name="DEBUG_CONSOLE_RX_ENABLE" value="false"/>
+                           <setting name="DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN" value="128"/>
+                           <setting name="DEBUG_CONSOLE_SCANF_MAX_LOG_LEN" value="20"/>
+                           <setting name="DEBUG_CONSOLE_ENABLE_ECHO" value="false"/>
+                           <setting name="PRINTF_FLOAT_ENABLE" value="false"/>
+                           <setting name="SCANF_FLOAT_ENABLE" value="false"/>
+                           <setting name="PRINTF_ADVANCED_ENABLE" value="false"/>
+                           <setting name="SCANF_ADVANCED_ENABLE" value="false"/>
+                           <setting name="DEBUG_CONSOLE_TRANSFER_NON_BLOCKING" value="false"/>
+                           <setting name="DEBUG_CONSOLE_TRANSMIT_BUFFER_LEN" value="512"/>
+                           <setting name="DEBUG_CONSOLE_RECEIVE_BUFFER_LEN" value="1024"/>
+                           <setting name="DEBUG_CONSOLE_TX_RELIABLE_ENABLE" value="true"/>
+                           <setting name="DEBUG_CONSOLE_DISABLE_RTOS_SYNCHRONIZATION" value="false"/>
+                        </struct>
+                        <struct name="debug_console_codegenerator"/>
+                     </config_set>
+                  </instance>
                   <instance name="GPIO1" uuid="45a757a7-91fc-46c5-81a3-0ea217764f97" type="igpio" type_id="igpio_b1c1fa279aa7069dca167502b8589cb7" mode="GPIO" peripheral="GPIO1" enabled="true" comment="" custom_name_enabled="false">
                      <config_set name="fsl_gpio">
                         <setting name="enable_irq_comb_0_15" value="true"/>
                         <struct name="gpio_interrupt_comb_0_15">
                            <setting name="IRQn" value="GPIO1_Combined_0_15_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="false"/>
                            <setting name="priority" value="0"/>
                            <setting name="enable_custom_name" value="false"/>
@@ -971,6 +999,7 @@
                         <setting name="enable_irq_comb_16_31" value="false"/>
                         <struct name="gpio_interrupt_comb_16_31">
                            <setting name="IRQn" value="GPIO1_Combined_16_31_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="false"/>
                            <setting name="priority" value="0"/>
                            <setting name="enable_custom_name" value="false"/>
@@ -978,6 +1007,7 @@
                         <setting name="enable_irq_int0" value="false"/>
                         <struct name="gpio_interrupt_int0">
                            <setting name="IRQn" value="GPIO1_INT0_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="false"/>
                            <setting name="priority" value="0"/>
                            <setting name="enable_custom_name" value="false"/>
@@ -985,6 +1015,7 @@
                         <setting name="enable_irq_int1" value="false"/>
                         <struct name="gpio_interrupt_int1">
                            <setting name="IRQn" value="GPIO1_INT1_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="false"/>
                            <setting name="priority" value="0"/>
                            <setting name="enable_custom_name" value="false"/>
@@ -992,6 +1023,7 @@
                         <setting name="enable_irq_int2" value="false"/>
                         <struct name="gpio_interrupt_int2">
                            <setting name="IRQn" value="GPIO1_INT2_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="false"/>
                            <setting name="priority" value="0"/>
                            <setting name="enable_custom_name" value="false"/>
@@ -999,6 +1031,7 @@
                         <setting name="enable_irq_int3" value="false"/>
                         <struct name="gpio_interrupt_int3">
                            <setting name="IRQn" value="GPIO1_INT3_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="false"/>
                            <setting name="priority" value="0"/>
                            <setting name="enable_custom_name" value="false"/>
@@ -1006,6 +1039,7 @@
                         <setting name="enable_irq_int4" value="false"/>
                         <struct name="gpio_interrupt_int4">
                            <setting name="IRQn" value="GPIO1_INT4_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="false"/>
                            <setting name="priority" value="0"/>
                            <setting name="enable_custom_name" value="false"/>
@@ -1013,6 +1047,7 @@
                         <setting name="enable_irq_int5" value="false"/>
                         <struct name="gpio_interrupt_int5">
                            <setting name="IRQn" value="GPIO1_INT5_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="false"/>
                            <setting name="priority" value="0"/>
                            <setting name="enable_custom_name" value="false"/>
@@ -1020,6 +1055,7 @@
                         <setting name="enable_irq_int6" value="false"/>
                         <struct name="gpio_interrupt_int6">
                            <setting name="IRQn" value="GPIO1_INT6_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="false"/>
                            <setting name="priority" value="0"/>
                            <setting name="enable_custom_name" value="false"/>
@@ -1027,6 +1063,7 @@
                         <setting name="enable_irq_int7" value="false"/>
                         <struct name="gpio_interrupt_int7">
                            <setting name="IRQn" value="GPIO1_INT7_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="false"/>
                            <setting name="priority" value="0"/>
                            <setting name="enable_custom_name" value="false"/>
@@ -1038,6 +1075,7 @@
                         <setting name="enable_irq_comb_0_15" value="true"/>
                         <struct name="gpio_interrupt_comb_0_15">
                            <setting name="IRQn" value="GPIO3_Combined_0_15_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="false"/>
                            <setting name="priority" value="0"/>
                            <setting name="enable_custom_name" value="false"/>
@@ -1045,41 +1083,10 @@
                         <setting name="enable_irq_comb_16_31" value="false"/>
                         <struct name="gpio_interrupt_comb_16_31">
                            <setting name="IRQn" value="GPIO3_Combined_16_31_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="false"/>
                            <setting name="priority" value="0"/>
                            <setting name="enable_custom_name" value="false"/>
-                        </struct>
-                     </config_set>
-                  </instance>
-                  <instance name="PGA" uuid="6acc9312-390b-4144-b915-7190def6b6dc" type="lpi2c" type_id="lpi2c_db68d4f4f06a22e25ab51fe9bd6db4d2" mode="master" peripheral="LPI2C1" enabled="false" comment="" custom_name_enabled="true">
-                     <config_set name="main" quick_selection="qs_interrupt">
-                        <setting name="clockSource" value="Lpi2cClock"/>
-                        <setting name="clockSourceFreq" value="BOARD_BootClockRUN"/>
-                        <struct name="interrupt">
-                           <setting name="IRQn" value="LPI2C1_IRQn"/>
-                           <setting name="enable_priority" value="false"/>
-                           <setting name="priority" value="0"/>
-                           <setting name="enable_custom_name" value="false"/>
-                        </struct>
-                     </config_set>
-                     <config_set name="master">
-                        <setting name="mode" value="polling"/>
-                        <struct name="config">
-                           <setting name="enableMaster" value="true"/>
-                           <setting name="enableDoze" value="true"/>
-                           <setting name="debugEnable" value="false"/>
-                           <setting name="ignoreAck" value="false"/>
-                           <setting name="pinConfig" value="kLPI2C_2PinOpenDrain"/>
-                           <setting name="baudRate_Hz" value="400000"/>
-                           <setting name="busIdleTimeout_ns" value="0"/>
-                           <setting name="pinLowTimeout_ns" value="0"/>
-                           <setting name="sdaGlitchFilterWidth_ns" value="0"/>
-                           <setting name="sclGlitchFilterWidth_ns" value="0"/>
-                           <struct name="hostRequest">
-                              <setting name="enable" value="false"/>
-                              <setting name="source" value="kLPI2C_HostRequestExternalPin"/>
-                              <setting name="polarity" value="kLPI2C_HostRequestPinActiveHigh"/>
-                           </struct>
                         </struct>
                      </config_set>
                   </instance>
@@ -1089,6 +1096,7 @@
                         <setting name="enableSharedInterrupt" value="true"/>
                         <struct name="sharedInterrupt">
                            <setting name="IRQn" value="PIT_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="true"/>
                            <setting name="priority" value="2"/>
                            <setting name="enable_custom_name" value="false"/>
@@ -1108,10 +1116,10 @@
                            </struct>
                            <struct name="1">
                               <setting name="channel_id" value="MOTOR_CH"/>
-                              <setting name="channelNumber" value="1"/>
+                              <setting name="channelNumber" value="3"/>
                               <setting name="enableChain" value="false"/>
-                              <setting name="timerPeriod" value="6Ms"/>
-                              <setting name="startTimer" value="false"/>
+                              <setting name="timerPeriod" value="6 ms"/>
+                              <setting name="startTimer" value="true"/>
                               <setting name="enableInterrupt" value="true"/>
                            </struct>
                            <struct name="2">
@@ -1119,7 +1127,7 @@
                               <setting name="channelNumber" value="2"/>
                               <setting name="enableChain" value="false"/>
                               <setting name="timerPeriod" value="10Ms"/>
-                              <setting name="startTimer" value="false"/>
+                              <setting name="startTimer" value="true"/>
                               <setting name="enableInterrupt" value="true"/>
                            </struct>
                         </array>
@@ -1175,6 +1183,7 @@
                            <setting name="enable_irq" value="false"/>
                            <struct name="interrupt">
                               <setting name="IRQn" value="TMR1_IRQn"/>
+                              <setting name="enable_interrrupt" value="enabled"/>
                               <setting name="enable_priority" value="false"/>
                               <setting name="priority" value="0"/>
                               <setting name="enable_custom_name" value="false"/>
@@ -1188,7 +1197,7 @@
                            <setting name="clockSource" value="LpuartClock"/>
                            <setting name="lpuartSrcClkFreq" value="BOARD_BootClockRUN"/>
                            <setting name="baudRate_Bps" value="1000000"/>
-                           <setting name="parityMode" value="kLPUART_ParityEven"/>
+                           <setting name="parityMode" value="kLPUART_ParityDisabled"/>
                            <setting name="dataBitsCount" value="kLPUART_EightDataBits"/>
                            <setting name="isMsb" value="false"/>
                            <setting name="stopBitCount" value="kLPUART_OneStopBit"/>
@@ -1250,6 +1259,7 @@
                         <setting name="isInterruptEnabled" value="true"/>
                         <struct name="interrupt">
                            <setting name="IRQn" value="GPT2_IRQn"/>
+                           <setting name="enable_interrrupt" value="enabled"/>
                            <setting name="enable_priority" value="false"/>
                            <setting name="priority" value="0"/>
                            <setting name="enable_custom_name" value="false"/>
@@ -1275,6 +1285,7 @@
                            <setting name="isInterruptEnabledLowHigh" value="false"/>
                            <struct name="interruptLowHigh">
                               <setting name="IRQn" value="TEMP_LOW_HIGH_IRQn"/>
+                              <setting name="enable_interrrupt" value="enabled"/>
                               <setting name="enable_priority" value="true"/>
                               <setting name="priority" value="0"/>
                               <setting name="enable_custom_name" value="false"/>
@@ -1282,6 +1293,7 @@
                            <setting name="isInterruptEnabledPanic" value="false"/>
                            <struct name="interruptPanic">
                               <setting name="IRQn" value="TEMP_PANIC_IRQn"/>
+                              <setting name="enable_interrrupt" value="enabled"/>
                               <setting name="enable_priority" value="true"/>
                               <setting name="priority" value="1"/>
                               <setting name="enable_custom_name" value="false"/>
@@ -1294,10 +1306,19 @@
          </functional_groups>
          <components>
             <component name="system" uuid="711a22fc-4dc0-4dc9-a541-22b57905e80c" type_id="system_54b53072540eeeb8f8e9343e71f28176">
-               <config_set_global name="global_system_definitions"/>
+               <config_set_global name="global_system_definitions">
+                  <setting name="user_definitions" value=""/>
+                  <setting name="user_includes" value=""/>
+               </config_set_global>
             </component>
             <component name="msg" uuid="f50818ea-8ba3-4eeb-81ae-9dcc408259da" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
                <config_set_global name="global_messages"/>
+            </component>
+            <component name="generic_uart" uuid="3900029b-8393-474d-997a-529ac373e03d" type_id="generic_uart_8cae00565451cf2346eb1b8c624e73a6">
+               <config_set_global name="global_uart"/>
+            </component>
+            <component name="generic_can" uuid="e1af8371-f158-474b-9f05-35a2115e8ee5" type_id="generic_can_1bfdd78b1af214566c1f23cf6a582d80">
+               <config_set_global name="global_can"/>
             </component>
          </components>
       </periphs>

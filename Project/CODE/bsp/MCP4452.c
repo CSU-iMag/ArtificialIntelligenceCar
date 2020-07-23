@@ -3,11 +3,11 @@
  *  @brief Microchip digital resistance driver.
  */
 #include "MCP4452.h"
-#include "SEEKFREE_IIC.h" //Ä£ÄâI2C
+#include "SEEKFREE_IIC.h" //æ¨¡æ‹ŸI2C
 #include "util.h"
 #include "zf_systick.h"
 
-// ·µ»Ø0£¬µç×èÎŞÎó£»·µ»Ø1£¬µç×è1´íÎó£»·µ»Ø2£¬µç×è2´íÎó£»·µ»Ø3£¬¶¼´íÎó
+// è¿”å›0ï¼Œç”µé˜»æ— è¯¯ï¼›è¿”å›1ï¼Œç”µé˜»1é”™è¯¯ï¼›è¿”å›2ï¼Œç”µé˜»2é”™è¯¯ï¼›è¿”å›3ï¼Œéƒ½é”™è¯¯
 uint8 MCP4452_self_check(void) {
     uint8 i = 0;
     MCP4452_set_4on(Res1234);
@@ -18,31 +18,17 @@ uint8 MCP4452_self_check(void) {
     if ((0x01FF != simiic_read_reg2(Res5678, TCON_0_R, SIMIIC)) &&
         (0x01FF != simiic_read_reg2(Res5678, TCON_1_R, SIMIIC)))
         i += 2;
-    return i; //×Ô¼ìÎŞÎó
+    MCP4452_set_4on(MCP4452_ADDR_2);
+    if ((0x01FF != simiic_read_reg2(Res5678, TCON_0_R, SIMIIC)) &&
+        (0x01FF != simiic_read_reg2(Res5678, TCON_1_R, SIMIIC)))
+        i += 4;
+    return i; //è‡ªæ£€æ— è¯¯
 }
 
-//-------------------------------------------------------------------------------------------------------------------
-//  @brief      ³õÊ¼»¯MCP4452
-//  Sample usage:		MCP4452_init(ADDR0_W)  µÚÒ»Æ¬Ğ´Èë
-//-------------------------------------------------------------------------------------------------------------------
-void MCP4452_init(uint8 MCP4452_ADDR) {
-    // simiic_init(); // init in Car.Startup
-    systick_delay_ms(100); //ÉÏµçÑÓÊ±
-    MCP4452_set_all_on(MCP4452_ADDR);
-    MCP4452_set_all_FScale(MCP4452_ADDR); //³õÊ¼»¯¾ùÎª×î´ó×èÖµ
-}
-
-void MCP4452_all_init() {
-    // simiic_init();
-    systick_delay_ms(100);    //ÉÏµçÑÓÊ±
-    MCP4452_set_all_on();     //³õÊ¼»¯È«²¿´ò¿ª
-    MCP4452_set_all_FScale(); //³õÊ¼»¯¾ùÎª×î´ó×èÖµ
-}
-
-// ÉèÖÃµç×è¿ª/¹Ø
-// MCP4452_ADDR:ËÄÂ·µçÎ»Æ÷µØÖ·.
-// sel£º TCON_x_W				Ñ¡ÔñTCON registers¼Ä´æÆ÷.
-// mode£º				ÉèÖÃ¸ÃÂ·µç×èÄ£Ê½
+// è®¾ç½®ç”µé˜»å¼€/å…³
+// MCP4452_ADDR:å››è·¯ç”µä½å™¨åœ°å€.
+// selï¼š TCON_x_W				é€‰æ‹©TCON registerså¯„å­˜å™¨.
+// modeï¼š				è®¾ç½®è¯¥è·¯ç”µé˜»æ¨¡å¼
 // R1R0_ALL_ON/OFF;	R3R2_ALL_ON/OFF
 // MCP4452_set_mode(Res1234, TCON_0_W, R0_OFF);
 void MCP4452_set_mode(uint8 MCP4452_ADDR, uint8 sel, Res_enum mode) {
@@ -50,68 +36,25 @@ void MCP4452_set_mode(uint8 MCP4452_ADDR, uint8 sel, Res_enum mode) {
 }
 
 void MCP4452_set_4on(uint8 MCP4452_ADDR) {
-    simiic_write_reg(MCP4452_ADDR, TCON_0_W, R1R0_ALL_ON); //µç×è0.1´ò¿ª
-    simiic_write_reg(MCP4452_ADDR, TCON_1_W, R3R2_ALL_ON); //µç×è3.2´ò¿ª
+    simiic_write_reg(MCP4452_ADDR, TCON_0_W, R1R0_ALL_ON); //ç”µé˜»0.1æ‰“å¼€
+    simiic_write_reg(MCP4452_ADDR, TCON_1_W, R3R2_ALL_ON); //ç”µé˜»3.2æ‰“å¼€
 }
 
-void MCP4452_set_all_on() {
-    MCP4452_set_4on(Res1234);
-    MCP4452_set_4on(Res5678);
-}
+void mcp_init(void) {
+    MCP4452_set_4on(MCP4452_ADDR_0);
+    MCP4452_set_4on(MCP4452_ADDR_1);
+    MCP4452_set_4on(MCP4452_ADDR_2);
 
-// ÉèÖÃµç×è×èÖµ´óĞ¡
-// MCP4452_ADDR:ËÄÂ·µçÎ»Æ÷µØÖ·.
-// ADDRx_W/R
-// sel£º				µç×èÂ·0.1.2.3¶ÔÓ¦µÄwiper×èÖµ´óĞ¡¼Ä´æÆ÷.
-// VWR_x_W_F            VWR_x_W_O¡ª£ºR1/R2/R3/R4
-// val£º				ÉèÖÃ¸ÃÂ·µç×è×èÖµ103e-10k. 256µ²
-// °ËÎ»µçÎ»Æ÷ 0x00~0xFF
-// eg£ºMCP4452_set_val(Res1234, R1, 1);      MCP4452_set_val(Res1234, R1, 0xff);
-void MCP4452_set_val(uint8 MCP4452_ADDR, uint8 sel, uint8 val) {
-
-    systick_delay_ms(100);                    //ÉÏµçÑÓÊ±
-    simiic_write_reg(MCP4452_ADDR, sel, val); //ÉèÖÃ×èÖµ
-}
-
-void MCP4452_set_4FScale(uint8 MCP4452_ADDR) {
-    systick_delay_ms(100);                           //ÉÏµçÑÓÊ±
-    simiic_write_reg(MCP4452_ADDR, VWR_0_W_F, 0x00); //ÉèÖÃ×èÖµ
-    simiic_write_reg(MCP4452_ADDR, VWR_1_W_F, 0x00);
-    simiic_write_reg(MCP4452_ADDR, VWR_2_W_F, 0x00);
-    simiic_write_reg(MCP4452_ADDR, VWR_3_W_F, 0x00);
-}
-
-// °Ë¸öµçÎ»Æ÷¶¼ÎªÂú×èÖµ
-void MCP4452_set_all_FScale() {
-    MCP4452_set_4FScale(Res1234);
-    MCP4452_set_4FScale(Res5678);
-}
-
-void MCP4452_set_4ZScale(uint8 MCP4452_ADDR) {
-    systick_delay_ms(100);                           //ÉÏµçÑÓÊ±
-    simiic_write_reg(MCP4452_ADDR, VWR_0_W_O, 0x00); //ÉèÖÃ×èÖµ
-    simiic_write_reg(MCP4452_ADDR, VWR_1_W_O, 0x00);
-    simiic_write_reg(MCP4452_ADDR, VWR_2_W_O, 0x00);
-    simiic_write_reg(MCP4452_ADDR, VWR_3_W_O, 0x00);
-}
-
-// ËÄÂ·µç×è×èÖµÉèÖÃ
-// MCP4452_ADDR:ËÄÂ·µçÎ»Æ÷µØÖ·.			ADDRx_W
-// val0.1.2.3£ºËÄÂ·µç×è×èÖµ´óĞ¡
-// eg£ºMCP4452_val_4init(Res1234, 100, 100, 100,100);
-void MCP4452_val_4init(uint8 MCP4452_ADDR, uint8 val0, uint8 val1, uint8 val2,
-                       uint8 val3) {
-    systick_delay_ms(100);                           //ÉÏµçÑÓÊ±
-    simiic_write_reg(MCP4452_ADDR, VWR_0_W_O, val0); //ÉèÖÃ×èÖµ
-    simiic_write_reg(MCP4452_ADDR, VWR_1_W_O, val1);
-    simiic_write_reg(MCP4452_ADDR, VWR_2_W_O, val2);
-    simiic_write_reg(MCP4452_ADDR, VWR_3_W_O, val3);
-}
-
-// °ËÂ·µç×è×èÖµÉèÖÃ
-void MCP4452_val_ALL_init(uint8 val00, uint8 val01, uint8 val02, uint8 val03,
-                          uint8 val10, uint8 val11, uint8 val12, uint8 val13) {
-    systick_delay_ms(100); //ÉÏµçÑÓÊ±
-    MCP4452_val_4init(MCP4452_ADDR_0, val00, val01, val02, val03);
-    MCP4452_val_4init(MCP4452_ADDR_1, val10, val11, val12, val13);
+    simiic_write_reg(MCP4452_ADDR_0, MCP4452_R1, 0x00); // è½¦èº«å³
+    simiic_write_reg(MCP4452_ADDR_0, MCP4452_R2, 0x00); // è½¦å¤´å³æ¨ª
+    simiic_write_reg(MCP4452_ADDR_0, MCP4452_R3, 0xff); // è½¦å¤´ä¸­é—´
+    simiic_write_reg(MCP4452_ADDR_0, MCP4452_R4, 0x00); // è½¦å¤´æœ€å³
+    simiic_write_reg(MCP4452_ADDR_1, MCP4452_R1, 0x00); // è½¦å¤´å·¦æ¨ª
+    simiic_write_reg(MCP4452_ADDR_1, MCP4452_R2, 0x00); // è½¦èº«å·¦
+    simiic_write_reg(MCP4452_ADDR_1, MCP4452_R3, 0x00); // è½¦å¤´æœ€å·¦è¾¹
+    simiic_write_reg(MCP4452_ADDR_1, MCP4452_R4, 0xff); // å‰ç»ä¸­
+    simiic_write_reg(MCP4452_ADDR_2, MCP4452_R1, 0xff); // å‰ç»å³
+    simiic_write_reg(MCP4452_ADDR_2, MCP4452_R2, 0x60); // è½¦å¤´å³ç«–
+    simiic_write_reg(MCP4452_ADDR_2, MCP4452_R3, 0x00); // å‰ç»å·¦
+    simiic_write_reg(MCP4452_ADDR_2, MCP4452_R4, 0xff); // è½¦å¤´å·¦ç«–
 }

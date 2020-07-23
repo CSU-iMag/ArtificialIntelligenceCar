@@ -9,10 +9,10 @@
 #include "storage.hpp"
 #include "timer.hpp"
 #include "usage.hpp"
+#include "package.hpp"
 #include "util.h"
 #include "zf_flash.h"
 #include "zf_pit.h"
-#include "zf_uart.h"
 
 //! @warning 全局唯一！
 AT_SDRAM_SECTION(iMagCar Car);
@@ -30,10 +30,14 @@ void iMagCar::Startup() {
     Steer3010.Init();
     bat_init();
     deep_init();
-       magnet_init();
+    magnet_init();
     cpu_usage_init();
+    mcp_init();
     EnableGlobalIRQ(0);
+
     storage_load(SLN_DEBUG_SECTOR, SLN_DEBUG_PAGE); //!< after MCP4452
+    package_init();
+    com_init();
     gui_motor.upd_tmr.Start(62);
     com_log("Startup Successfully!\n", LogGreen);
 }
@@ -52,7 +56,7 @@ void iMagCar::Pause() {
     Car.MotorL.Stop();
     Car.MotorR.Stop();
     pit_close(PIT_MOTOR_CH);
-    pit_close(PIT_STEER_CH);
+    // pit_close(PIT_STEER_CH);
 }
 
 iMagCar::~iMagCar() {

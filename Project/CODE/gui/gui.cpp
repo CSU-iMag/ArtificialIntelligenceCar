@@ -1,5 +1,4 @@
 #include "gui.hpp"
-#include "zf_pit.h"
 #include "car.hpp"
 #include "fsl_gpt.h"
 #include "package.hpp"
@@ -7,6 +6,7 @@
 #include "timer.hpp"
 #include "usage.hpp"
 #include "util.h"
+#include "zf_pit.h"
 
 SECTION_SDRAM BackGround gui_background;
 SECTION_SDRAM HomePage gui_home;
@@ -17,6 +17,7 @@ SECTION_SDRAM ControlPanel gui_control;
 SECTION_SDRAM ComEnable gui_communication;
 SECTION_SDRAM MotorConfig gui_motor;
 SECTION_SDRAM ModelSelect gui_model;
+SECTION_SDRAM RingLoad gui_ring;
 
 BackGround::BackGround() : BasicLayout(&tree) {
     tree.Children.push_back((LayoutBase *)&gui_home);
@@ -58,18 +59,25 @@ void BackGround::KeyDownPush() { Car.Pause(); }
 
 HomePage::HomePage()
     : ListLayout(&tree, its, " 主菜单",
-                 {"调试信息", "控制面板", "后轮电机", "方向控制", "通信使能",
-                  "模型选择", "ADC raw", }) {
-    tree.Children = {(LayoutBase *)&gui_debug,
-                     (LayoutBase *)&gui_control,
-                     (LayoutBase *)&gui_motor,
-                     (LayoutBase *)&gui_steering,
-                     (LayoutBase *)&gui_communication,
-                     (LayoutBase *)&gui_model,
-                     (LayoutBase *)&gui_magadcDat}; //!< 注意顺序要与上面字符串相对应
+                 {
+                     "调试信息",
+                     "控制面板",
+                     "环岛检测",
+                     "后轮电机",
+                     "方向控制",
+                     "通信使能",
+                     "模型选择",
+                     "ADC raw",
+                 }) {
+    tree.Children = {
+        (LayoutBase *)&gui_debug,    (LayoutBase *)&gui_control,
+        (LayoutBase *)&gui_ring,     (LayoutBase *)&gui_motor,
+        (LayoutBase *)&gui_steering, (LayoutBase *)&gui_communication,
+        (LayoutBase *)&gui_model,    (LayoutBase *)&gui_magadcDat};
 }
 
-//! @brief 打开子菜单
+//! @brief
+//! 闂傚倷鑳堕幊鎾绘倶濮樿泛绠伴柛婵勫劜椤?鏇㈡煙鐎电?啃涢柛瀣?鎸搁埥澶娾枎韫囨搩娼欓柣鐔哥矋濠㈡?肩矓閻熸壆鏆﹂柨鐔哄У閺呮悂鏌ㄩ悤鍌涘??
 void HomePage::KeyEnterPush() {
     if (tree.Children.size() <= ListObject.stItems.iSelection)
         return;
@@ -97,7 +105,7 @@ void MagadcDat::KeyEnterPush() {
         SaveMaxEnabled = !SaveMaxEnabled;
         if (SaveMaxEnabled) {
             for (int i(0); i < ADC_CNT; ++i)
-               Car.MagList[i].ClearMax();
+                Car.MagList[i].ClearMax();
         }
         Items[0].UpdateValue(SaveMaxEnabled ? " ing..." : " ");
     }
@@ -156,17 +164,22 @@ void SteeringConfig::KeyEnterPush() {
     case 1:
     case 2:
         SteeringEnabled = !SteeringEnabled;
+        CRITICAL_REGION_ENTER();
         if (SteeringEnabled)
-            PIT_StartTimer(PIT, PIT_STEER_CH);
+            SET_BIT(Car.Enabled, SW_STEER);
         else
-            pit_close(PIT_STEER_CH);
+            CLR_BIT(Car.Enabled, SW_STEER);
+        CRITICAL_REGION_EXIT();
         break;
     case 3:
         ActiveLayout = &err_curve;
         break;
 
     case 4:
-        UpdateValue(4, (STEER_CENTER - pulse_width) / 5); //!< 归中
+        UpdateValue(
+            4,
+            (STEER_CENTER - pulse_width) /
+                5); //!< 闂佽崵鍠愮划搴㈡櫠濡ゅ啯鏆滃┑鐘叉处閸ゅ牓鏌ㄩ悤鍌涘??
         break;
 
     default:
@@ -229,19 +242,21 @@ void ComEnable::KeyEnterPush() {
 
     CAR_ERROR_CHECK(item_cnt > row);
     enabled[row] = !enabled[row];
-    Items[row].UpdateValue(enabled[row] ? "发送中…" : "已关闭");
+    Items[row].UpdateValue(enabled[row] ? "发送中" : "已关闭");
 
+    CRITICAL_REGION_ENTER();
     if (enabled[0]) {
-        SET_BIT(Car.Enabled, SW_MASK_SEND_AI);
+        SET_BIT(Car.Enabled, SW_SEND_AI);
     } else {
-        CLR_BIT(Car.Enabled, SW_MASK_SEND_AI);
+        CLR_BIT(Car.Enabled, SW_SEND_AI);
     }
 
     if (enabled[1]) {
-        SET_BIT(Car.Enabled, SW_MASK_SEND_MOTOR);
+        SET_BIT(Car.Enabled, SW_SEND_MOTOR);
     } else {
-        CLR_BIT(Car.Enabled, SW_MASK_SEND_MOTOR);
+        CLR_BIT(Car.Enabled, SW_SEND_MOTOR);
     }
+    CRITICAL_REGION_EXIT();
 
     if (enabled[2]) {
     } else {
@@ -333,6 +348,40 @@ void ModelSelect::KeyEnterPush() {
     }
     deep_init();
     CRITICAL_REGION_EXIT();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void RingLoad::UpdateValue(uint8_t row, uint8_t val) {
+    switch (row) {
+    case 0:
+        Items[0].UpdateValue(std::to_string(val));
+        break;
+    case 1:
+        Items[1].UpdateValue(std::to_string(Car.RingLoader.island += val));
+        break;
+    case 2:
+        Items[2].UpdateValue(std::to_string(Car.RingLoader.straightL += val));
+        break;
+    case 3:
+        gui_ring.Items[3].UpdateValue(
+            std::to_string(Car.RingLoader.straightR += val));
+        break;
+    case 4:
+        gui_ring.Items[4].UpdateValue(
+            std::to_string(Car.RingLoader.straightM += val));
+        break;
+
+    default:
+        break;
+    }
+    gui_ring.Repaint();
+}
+
+void RingLoad::KeyLeftPush() { UpdateValue(ListObject.stItems.iSelection, 2); }
+
+void RingLoad::KeyRightPush() {
+    UpdateValue(ListObject.stItems.iSelection, -2);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

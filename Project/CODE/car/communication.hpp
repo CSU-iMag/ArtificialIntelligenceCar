@@ -8,6 +8,7 @@ enum log_color_enum { LogBlack, LogRed, LogGreen, LogBlue, LogOrange, LogLime };
 
 static const uint8_t SOH = 0x01, EOT = 0x04, ESC = 0x5c;
 
+void com_init();
 void com_push(uint8_t packID, const uint8_t *payload, uint8_t length);
 
 /**

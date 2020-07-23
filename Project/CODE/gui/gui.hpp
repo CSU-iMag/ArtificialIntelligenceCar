@@ -20,6 +20,7 @@ extern struct Resistance gui_resistance;
 extern struct ControlPanel gui_control;
 extern struct MagadcDat gui_magadcDat;
 extern struct MotorConfig gui_motor;
+extern struct RingLoad gui_ring;
 
 struct BackGround : BasicLayout {
     BackGround();
@@ -38,18 +39,18 @@ struct HomePage : ListLayout {
     HomePage();
 
   private:
-    static const int ChildrenCnt = 7;
+    static const int ChildrenCnt = 9;
     struct TreeNode tree = {.Parent = &gui_background};
     SGUI_ITEMS_ITEM its[ChildrenCnt];
 
-    //! @brief 打开子菜单
+    //! @brief 闂備胶鎳撻悘姘跺箰閸濄儲顫曢柟瀵稿Л閸嬫挸鈽夊▎蹇擃潙閻熸粍婢樼粔鐟扮暦閿熺姵鏅搁柨鐕傛嫹
     void KeyEnterPush();
 };
 
 struct DebugInfo : ListLayout {
     DebugInfo() : ListLayout(&tree, its, "DebugInfo", {"1", "2", "3"}) {}
 
-    //! @brief 更新第i行显示的字符串
+    //! @brief 闂備礁鎼?ú銈夋偤閵娾晛钃熷┑鐘插?缁犳棃鏌ｉ悙璺虹毢闁诡喗澹嗘禒锕傛倷椤戣姤鐏冪紓鍌欒?閸嬫捇鏌ц箛姘兼綈闁伙綁浜堕幃妤�鈽夊▎妯荤暭濡炪倖鍨抽悞锔剧矙婢舵劖鏅搁柨鐕傛嫹
     __inline void UpdateValue(unsigned id, std::string str) {
 //        if (this != ActiveLayout)
 //            return;
@@ -69,7 +70,7 @@ struct MagadcDat : ListLayout {
                      {"Record Max", "1: ", "2: ", "3: ", "4: ", "5: ", "6: ",
                       "7: ", "8: ", "9: ", "10: ", "11: ", "12: "}) {}
     void UpdateValue();
-
+ 
   private:
     bool FigureMode;
     static const uint8_t AdcNum = ADC_CNT + 1;
@@ -86,7 +87,7 @@ struct SteeringConfig : ListLayout {
 
     SteeringConfig()
         : ListLayout(&tree, its, "-方向控制",
-                     {"Kp: ", "Ki: ", "Kd: ", "软件调零：", "高电平时间：",
+                     {"Kp: ", "Ki: ", "Kd: ", "软件调零", "高电平时间",
                       "ctrl mode: "}),
           err_curve(&err_tree, " Steering PID ErrNow",
                     (SGUI_RTGRAPH_CONTROL){20, -20, SGUI_TRUE, 1, 0}) {}
@@ -99,10 +100,10 @@ struct SteeringConfig : ListLayout {
                     err_tree = {.Parent = &gui_steering};
     SGUI_ITEMS_ITEM its[ConfigNum];
 
-    //! @brief 减
+    //! @brief 闂備礁鎲￠崺濠囧箯閿燂拷
     virtual void KeyLeftPush();
 
-    //! @brief 加
+    //! @brief 闂備礁鎲″Λ鎴﹀箯閿燂拷
     virtual void KeyRightPush();
 
     virtual void KeyEnterPush();
@@ -171,5 +172,19 @@ static __inline void gui_reloadVal() {
     for (uint8_t i(0); i < gui_steering.ConfigNum; ++i)
         gui_steering.UpdateValue(i, 0);
 }
+
+struct RingLoad : ListLayout {
+    RingLoad()
+        : ListLayout(&tree, its, "-环岛",
+                     {"状态 = ","入环阈值：", "平道左瞻：", "平道右瞻：", "直道前瞻中"
+                       }) {}
+    void UpdateValue(uint8_t row, uint8_t val);
+  private:
+    static const uint8_t item_cnt = 5;
+    struct TreeNode tree = {.Parent = &gui_home};
+    SGUI_ITEMS_ITEM its[item_cnt];
+    virtual void KeyLeftPush();
+    virtual void KeyRightPush();
+};
 
 #endif

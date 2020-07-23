@@ -112,16 +112,10 @@ void CarMachine::ST_Brake(CarData *) {
 
 void CarMachine::ST_Exception(CarData *) {
     com_log("Exception\n");
-#ifdef BEEP_ENABLED
-    Car.beep0.BeepFreq(0xBAD);
-#endif
     InternalEvent(ST_BRAKE);
 }
 
 void CarMachine::ST_Recover(CarData *) {
     com_log("Recover\n");
-#ifdef BEEP_ENABLED
-    Car.beep0.BeepFreqDelay(5555, 111);
-#endif
     // InternalEvent(IS_DERAIL ? ST_IDLE : ST_LAUNCH);
 }

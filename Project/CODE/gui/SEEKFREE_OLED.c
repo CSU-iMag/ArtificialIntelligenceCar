@@ -52,13 +52,13 @@
 #define Max_Row 64
 
 #define OLED_SCL(x)                                                            \
-    GPIO_PinWrite(BOARD_INITPINS_CLK_PORT, BOARD_INITPINS_CLK_PIN, x)
+    GPIO_PinWrite(BOARD_INITPINS_CLK_GPIO, BOARD_INITPINS_CLK_GPIO_PIN, x)
 #define OLED_SDA(x)                                                            \
-    GPIO_PinWrite(BOARD_INITPINS_MOSI_PORT, BOARD_INITPINS_MOSI_PIN, x)
+    GPIO_PinWrite(BOARD_INITPINS_MOSI_GPIO, BOARD_INITPINS_MOSI_GPIO_PIN, x)
 #define OLED_RST(x)                                                            \
-    GPIO_PinWrite(BOARD_INITPINS_RES_PORT, BOARD_INITPINS_RES_PIN, x)
+    GPIO_PinWrite(BOARD_INITPINS_RES_GPIO, BOARD_INITPINS_RES_GPIO_PIN, x)
 #define OLED_DC(x)                                                             \
-    GPIO_PinWrite(BOARD_INITPINS_DC_PORT, BOARD_INITPINS_DC_PIN, x)
+    GPIO_PinWrite(BOARD_INITPINS_DC_GPIO, BOARD_INITPINS_DC_GPIO_PIN, x)
 #define OLED_CS(x)
 
 //-------------------------------------------------------------------------------------------------------------------

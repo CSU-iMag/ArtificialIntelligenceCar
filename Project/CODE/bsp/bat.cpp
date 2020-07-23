@@ -35,4 +35,5 @@ extern "C" void BAT_IRQHANDLER(void) {
     gui_background.UpdateValue(bat_val);
     gui_control.UpdateValue(4, std::to_string(bat_val));
     gui_control.battery_curve.AppendValue(bat_val);
+    // gui_debug.UpdateValue(1, "Enabled:" + std::to_string(Car.Enabled));
 }

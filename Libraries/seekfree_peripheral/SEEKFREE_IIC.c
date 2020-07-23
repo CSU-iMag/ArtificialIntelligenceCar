@@ -50,7 +50,7 @@ uint8 IIC_num;     //发送|接收数据个数
 
 
 
-static uint32 simiic_delay_time=999;   //ICM等传感器应设置为100
+static uint32 simiic_delay_time=0xf0f00f0;   //ICM等传感器应设置为100
 
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -71,10 +71,10 @@ void simiic_delay_set(uint16 time)
 //-------------------------------------------------------------------------------------------------------------------
 void simiic_delay(void)
 {
-//	uint32 delay_time;
+// 	uint32 delay_time;
 //    delay_time = simiic_delay_time;
-//	while(delay_time--);
-    systick_delay_us(2);
+// 	while(delay_time--);
+systick_delay_ns(6);
 }
 
 

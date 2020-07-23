@@ -10,13 +10,22 @@ product: Peripherals v8.0
 processor: MIMXRT1064xxxxA
 package_id: MIMXRT1064DVL6A
 mcu_data: ksdk2_0
-processor_version: 7.0.1
+processor_version: 8.0.1
 board: MIMXRT1064-EVK
 functionalGroups:
 - name: BOARD_InitPeripherals
   UUID: 807635b5-074f-4250-b1e8-d8001ebce3f1
   called_from_default_init: true
   selectedCore: core0
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+component:
+- type: 'system'
+- type_id: 'system_54b53072540eeeb8f8e9343e71f28176'
+- global_system_definitions:
+  - user_definitions: ''
+  - user_includes: ''
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
 
@@ -54,6 +63,7 @@ instance:
       - enableErrInterrupt: 'false'
       - errorInterrupt:
         - IRQn: 'DMA_ERROR_IRQn'
+        - enable_interrrupt: 'enabled'
         - enable_priority: 'false'
         - priority: '0'
         - enable_custom_name: 'false'
@@ -110,6 +120,7 @@ instance:
     - enableInterrupt: 'true'
     - adc_interrupt:
       - IRQn: 'ADC1_IRQn'
+      - enable_interrrupt: 'enabled'
       - enable_priority: 'false'
       - priority: '6'
       - enable_custom_name: 'false'
@@ -150,7 +161,7 @@ void BAT_init(void) {
   ADC_DoAutoCalibration(BAT_PERIPHERAL);
   /* Initialize ADC1 channel 9. */
   ADC_SetChannelConfig(BAT_PERIPHERAL, 0U, &BAT_channels_config[0]);
-  /* Enable interrupt ADC1_IRQn request in the NVIC */
+  /* Enable interrupt ADC1_IRQn request in the NVIC. */
   EnableIRQ(BAT_IRQN);
 }
 
@@ -172,8 +183,8 @@ instance:
     - lpuartConfig:
       - clockSource: 'LpuartClock'
       - lpuartSrcClkFreq: 'BOARD_BootClockRUN'
-      - baudRate_Bps: '115200'
-      - parityMode: 'kLPUART_ParityEven'
+      - baudRate_Bps: '460800'
+      - parityMode: 'kLPUART_ParityDisabled'
       - dataBitsCount: 'kLPUART_EightDataBits'
       - isMsb: 'false'
       - stopBitCount: 'kLPUART_OneStopBit'
@@ -191,19 +202,18 @@ instance:
     - transfer:
       - init_rx_transfer: 'true'
       - rx_transfer:
-        - data_size: '10'
-      - init_tx_transfer: 'true'
+        - data_size: '30'
+      - init_tx_transfer: 'false'
       - tx_transfer:
         - data_size: '10'
-      - init_callback: 'false'
-      - callback_fcn: ''
+      - init_callback: 'true'
+      - callback_fcn: 'com_callback'
       - user_data: ''
-    - quick_selection: 'QuickSelection1'
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
 const lpuart_config_t COM_config = {
-  .baudRate_Bps = 115200,
-  .parityMode = kLPUART_ParityEven,
+  .baudRate_Bps = 460800,
+  .parityMode = kLPUART_ParityDisabled,
   .dataBitsCount = kLPUART_EightDataBits,
   .isMsb = false,
   .stopBitCount = kLPUART_OneStopBit,
@@ -224,15 +234,47 @@ const lpuart_transfer_t COM_rxTransfer = {
   .data = COM_rxBuffer,
   .dataSize = COM_RX_BUFFER_SIZE
 };
-uint8_t COM_txBuffer[COM_TX_BUFFER_SIZE];
-const lpuart_transfer_t COM_txTransfer = {
-  .data = COM_txBuffer,
-  .dataSize = COM_TX_BUFFER_SIZE
-};
 
 void COM_init(void) {
   LPUART_Init(COM_PERIPHERAL, &COM_config, COM_CLOCK_SOURCE);
-  LPUART_TransferCreateHandle(COM_PERIPHERAL, &COM_handle, NULL, NULL);
+  LPUART_TransferCreateHandle(COM_PERIPHERAL, &COM_handle, com_callback, NULL);
+}
+
+/***********************************************************************************************************************
+ * DebugConsole initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'DebugConsole'
+- type: 'debug_console'
+- mode: 'general'
+- custom_name_enabled: 'false'
+- type_id: 'debug_console_51864e4f3ac859dae7b603e07bc4ae33'
+- functional_group: 'BOARD_InitPeripherals'
+- config_sets:
+  - fsl_debug_console:
+    - config:
+      - SDK_DEBUGCONSOLE: 'DEBUGCONSOLE_REDIRECT_TO_TOOLCHAIN'
+      - SDK_DEBUGCONSOLE_UART: 'semihost'
+      - DEBUG_CONSOLE_RX_ENABLE: 'false'
+      - DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN: '128'
+      - DEBUG_CONSOLE_SCANF_MAX_LOG_LEN: '20'
+      - DEBUG_CONSOLE_ENABLE_ECHO: 'false'
+      - PRINTF_FLOAT_ENABLE: 'false'
+      - SCANF_FLOAT_ENABLE: 'false'
+      - PRINTF_ADVANCED_ENABLE: 'false'
+      - SCANF_ADVANCED_ENABLE: 'false'
+      - DEBUG_CONSOLE_TRANSFER_NON_BLOCKING: 'false'
+      - DEBUG_CONSOLE_TRANSMIT_BUFFER_LEN: '512'
+      - DEBUG_CONSOLE_RECEIVE_BUFFER_LEN: '1024'
+      - DEBUG_CONSOLE_TX_RELIABLE_ENABLE: 'true'
+      - DEBUG_CONSOLE_DISABLE_RTOS_SYNCHRONIZATION: 'false'
+    - debug_console_codegenerator: []
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+
+void DebugConsole_init(void) {
 }
 
 /***********************************************************************************************************************
@@ -253,60 +295,70 @@ instance:
     - enable_irq_comb_0_15: 'true'
     - gpio_interrupt_comb_0_15:
       - IRQn: 'GPIO1_Combined_0_15_IRQn'
+      - enable_interrrupt: 'enabled'
       - enable_priority: 'false'
       - priority: '0'
       - enable_custom_name: 'false'
     - enable_irq_comb_16_31: 'false'
     - gpio_interrupt_comb_16_31:
       - IRQn: 'GPIO1_Combined_16_31_IRQn'
+      - enable_interrrupt: 'enabled'
       - enable_priority: 'false'
       - priority: '0'
       - enable_custom_name: 'false'
     - enable_irq_int0: 'false'
     - gpio_interrupt_int0:
       - IRQn: 'GPIO1_INT0_IRQn'
+      - enable_interrrupt: 'enabled'
       - enable_priority: 'false'
       - priority: '0'
       - enable_custom_name: 'false'
     - enable_irq_int1: 'false'
     - gpio_interrupt_int1:
       - IRQn: 'GPIO1_INT1_IRQn'
+      - enable_interrrupt: 'enabled'
       - enable_priority: 'false'
       - priority: '0'
       - enable_custom_name: 'false'
     - enable_irq_int2: 'false'
     - gpio_interrupt_int2:
       - IRQn: 'GPIO1_INT2_IRQn'
+      - enable_interrrupt: 'enabled'
       - enable_priority: 'false'
       - priority: '0'
       - enable_custom_name: 'false'
     - enable_irq_int3: 'false'
     - gpio_interrupt_int3:
       - IRQn: 'GPIO1_INT3_IRQn'
+      - enable_interrrupt: 'enabled'
       - enable_priority: 'false'
       - priority: '0'
       - enable_custom_name: 'false'
     - enable_irq_int4: 'false'
     - gpio_interrupt_int4:
       - IRQn: 'GPIO1_INT4_IRQn'
+      - enable_interrrupt: 'enabled'
       - enable_priority: 'false'
       - priority: '0'
       - enable_custom_name: 'false'
     - enable_irq_int5: 'false'
     - gpio_interrupt_int5:
       - IRQn: 'GPIO1_INT5_IRQn'
+      - enable_interrrupt: 'enabled'
       - enable_priority: 'false'
       - priority: '0'
       - enable_custom_name: 'false'
     - enable_irq_int6: 'false'
     - gpio_interrupt_int6:
       - IRQn: 'GPIO1_INT6_IRQn'
+      - enable_interrrupt: 'enabled'
       - enable_priority: 'false'
       - priority: '0'
       - enable_custom_name: 'false'
     - enable_irq_int7: 'false'
     - gpio_interrupt_int7:
       - IRQn: 'GPIO1_INT7_IRQn'
+      - enable_interrrupt: 'enabled'
       - enable_priority: 'false'
       - priority: '0'
       - enable_custom_name: 'false'
@@ -337,12 +389,14 @@ instance:
     - enable_irq_comb_0_15: 'true'
     - gpio_interrupt_comb_0_15:
       - IRQn: 'GPIO3_Combined_0_15_IRQn'
+      - enable_interrrupt: 'enabled'
       - enable_priority: 'false'
       - priority: '0'
       - enable_custom_name: 'false'
     - enable_irq_comb_16_31: 'false'
     - gpio_interrupt_comb_16_31:
       - IRQn: 'GPIO3_Combined_16_31_IRQn'
+      - enable_interrrupt: 'enabled'
       - enable_priority: 'false'
       - priority: '0'
       - enable_custom_name: 'false'
@@ -374,6 +428,7 @@ instance:
     - enableSharedInterrupt: 'true'
     - sharedInterrupt:
       - IRQn: 'PIT_IRQn'
+      - enable_interrrupt: 'enabled'
       - enable_priority: 'true'
       - priority: '2'
       - enable_custom_name: 'false'
@@ -390,17 +445,17 @@ instance:
         - enableInterrupt: 'true'
       - 1:
         - channel_id: 'MOTOR_CH'
-        - channelNumber: '1'
+        - channelNumber: '3'
         - enableChain: 'false'
-        - timerPeriod: '6Ms'
-        - startTimer: 'false'
+        - timerPeriod: '6 ms'
+        - startTimer: 'true'
         - enableInterrupt: 'true'
       - 2:
         - channel_id: 'STEER_CH'
         - channelNumber: '2'
         - enableChain: 'false'
         - timerPeriod: '10Ms'
-        - startTimer: 'false'
+        - startTimer: 'true'
         - enableInterrupt: 'true'
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
 /* clang-format on */
@@ -413,13 +468,13 @@ void PIT_init(void) {
   PIT_Init(PIT_PERIPHERAL, &PIT_config);
   /* Set channel 0 period to 3 ms (75000 ticks). */
   PIT_SetTimerPeriod(PIT_PERIPHERAL, PIT_ENCODER_CH, PIT_ENCODER_CH_TICKS);
-  /* Set channel 1 period to 6 ms (150000 ticks). */
+  /* Set channel 3 period to 6 ms (150000 ticks). */
   PIT_SetTimerPeriod(PIT_PERIPHERAL, PIT_MOTOR_CH, PIT_MOTOR_CH_TICKS);
   /* Set channel 2 period to 10 ms (250000 ticks). */
   PIT_SetTimerPeriod(PIT_PERIPHERAL, PIT_STEER_CH, PIT_STEER_CH_TICKS);
   /* Enable interrupts from channel 0. */
   PIT_EnableInterrupts(PIT_PERIPHERAL, PIT_ENCODER_CH, kPIT_TimerInterruptEnable);
-  /* Enable interrupts from channel 1. */
+  /* Enable interrupts from channel 3. */
   PIT_EnableInterrupts(PIT_PERIPHERAL, PIT_MOTOR_CH, kPIT_TimerInterruptEnable);
   /* Enable interrupts from channel 2. */
   PIT_EnableInterrupts(PIT_PERIPHERAL, PIT_STEER_CH, kPIT_TimerInterruptEnable);
@@ -429,6 +484,10 @@ void PIT_init(void) {
   EnableIRQ(PIT_IRQN);
   /* Start channel 0. */
   PIT_StartTimer(PIT_PERIPHERAL, PIT_ENCODER_CH);
+  /* Start channel 3. */
+  PIT_StartTimer(PIT_PERIPHERAL, PIT_MOTOR_CH);
+  /* Start channel 2. */
+  PIT_StartTimer(PIT_PERIPHERAL, PIT_STEER_CH);
 }
 
 /***********************************************************************************************************************
@@ -489,6 +548,7 @@ instance:
       - enable_irq: 'false'
       - interrupt:
         - IRQn: 'TMR1_IRQn'
+        - enable_interrrupt: 'enabled'
         - enable_priority: 'false'
         - priority: '0'
         - enable_custom_name: 'false'
@@ -547,7 +607,7 @@ instance:
       - clockSource: 'LpuartClock'
       - lpuartSrcClkFreq: 'BOARD_BootClockRUN'
       - baudRate_Bps: '1000000'
-      - parityMode: 'kLPUART_ParityEven'
+      - parityMode: 'kLPUART_ParityDisabled'
       - dataBitsCount: 'kLPUART_EightDataBits'
       - isMsb: 'false'
       - stopBitCount: 'kLPUART_OneStopBit'
@@ -576,7 +636,7 @@ instance:
 /* clang-format on */
 const lpuart_config_t SLAVE_config = {
   .baudRate_Bps = 1000000,
-  .parityMode = kLPUART_ParityEven,
+  .parityMode = kLPUART_ParityDisabled,
   .dataBitsCount = kLPUART_EightDataBits,
   .isMsb = false,
   .stopBitCount = kLPUART_OneStopBit,
@@ -644,6 +704,7 @@ instance:
     - isInterruptEnabled: 'true'
     - interrupt:
       - IRQn: 'GPT2_IRQn'
+      - enable_interrrupt: 'enabled'
       - enable_priority: 'false'
       - priority: '0'
       - enable_custom_name: 'false'
@@ -669,7 +730,7 @@ void SoftTimer_init(void) {
   GPT_SetOutputOperationMode(SOFTTIMER_PERIPHERAL, kGPT_OutputCompare_Channel1, kGPT_OutputOperation_Disconnected);
   /* Enable GPT interrupt sources */
   GPT_EnableInterrupts(SOFTTIMER_PERIPHERAL, kGPT_OutputCompare1InterruptEnable);
-  /* Enable interrupt GPT2_IRQn request in the NVIC */
+  /* Enable interrupt GPT2_IRQn request in the NVIC. */
   EnableIRQ(SOFTTIMER_GPT_IRQN);
   /* Start the GPT timer */ 
   GPT_StartTimer(SOFTTIMER_PERIPHERAL);
@@ -704,12 +765,14 @@ instance:
       - isInterruptEnabledLowHigh: 'false'
       - interruptLowHigh:
         - IRQn: 'TEMP_LOW_HIGH_IRQn'
+        - enable_interrrupt: 'enabled'
         - enable_priority: 'true'
         - priority: '0'
         - enable_custom_name: 'false'
       - isInterruptEnabledPanic: 'false'
       - interruptPanic:
         - IRQn: 'TEMP_PANIC_IRQn'
+        - enable_interrrupt: 'enabled'
         - enable_priority: 'true'
         - priority: '1'
         - enable_custom_name: 'false'
@@ -742,6 +805,7 @@ void BOARD_InitPeripherals(void)
   DMA0_init();
   BAT_init();
   COM_init();
+  DebugConsole_init();
   GPIO1_init();
   GPIO3_init();
   PIT_init();

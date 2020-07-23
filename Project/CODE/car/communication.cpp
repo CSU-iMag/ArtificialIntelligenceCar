@@ -19,7 +19,6 @@ static void SendOne(std::vector<uint8_t> &pack) {
     buf[0] = SOH;
     buf[pack.size() + 1] = EOT;
     LPUART_TransferSendNonBlocking(COM_PERIPHERAL, &COM_handle, &xfer);
-    //    LPUART_SendEDMA(COM_PERIPHERAL, &COM_LPUART_eDMA_Handle, &xfer);
 }
 
 static void SendPop() {
@@ -45,31 +44,52 @@ void com_push(uint8_t packID, const uint8_t *payload, uint8_t length) {
     pack.push_back(parity);
 
     CRITICAL_REGION_ENTER();
-    if (LPUART_GetStatusFlags(COM_PERIPHERAL) &
-        kLPUART_TxDataRegEmptyFlag)
+    if (LPUART_GetStatusFlags(COM_PERIPHERAL) & kLPUART_TxDataRegEmptyFlag)
         SendOne(pack);
     else
         sendQ.push(pack);
     CRITICAL_REGION_EXIT();
 }
 
-static void AnalysePackages() {
-
-
+__STATIC_INLINE bool CheckParity(int i) {
+    return AccParity(COM_rxBuffer + 2, i - 2) == COM_rxBuffer[i];
 }
 
-// extern "C" void com_callback(LPUART_Type *, lpuart_edma_handle_t *, status_t status,
-//                              void *) {
-//     volatile int i;
-//     ++i;
-//                                 i%=2;
-//                                 if (i)
-//                                     Car.CoreLED.SetBrightness(99);
-//                                 else
-//                                      Car.CoreLED.SetBrightness(1);
-//     if (kStatus_LPUART_IdleLineDetected == status) {
-//         Car.CoreLED.SetBrightness(50);
-//     }
-//     if (kStatus_LPUART_TxIdle == status)
-//         SendPop();
-// }
+static void AnalysePackages(sched_event_data_t dat) {
+    if (COM_rxBuffer[0] != SOH)
+        return;
+
+    bool esc = false;
+    std::vector<uint8_t> buf;
+    for (int i(1); i < COM_RX_BUFFER_SIZE; ++i) {
+        if (!esc && COM_rxBuffer[i] == EOT &&
+            CheckParity(i - 1)) { // 检测到帧尾
+            buf.erase(buf.cend() - 1);
+            package_receive(buf);
+            return;
+        } else if (!esc && COM_rxBuffer[i] == ESC)
+            esc = true; // 转义下一个字节
+        else {
+            esc = false;
+            buf.push_back(COM_rxBuffer[i]);
+        }
+    }
+}
+
+#define START_RX                                                               \
+    LPUART_TransferReceiveNonBlocking(COM_PERIPHERAL, &COM_handle,             \
+                                      (lpuart_transfer_t *)&COM_rxTransfer,    \
+                                      NULL)
+
+void com_callback(LPUART_Type *base, lpuart_handle_t *handle, status_t status,
+                  void *userData) {
+    if (kStatus_LPUART_TxIdle == status)
+        SendPop();
+    if (kStatus_LPUART_IdleLineDetected == status) {
+        sched_event_put(AnalysePackages);
+        LPUART_TransferAbortReceive(COM_PERIPHERAL, &COM_handle);
+        START_RX;
+    }
+}
+
+void com_init() { START_RX; }

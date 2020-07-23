@@ -49,9 +49,9 @@ extern "C" {
 /* Definition of the clock source frequency */
 #define COM_CLOCK_SOURCE 80000000UL
 /* Rx transfer buffer size. */
-#define COM_RX_BUFFER_SIZE 10
-/* Rx transfer buffer size. */
-#define COM_TX_BUFFER_SIZE 10
+#define COM_RX_BUFFER_SIZE 30
+/* Debug console is initialized in the peripheral tool */
+#define BOARD_INIT_DEBUG_CONSOLE_PERIPHERAL 
 /* GPIO1 interrupt vector ID (number). */
 #define GPIO1_GPIO_COMB_0_15_IRQN GPIO1_Combined_0_15_IRQn
 /* GPIO1 interrupt handler identifier. */
@@ -67,8 +67,8 @@ extern "C" {
 #define PIT_CLK_FREQ 25000000UL
 /* Definition of ticks count for channel 0 - deprecated. */
 #define PIT_0_TICKS 74999U
-/* Definition of ticks count for channel 1 - deprecated. */
-#define PIT_1_TICKS 149999U
+/* Definition of ticks count for channel 3 - deprecated. */
+#define PIT_3_TICKS 149999U
 /* Definition of ticks count for channel 2 - deprecated. */
 #define PIT_2_TICKS 249999U
 /* PIT interrupt vector ID (number) - deprecated. */
@@ -76,22 +76,22 @@ extern "C" {
 /* PIT interrupt handler identifier - deprecated. */
 #define PIT_0_IRQHANDLER PIT0_IRQHandler
 /* PIT interrupt vector ID (number) - deprecated. */
-#define PIT_1_IRQN PIT_IRQn
+#define PIT_3_IRQN PIT_IRQn
 /* PIT interrupt handler identifier - deprecated. */
-#define PIT_1_IRQHANDLER PIT1_IRQHandler
+#define PIT_3_IRQHANDLER PIT3_IRQHandler
 /* PIT interrupt vector ID (number) - deprecated. */
 #define PIT_2_IRQN PIT_IRQn
 /* PIT interrupt handler identifier - deprecated. */
 #define PIT_2_IRQHANDLER PIT2_IRQHandler
 /* Definition of channel number for channel 0. */
 #define PIT_ENCODER_CH kPIT_Chnl_0
-/* Definition of channel number for channel 1. */
-#define PIT_MOTOR_CH kPIT_Chnl_1
+/* Definition of channel number for channel 3. */
+#define PIT_MOTOR_CH kPIT_Chnl_3
 /* Definition of channel number for channel 2. */
 #define PIT_STEER_CH kPIT_Chnl_2
 /* Definition of ticks count for channel 0. */
 #define PIT_ENCODER_CH_TICKS 74999U
-/* Definition of ticks count for channel 1. */
+/* Definition of ticks count for channel 3. */
 #define PIT_MOTOR_CH_TICKS 149999U
 /* Definition of ticks count for channel 2. */
 #define PIT_STEER_CH_TICKS 249999U
@@ -140,8 +140,6 @@ extern const lpuart_config_t COM_config;
 extern lpuart_handle_t COM_handle;
 extern uint8_t COM_rxBuffer[COM_RX_BUFFER_SIZE];
 extern const lpuart_transfer_t COM_rxTransfer;
-extern uint8_t COM_txBuffer[COM_TX_BUFFER_SIZE];
-extern const lpuart_transfer_t COM_txTransfer;
 extern const pit_config_t PIT_config;
 extern const qtmr_config_t PulseEncoder_Channel_0_config;
 extern const qtmr_config_t PulseEncoder_Channel_2_config;
@@ -152,11 +150,14 @@ extern const lpuart_transfer_t SLAVE_rxTransfer;
 extern uint8_t SLAVE_txBuffer[SLAVE_TX_BUFFER_SIZE];
 extern const lpuart_transfer_t SLAVE_txTransfer;
 extern const gpt_config_t SoftTimer_config;
+/* TEMPMON configuration */
 extern const tempmon_config_t TEMPMON_config;
 
 /***********************************************************************************************************************
  * Callback functions
  **********************************************************************************************************************/
+/* LPUART transfer callback function for the COM component (init. function BOARD_InitPeripherals)*/
+extern void com_callback(LPUART_Type *base, lpuart_handle_t *handle, status_t status, void *userData);
 /* LPUART transfer callback function for the SLAVE component (init. function BOARD_InitPeripherals)*/
 extern void SlaveCallback(LPUART_Type *base, lpuart_handle_t *handle, status_t status, void *userData);
 

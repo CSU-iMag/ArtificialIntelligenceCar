@@ -148,7 +148,7 @@ void pwm_init(PWMCH_enum pwmch, uint32 freq, uint32 duty)
     uint8  pwm_num;
     uint8  pwm_module;
     uint8  pwm_module_ch;
-    uint16 temp_prsc;
+    uint32 temp_prsc;
     pwm_config_t pwmConfig;
     
     pwm_iomuxc(pwmch);
@@ -175,6 +175,9 @@ void pwm_init(PWMCH_enum pwmch, uint32 freq, uint32 duty)
 
     //计算分频系数
     temp_prsc = (PWM_SRC_CLK_FREQ/freq)>>16;
+    if (PWM_SRC_CLK_FREQ % (freq << 16))
+        temp_prsc++;
+
     if      (1   >= temp_prsc)  pwmConfig.prescale = kPWM_Prescale_Divide_1;
     else if (2   >= temp_prsc)  pwmConfig.prescale = kPWM_Prescale_Divide_2;
     else if (4   >= temp_prsc)  pwmConfig.prescale = kPWM_Prescale_Divide_4;

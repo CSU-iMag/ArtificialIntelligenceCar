@@ -1,17 +1,12 @@
 /*
  * Copyright (c) 2015, Freescale Semiconductor, Inc.
- * Copyright 2016-2017 NXP
+ * Copyright 2016-2019 NXP
  * All rights reserved.
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
 #include "fsl_lpspi_edma.h"
-#if (defined(__ICCARM__))
-	
-#elif(defined(__CC_ARM))
-	#pragma diag_suppress 550
-#endif
 
 /***********************************************************************************************************************
  * Definitions
@@ -68,7 +63,6 @@ static void LPSPI_SeparateEdmaReadData(uint8_t *rxData, uint32_t readData, uint3
  * Variables
  ***********************************************************************************************************************/
 /*! @brief Pointers to lpspi bases for each instance. */
-
 static LPSPI_Type *const s_lpspiBases[] = LPSPI_BASE_PTRS;
 
 /*! @brief Pointers to lpspi edma handles for each instance. */
@@ -393,7 +387,7 @@ status_t LPSPI_MasterTransferEDMA(LPSPI_Type *base, lpspi_master_edma_handle_t *
     transferConfigRx.srcAddr   = (uint32_t)rxAddr + dif;
     transferConfigRx.srcOffset = 0;
 
-    transferConfigRx.majorLoopCounts = (uint8_t)handle->readRegRemainingTimes;
+    transferConfigRx.majorLoopCounts = handle->readRegRemainingTimes;
 
     /* Store the initially configured eDMA minor byte transfer count into the LPSPI handle */
     handle->nbytes = (uint8_t)transferConfigRx.minorLoopBytes;

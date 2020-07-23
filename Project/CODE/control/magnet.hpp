@@ -14,7 +14,7 @@ class MagSensor {
   private:
     //    filter_movAve_t filter_RawData;
     float fValue;
-    float RawData, MaxRawData = 1;
+    float RawData, MaxRaw = 0.1, MinRaw = INT16_MAX;
     void Normalize();
 
   public:
@@ -24,8 +24,16 @@ class MagSensor {
     __inline float GetRaw() { return RawData; }
     __inline float GetNormalized() { return fValue; }
     __inline float GetVoltage() { return ADC12b_TO_mV(RawData); }
-    __inline float GetMax() { return MaxRawData; }
-    __inline void ClearMax() { MaxRawData = 0; }
+    __inline float GetMax() { return MaxRaw; }
+    __inline float GetMin() { return MinRaw; }
+    __inline void ClearMax() { MaxRaw = 0; }
+};
+
+struct RingThreshold {
+    uint8_t island, //进入环岛的阈值
+        straightR,  //平道右瞻ADC
+        straightL,  //平道左瞻ADC
+        straightM;  //平道中瞻ADC
 };
 
 //! @brief 平移电感记录归一化用的最大值
