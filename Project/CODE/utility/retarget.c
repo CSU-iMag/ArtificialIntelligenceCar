@@ -1,8 +1,8 @@
 __asm(".global __use_no_semihosting\n\t");
 
-const char __stdin_name[150];
-const char __stdout_name[150];
-const char __stderr_name[150];
+//const char __stdin_name[150];
+//const char __stdout_name[150];
+//const char __stderr_name[150];
 typedef int FILEHANDLE;
 
 //重写标准库函数，这时printf、fopen、fclose等文件操作函数运行时就会调用你的重写函数，这些重写函数只是几个简单的例子，并没有重写所有的文件操作函数
@@ -35,4 +35,4 @@ int _sys_tmpnam(char *name, int fileno, unsigned maxlength) { return 0; }
 void _ttywrch(int ch) {}
 int remove(const char *filename) { return 0; }
 
-char *_sys_command_string(char *cmd, int len) { return 0; }
+//char *_sys_command_string(char *cmd, int len) { return 0; }

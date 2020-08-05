@@ -16,8 +16,7 @@
  * 定义存储方向上行包的所有内容
  */
 __PACKED_STRUCT Direction_PackData {
-    uint8_t steerDutyforAI, steerPID_Input, magL_Row1_fValue, magM_Row1_fValue,
-        magR_Row1_fValue;
+    uint8_t steerDuty, steerInput;
 }
 static pkgDir;
 static const uint8_t DirectionID = 0x8a;
@@ -85,6 +84,16 @@ __STATIC_INLINE void ReceiveSteerPID(uint8_t *buf) {
     CRITICAL_REGION_EXIT();
 }
 
+__STATIC_INLINE void ReceiveSwitch(uint8_t sw) {
+    if (!IS_SET(sw, SW_SPEED))
+        Car.Machine.Pause();
+    else if (!IS_SET(Car.Enabled, SW_SPEED))
+        Car.Machine.Start();
+    CRITICAL_REGION_ENTER();
+    Car.Enabled = sw;
+    CRITICAL_REGION_EXIT();
+}
+
 void package_receive(std::vector<uint8_t> buffer) {
     gui_debug.UpdateValue(0, "id: " + std::to_string(buffer[0]));
     switch (buffer[0]) {
@@ -98,9 +107,7 @@ void package_receive(std::vector<uint8_t> buffer) {
             ReceiveSteerPID(&buffer[1]);
         break;
     case Switch_ID:
-        CRITICAL_REGION_ENTER();
-        Car.Enabled = buffer[1];
-        CRITICAL_REGION_EXIT();
+        ReceiveSwitch(buffer[1]);
         break;
     default:
         break;
@@ -126,10 +133,10 @@ static void SendSpeed(sched_event_data_t dat) {
 static void SendSteer(sched_event_data_t dat) {
     if (!IS_SET(Car.Enabled, SW_SEND_DIR))
         return;
-
-    pkgDir.magL_Row1_fValue = Car.MagList[MagLeftL].GetNormalized();
-    pkgDir.magM_Row1_fValue = Car.MagList[MagMiddleM].GetNormalized();
-    pkgDir.magR_Row1_fValue = Car.MagList[MagRightR].GetNormalized();
+    CRITICAL_REGION_ENTER();
+    pkgDir.steerDuty = Car.Steer3010.duty;
+    pkgDir.steerInput = lim(MagErrorForPID, -128, 127);
+    CRITICAL_REGION_EXIT();
 }
 
 static void SendSwitch(sched_event_data_t dat) {
@@ -159,9 +166,9 @@ void package_sendDeep(uint8_t steering) {
         return;
     pkgAI.steerDutyforAI = steering;
     pkgAI.MagL_Row2 = (uint8_t)Car.MagList[MagLeftL].GetNormalized();
-    pkgAI.MagLM_Row2 = (uint8_t)Car.MagList[MagLeftX].GetNormalized();
+    pkgAI.MagLM_Row2 = (uint8_t)Car.MagList[MagLeftY].GetNormalized();
     pkgAI.MagM_Row2 = (uint8_t)Car.MagList[MagMiddleM].GetNormalized();
-    pkgAI.MagRM_Row2 = (uint8_t)Car.MagList[MagRightX].GetNormalized();
+    pkgAI.MagRM_Row2 = (uint8_t)Car.MagList[MagRightY].GetNormalized();
     pkgAI.MagR_Row2 = (uint8_t)Car.MagList[MagRightR].GetNormalized();
     pkgAI.MagL_Row3 = (uint8_t)Car.MagList[MagMiddleL].GetNormalized();
     pkgAI.MagR_Row3 = (uint8_t)Car.MagList[MagMiddleR].GetNormalized();

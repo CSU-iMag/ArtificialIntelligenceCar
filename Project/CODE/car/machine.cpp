@@ -112,6 +112,7 @@ void CarMachine::ST_Brake(CarData *) {
 
 void CarMachine::ST_Exception(CarData *) {
     com_log("Exception\n");
+    Car.Buzzer.BeepFreqDelay(7890, 666);
     InternalEvent(ST_BRAKE);
 }
 

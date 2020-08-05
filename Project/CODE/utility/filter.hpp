@@ -14,7 +14,7 @@ class filter_movAve_t {
     std::vector<float32_t> buffer;
 
   public:
-    filter_movAve_t(uint8_t filter_size)
+    explicit filter_movAve_t(uint8_t filter_size)
         : size(filter_size), buffer(size), header(0) {}
 
     /**

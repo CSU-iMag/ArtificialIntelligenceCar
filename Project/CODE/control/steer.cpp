@@ -20,8 +20,7 @@
 //  MotorR(MOTOR_R,encoderR_QTIMER,encoderR_LSB_QTIMER,encoderR_DIR_QTIMER);
 //-------------------------------------------------------------------------------------------------------------------
 Steer::Steer(PWMCH_enum ch, float OutMin, float OutMax)
-    : PWM_Channel(ch), steerCtrl(std::make_pair(OutMin, OutMax)),
-      steerOffset(0) {}
+    : PWM_Channel(ch), steerOffset(0) {}
 
 void Steer::Init() {
     pwm_init(PWM_Channel, STEER_FREQ,
@@ -33,6 +32,18 @@ void Steer::DutySet(float duty) {
     pwm_duty(PWM_Channel, PERCENT_TO_TICKS(duty));
 }
 
+__STATIC_INLINE void CalcSpeedTarget(float steering) {
+    // float differ(steering * SPEED_DIFFER_K + SPEED_DIFFER_B);
+    // differ /= 2;
+
+    CRITICAL_REGION_ENTER();
+    Car.MotorL.target = Car.MotorR.target =
+        Car.TargetSpeed - std::abs(steering - STEER_CENTER) * Car.Deceleration;
+    // Car.MotorL.target -= differ;
+    // Car.MotorR.target += differ;
+    CRITICAL_REGION_EXIT();
+}
+
 //-------------------------------------------------------------------------------------------------------------------
 //  @name
 //  pid闂傚倸鍊搁崐鎼佸磹閹间礁纾圭€瑰嫭鍣磋ぐ鎺戠倞鐟滃寮搁弽顓熺厸闁搞儯鍎遍悘鈺冪磼閹邦収娈滈柡宀€鍠栭幃褔宕奸悢鍝勫殥闂備礁鎲￠崹瑙勬叏閹绢喖鐓橀柟杈鹃檮閸嬫劙鎮楅崷顓炐㈡い銉︾箘缁辨挻鎷呴崫鍕碘偓宀勬煕閵娿儳鍩ｇ€殿喖顭烽弫鎰緞婵犲嫷鍚呴梻浣瑰缁诲倿骞夊☉銏犵缂備焦顭囬崢鎼佹⒑閸涘﹣绶遍柛鐘愁殜瀹曟劙骞囬悧鍫㈠幐閻庡厜鍋撻悗锝庡墮閸╁矂姊虹€圭媭鍤欑紒澶婄秺閵嗕線寮介鐐电暰閻熸粌顦靛畷鎴﹀箻鐠囧弬褍顭跨捄鐚村姛闁哄苯鐗撳娲箹閻愭彃濮堕梺鍛婃尰瀹€鎼佸箖閳ユ枼鏋庨煫鍥风稻鐎靛矂鏌ｆ惔顖滅У濞存粠浜、鎾澄旈崨顔惧幈濠碘槅鍨崇划顖滀焊閿曞倹鐓涢悘鐐登规晶鏌ユ煙瀹勭増鍣介柟鍙夋尦瀹曠喖顢曢妶蹇曞闂傚倸鍊峰ù鍥ь浖閵娾晜鍊块柨鏇炲€哥粻鏌ユ煕閵夘喖澧柡瀣╃窔閺岀喖宕滆鐢盯鏌￠崨顔藉€愰柡灞诲姂閹倝宕掑☉姗嗕紦
@@ -40,16 +51,21 @@ void Steer::DutySet(float duty) {
 void steer_schedule(sched_event_data_t dat) {
     float steering;
     if (Car.CtrlMode == ControlMode::AI)
-        steering = deep_predict();
+        Car.Steer3010.duty = steering = deep_predict();
     else {
         steering =
             Car.Steer3010.steerCtrl.Realize(MagErrorForPID) + STEER_CENTER;
-        LIMITING(steering, STEER_MIN, STEER_MAX);
-        
-        package_sendDeep(
-            RESCALE_VALUE(steering - STEER_MIN, 255, STEER_MAX - STEER_MIN));
+
+        extern uint8_t RingStatus;
+        if (RingStatus)
+            LIMITING(steering, STEER_CENTER - 20, STEER_CENTER + 20);
+        else
+            LIMITING(steering, STEER_MIN, STEER_MAX);
+
+        Car.Steer3010.duty =
+            RESCALE_VALUE(steering - STEER_MIN, 255, STEER_MAX - STEER_MIN);
+        package_sendDeep(Car.Steer3010.duty);
     }
     Car.Steer3010.WidthSet(steering);
-    Car.MotorL.target = Car.MotorR.target =
-        Car.TargetSpeed - std::abs(steering - STEER_CENTER) * Car.Deceleration;
+    CalcSpeedTarget(steering);
 }

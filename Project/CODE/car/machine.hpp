@@ -5,7 +5,7 @@
 
 //! @brief structure to hold event data passed into state machine
 struct CarData : public EventData {
-    CarData(float speed) : TargetSpeed(speed) {}
+    explicit CarData(float speed) : TargetSpeed(speed) {}
     float TargetSpeed;
 };
 

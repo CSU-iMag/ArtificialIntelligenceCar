@@ -53,9 +53,9 @@ extern "C" {
 /* Debug console is initialized in the peripheral tool */
 #define BOARD_INIT_DEBUG_CONSOLE_PERIPHERAL 
 /* GPIO1 interrupt vector ID (number). */
-#define GPIO1_GPIO_COMB_0_15_IRQN GPIO1_Combined_0_15_IRQn
+#define GPIO1_GPIO_COMB_16_31_IRQN GPIO1_Combined_16_31_IRQn
 /* GPIO1 interrupt handler identifier. */
-#define GPIO1_GPIO_COMB_0_15_IRQHANDLER GPIO1_Combined_0_15_IRQHandler
+#define GPIO1_GPIO_COMB_16_31_IRQHANDLER GPIO1_Combined_16_31_IRQHandler
 /* GPIO3 interrupt vector ID (number). */
 #define GPIO3_GPIO_COMB_0_15_IRQN GPIO3_Combined_0_15_IRQn
 /* GPIO3 interrupt handler identifier. */

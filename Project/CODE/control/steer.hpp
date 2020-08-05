@@ -11,7 +11,8 @@ class Steer {
 
   public:
     float steerOffset;
-    PID steerCtrl;
+    uint8_t duty;
+    PosPID steerCtrl;
     Steer(PWMCH_enum ch, float OutMin, float OutMax);
     void Init();
     void ModifyOffset(int8 varia);

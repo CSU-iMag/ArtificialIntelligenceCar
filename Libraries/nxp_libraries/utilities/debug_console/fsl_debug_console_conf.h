@@ -18,10 +18,10 @@
 /****************Debug console configuration********************/
 
 /* Debug console configuration check */
-#if ((defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE != 0)))
-    #error SDK_DEBUGCONSOLE has already been defined and the value is not 0 as value in the DebugConsole component instance setting.
+#if ((defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE != 2)))
+    #error SDK_DEBUGCONSOLE has already been defined and the value is not 2 as value in the DebugConsole component instance setting.
 #elif (!defined(SDK_DEBUGCONSOLE))
-    #error SDK_DEBUGCONSOLE is not defined. Define SDK_DEBUGCONSOLE=0 at the project setting.
+    #error SDK_DEBUGCONSOLE is not defined. Define SDK_DEBUGCONSOLE=2 at the project setting.
 #endif
 
 #if (defined(SDK_DEBUGCONSOLE_UART))
@@ -88,7 +88,7 @@
  * If the macro is zero, the receive function of the debug console is disabled.
  */
 #ifndef DEBUG_CONSOLE_RX_ENABLE
-#define DEBUG_CONSOLE_RX_ENABLE (0U)
+#define DEBUG_CONSOLE_RX_ENABLE (1U)
 #endif /* DEBUG_CONSOLE_RX_ENABLE */
 
 /*!@ brief define the MAX log length debug console support , that is when you call printf("log", x);, the log

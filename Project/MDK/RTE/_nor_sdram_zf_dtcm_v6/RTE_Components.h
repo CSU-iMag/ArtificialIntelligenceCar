@@ -16,6 +16,9 @@
  */
 #define CMSIS_device_header "fsl_device_registers.h"
 
+/*  Keil.ARM Compiler::Compiler:I/O:STDOUT:Breakpoint:1.2.0 */
+#define RTE_Compiler_IO_STDOUT          /* Compiler I/O: STDOUT */
+          #define RTE_Compiler_IO_STDOUT_BKPT     /* Compiler I/O: STDOUT Breakpoint */
 
 
 #endif /* RTE_COMPONENTS_H */

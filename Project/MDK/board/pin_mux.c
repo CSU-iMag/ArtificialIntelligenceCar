@@ -37,6 +37,7 @@ pin_labels:
 - {pin_num: G13, pin_signal: GPIO_AD_B0_10, label: MOTOR, identifier: INT1_COMBO;RIGHT}
 - {pin_num: G10, pin_signal: GPIO_AD_B0_11, label: MOTOR, identifier: INT2_COMBO;LEFT}
 - {pin_num: K14, pin_signal: GPIO_AD_B0_12, label: CON, identifier: UART1_TXD;HAL1}
+- {pin_num: L14, pin_signal: GPIO_AD_B0_13, label: CON, identifier: UART1_RXD}
 - {pin_num: H14, pin_signal: GPIO_AD_B0_14, label: KEY, identifier: CAN2_TX;AD_CH2;K4;DOWN;K_DOWN}
 - {pin_num: L10, pin_signal: GPIO_AD_B0_15, label: KEY, identifier: CAN2_RX;AD_CH3;K5;OKEY;K_OK}
 - {pin_num: J11, pin_signal: GPIO_AD_B1_00, label: IIC, identifier: I2C_SCL_FXOS8700CQ;CSI_I2C_SCL;AD_CH4;SCL}
@@ -57,7 +58,7 @@ pin_labels:
 - {pin_num: M4, pin_signal: GPIO_SD_B1_03, label: FlexSPI_D0_B, identifier: FlexSPI_D0_B;SCL;SW4}
 - {pin_num: P2, pin_signal: GPIO_SD_B1_04, label: HAL, identifier: HAL2}
 - {pin_num: L12, pin_signal: GPIO_AD_B1_04, label: BAT, identifier: CSI_PIXCLK;AD_CH8;BAT}
-- {pin_num: K12, pin_signal: GPIO_AD_B1_05, label: 'CSI_MCLK/J35[12]/J23[4]', identifier: CSI_MCLK;AD_CH9}
+- {pin_num: K12, pin_signal: GPIO_AD_B1_05, label: HAL, identifier: CSI_MCLK;AD_CH9;HAL1}
 - {pin_num: J12, pin_signal: GPIO_AD_B1_06, label: 'CSI_VSYNC/J35[18]/J22[2]/UART_TX', identifier: CSI_VSYNC;AD_CH10}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
@@ -119,8 +120,11 @@ BOARD_InitPins:
     open_drain: Enable}
   - {pin_num: K11, peripheral: GPIO1, signal: 'gpio_io, 17', pin_signal: GPIO_AD_B1_01, identifier: SDA, direction: OUTPUT, gpio_init_state: 'true', pull_keeper_enable: Disable,
     open_drain: Enable}
-  - {pin_num: C11, peripheral: PWM2, signal: 'A, 3', pin_signal: GPIO_B1_02, identifier: BEEP}
+  - {pin_num: C11, peripheral: PWM2, signal: 'A, 3', pin_signal: GPIO_B1_02, identifier: BEEP, direction: OUTPUT}
   - {pin_num: K14, peripheral: LPUART1, signal: TX, pin_signal: GPIO_AD_B0_12, identifier: UART1_TXD}
+  - {pin_num: L14, peripheral: LPUART1, signal: RX, pin_signal: GPIO_AD_B0_13}
+  - {pin_num: K12, peripheral: GPIO1, signal: 'gpio_io, 21', pin_signal: GPIO_AD_B1_05, identifier: HAL1, direction: INPUT, gpio_interrupt: kGPIO_IntFallingEdge,
+    hysteresis_enable: Enable, pull_keeper_enable: Disable}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 
@@ -205,6 +209,17 @@ void BOARD_InitPins(void) {
   /* Initialize GPIO functionality on GPIO_AD_B1_03 (pin M12) */
   GPIO_PinInit(GPIO1, 19U, &K_LEFT_config);
 
+  /* GPIO configuration of HAL1 on GPIO_AD_B1_05 (pin K12) */
+  gpio_pin_config_t HAL1_config = {
+      .direction = kGPIO_DigitalInput,
+      .outputLogic = 0U,
+      .interruptMode = kGPIO_IntFallingEdge
+  };
+  /* Initialize GPIO functionality on GPIO_AD_B1_05 (pin K12) */
+  GPIO_PinInit(GPIO1, 21U, &HAL1_config);
+  /* Enable GPIO pin interrupt on GPIO_AD_B1_05 (pin K12) */
+  GPIO_PortEnableInterrupts(GPIO1, 1U << 21U);
+
   /* GPIO configuration of MOSI on GPIO_AD_B1_13 (pin H11) */
   gpio_pin_config_t MOSI_config = {
       .direction = kGPIO_DigitalOutput,
@@ -277,6 +292,9 @@ void BOARD_InitPins(void) {
       IOMUXC_GPIO_AD_B0_12_LPUART1_TX,        /* GPIO_AD_B0_12 is configured as LPUART1_TX */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B0_13_LPUART1_RX,        /* GPIO_AD_B0_13 is configured as LPUART1_RX */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
       IOMUXC_GPIO_AD_B0_14_GPIO1_IO14,        /* GPIO_AD_B0_14 is configured as GPIO1_IO14 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
@@ -296,6 +314,9 @@ void BOARD_InitPins(void) {
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_AD_B1_04_GPIO1_IO20,        /* GPIO_AD_B1_04 is configured as GPIO1_IO20 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B1_05_GPIO1_IO21,        /* GPIO_AD_B1_05 is configured as GPIO1_IO21 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_AD_B1_10_LPUART8_TX,        /* GPIO_AD_B1_10 is configured as LPUART8_TX */
@@ -466,6 +487,16 @@ void BOARD_InitPins(void) {
                                                  Pull / Keep Enable Field: Pull/Keeper Enabled
                                                  Pull / Keep Select Field: Pull
                                                  Pull Up / Down Config. Field: 47K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+  IOMUXC_SetPinConfig(
+      IOMUXC_GPIO_AD_B1_05_GPIO1_IO21,        /* GPIO_AD_B1_05 PAD functional properties : */
+      0x0100B0U);                             /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0/6
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Disabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Disabled
+                                                 Pull / Keep Select Field: Keeper
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
                                                  Hyst. Enable Field: Hysteresis Enabled */
   IOMUXC_SetPinConfig(
       IOMUXC_GPIO_AD_B1_10_LPUART8_TX,        /* GPIO_AD_B1_10 PAD functional properties : */

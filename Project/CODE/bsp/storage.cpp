@@ -33,9 +33,9 @@ void storage_save(uint32 sector, uint32 page) {
     }
     store.data.TargetSpeed = Car.TargetSpeed;
     store.data.SteerOffset = Car.Steer3010.steerOffset;
-    store.data.SteerCoeff.Kp = Car.Steer3010.steerCtrl.instance.Kp;
-    store.data.SteerCoeff.Ki = Car.Steer3010.steerCtrl.instance.Ki;
-    store.data.SteerCoeff.Kd = Car.Steer3010.steerCtrl.instance.Kd;
+    store.data.SteerCoeff.Kp = Car.Steer3010.steerCtrl.coeff.Kp;
+    store.data.SteerCoeff.Ki = Car.Steer3010.steerCtrl.coeff.Ki;
+    store.data.SteerCoeff.Kd = Car.Steer3010.steerCtrl.coeff.Kd;
     store.data.SpeedCoeff.Kp = Car.MotorL.speedCtrl.instance.Kp;
     store.data.SpeedCoeff.Ki = Car.MotorL.speedCtrl.instance.Ki;
     store.data.SpeedCoeff.Kd = Car.MotorL.speedCtrl.instance.Kd;
@@ -46,7 +46,6 @@ void storage_save(uint32 sector, uint32 page) {
 }
 
 void storage_load(uint32 sector, uint32 page) {
-    // SCB_InvalidateDCache();
     flash_read_page(sector, page, store.buffer, storage_size / 4);
 
     CRITICAL_REGION_ENTER();
@@ -75,9 +74,9 @@ void storage_load(uint32 sector, uint32 page) {
     com_log("\nsteer offset=");
     com_log(to_string(Car.Steer3010.steerOffset));
     com_log("\nsteer pid:");
-    com_log(to_string(STEER_K(p)) + ' ');
-    com_log(to_string(STEER_K(i)) + ' ');
-    com_log(to_string(STEER_K(d)) + ' ');
+//    com_log(to_string(STEER_K(p)) + ' ');
+//    com_log(to_string(STEER_K(i)) + ' ');
+//    com_log(to_string(STEER_K(d)) + ' ');
     com_log("\nspeed pid:");
     com_log(to_string(SPEED_K(L, p)) + ' ');
     com_log(to_string(SPEED_K(L, i)) + ' ');

@@ -255,9 +255,9 @@ instance:
 - config_sets:
   - fsl_debug_console:
     - config:
-      - SDK_DEBUGCONSOLE: 'DEBUGCONSOLE_REDIRECT_TO_TOOLCHAIN'
+      - SDK_DEBUGCONSOLE: 'DEBUGCONSOLE_DISABLE'
       - SDK_DEBUGCONSOLE_UART: 'semihost'
-      - DEBUG_CONSOLE_RX_ENABLE: 'false'
+      - DEBUG_CONSOLE_RX_ENABLE: 'true'
       - DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN: '128'
       - DEBUG_CONSOLE_SCANF_MAX_LOG_LEN: '20'
       - DEBUG_CONSOLE_ENABLE_ECHO: 'false'
@@ -292,14 +292,14 @@ instance:
 - peripheral: 'GPIO1'
 - config_sets:
   - fsl_gpio:
-    - enable_irq_comb_0_15: 'true'
+    - enable_irq_comb_0_15: 'false'
     - gpio_interrupt_comb_0_15:
       - IRQn: 'GPIO1_Combined_0_15_IRQn'
       - enable_interrrupt: 'enabled'
       - enable_priority: 'false'
       - priority: '0'
       - enable_custom_name: 'false'
-    - enable_irq_comb_16_31: 'false'
+    - enable_irq_comb_16_31: 'true'
     - gpio_interrupt_comb_16_31:
       - IRQn: 'GPIO1_Combined_16_31_IRQn'
       - enable_interrrupt: 'enabled'
@@ -367,8 +367,8 @@ instance:
 
 void GPIO1_init(void) {
   /* Make sure, the clock gate for GPIO1 is enabled (e. g. in pin_mux.c) */
-  /* Enable interrupt GPIO1_Combined_0_15_IRQn request in the NVIC */
-  EnableIRQ(GPIO1_Combined_0_15_IRQn);
+  /* Enable interrupt GPIO1_Combined_16_31_IRQn request in the NVIC */
+  EnableIRQ(GPIO1_Combined_16_31_IRQn);
 }
 
 /***********************************************************************************************************************

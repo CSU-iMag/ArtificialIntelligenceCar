@@ -337,9 +337,9 @@
             <v6Rtti>1</v6Rtti>
             <VariousControls>
               <MiscControls>-fno-common  -fdata-sections  -fno-builtin  -mthumb -Wno-invalid-source-encoding</MiscControls>
-              <Define>CPU_MIMXRT1064DVL6A,SKIP_SYSCLK_INIT,XIP_EXTERNAL_FLASH=1, XIP_BOOT_HEADER_DCD_ENABLE =1, XIP_BOOT_HEADER_ENABLE =1,PRINTF_FLOAT_ENABLE=1, SCANF_FLOAT_ENABLE=1, PRINTF_ADVANCED_ENABLE=1, SCANF_ADVANCED_ENABLE=1, FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ=0,USB_STACK_BM, SERIAL_PORT_TYPE_UART, SDK_DEBUGCONSOLE=0,  __FPU_PRESENT=1 __TARGET_FPU_VFP __ARM_FP=0xe</Define>
+              <Define>CPU_MIMXRT1064DVL6A,SKIP_SYSCLK_INIT,XIP_EXTERNAL_FLASH=1, XIP_BOOT_HEADER_DCD_ENABLE =1, XIP_BOOT_HEADER_ENABLE =1, FSL_DRIVER_TRANSFER_DOUBLE_WEAK_IRQ=0,USB_STACK_BM, SDK_DEBUGCONSOLE=2,  SERIAL_PORT_TYPE_UART, __FPU_PRESENT=1 __TARGET_FPU_VFP __ARM_FP=0xe</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CODE;..\..\Libraries\seekfree_libraries;..\..\Libraries\nxp_libraries\CMSIS\Include;..\..\Libraries\nxp_libraries\cmsis_drivers;..\..\Libraries\nxp_libraries\drives;..\..\Libraries\nxp_libraries\startup;..\..\Libraries\nxp_libraries\startup\MDK-ARM;..\..\Libraries\nxp_libraries\utilities;..\..\Libraries\nxp_libraries\utilities\debug_console;..\..\Libraries\nxp_libraries\utilities\str;..\..\Libraries\nxp_libraries\xip;..\..\Libraries\nxp_libraries\deceive;..\..\Libraries\nxp_libraries\components\serial_manager;..\..\Libraries\nxp_libraries\components\uart;..\..\Libraries\nxp_libraries\components\lists;..\..\Libraries\nxp_libraries\components\osa;..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter;..\..\Libraries\nxp_libraries\middleware\usb\include;..\..\Libraries\nxp_libraries\middleware\usb\phy;..\..\Libraries\nxp_libraries\middleware\usb\device;..\..\Libraries\nxp_libraries\middleware\sdmmc\inc;..\..\Libraries\nxp_libraries\middleware\sdmmc\port;..\..\Libraries\nxp_libraries\middleware\sdmmc\port\usdhc;..\..\Libraries\nxp_libraries\middleware\sdmmc\port\usdhc\interrupt;..\..\Libraries\nxp_libraries\middleware\sdmmc\src;..\..\Libraries\nxp_libraries\middleware\fatfs\source;..\..\Libraries\nxp_libraries\middleware\fatfs\source\fsl_sd_disk;..\..\Libraries\seekfree_libraries\common;..\..\Libraries\seekfree_peripheral;..\CODE\control;..\CODE;..\CODE\car;..\CODE\utility;..\CODE\bsp;.\board;..\..\Libraries\SimpleGUI\inc;..\CODE\gui;..\..\Libraries\StateMachineCompact;..\..\Libraries\nncu;..\..\Libraries\nncu\aiann;..\..\Libraries\nncu\cmsis_nn\Include;..\CODE\ai;.\RTE\_nor_sdram_zf_dtcm_v6</IncludePath>
+              <IncludePath>..\CODE;..\..\Libraries\seekfree_libraries;..\..\Libraries\nxp_libraries\CMSIS\Include;..\..\Libraries\nxp_libraries\cmsis_drivers;..\..\Libraries\nxp_libraries\drives;..\..\Libraries\nxp_libraries\startup;..\..\Libraries\nxp_libraries\startup\MDK-ARM;..\..\Libraries\nxp_libraries\utilities;..\..\Libraries\nxp_libraries\utilities\debug_console;..\..\Libraries\nxp_libraries\utilities\str;..\..\Libraries\nxp_libraries\xip;..\..\Libraries\nxp_libraries\deceive;..\..\Libraries\nxp_libraries\components\serial_manager;..\..\Libraries\nxp_libraries\components\uart;..\..\Libraries\nxp_libraries\components\lists;..\..\Libraries\nxp_libraries\components\serial_manager\usb_cdc_adapter;..\..\Libraries\nxp_libraries\middleware\sdmmc\inc;..\..\Libraries\nxp_libraries\middleware\sdmmc\port;..\..\Libraries\nxp_libraries\middleware\sdmmc\port\usdhc;..\..\Libraries\nxp_libraries\middleware\sdmmc\port\usdhc\interrupt;..\..\Libraries\nxp_libraries\middleware\sdmmc\src;..\..\Libraries\seekfree_libraries\common;..\..\Libraries\seekfree_peripheral;..\CODE\control;..\CODE;..\CODE\car;..\CODE\utility;..\CODE\bsp;.\board;..\..\Libraries\SimpleGUI\inc;..\CODE\gui;..\..\Libraries\StateMachineCompact;..\..\Libraries\nncu;..\..\Libraries\nncu\aiann;..\..\Libraries\nncu\cmsis_nn\Include;..\CODE\ai;.\RTE\_nor_sdram_zf_dtcm_v6</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1014,6 +1014,11 @@
               <FileType>8</FileType>
               <FilePath>..\CODE\control\hall.cpp</FilePath>
             </File>
+            <File>
+              <FileName>beep.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\CODE\bsp\beep.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1498,7 +1503,14 @@
   <RTE>
     <apis/>
     <components/>
-    <files/>
+    <files>
+      <file attr="config" category="header" name="Config\EventRecorderConf.h" version="1.1.0">
+        <instance index="0" removed="1">RTE\Compiler\EventRecorderConf.h</instance>
+        <component Cbundle="ARM Compiler" Cclass="Compiler" Cgroup="Event Recorder" Cvariant="DAP" Cvendor="Keil" Cversion="1.4.0" condition="Cortex-M Device"/>
+        <package name="ARM_Compiler" schemaVersion="1.6.3" url="http://www.keil.com/pack/" vendor="Keil" version="1.6.3"/>
+        <targetInfos/>
+      </file>
+    </files>
   </RTE>
 
   <LayerInfo>

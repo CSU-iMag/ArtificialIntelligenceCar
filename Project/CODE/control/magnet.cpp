@@ -10,7 +10,7 @@ std::vector<MagSensor> iMagCar::MagList(ADC_CNT);
 
 bool SaveMaxEnabled;
 volatile float MagErrorForPID;
-static uint8_t RingStatus; // 0在环外，1在入环，2在环内，3在出环
+uint8_t RingStatus; // 0在环外，1在入环，2在环内，3在出环
 
 void MagSensor::Sample(float raw) {
     RawData = raw;
@@ -25,9 +25,9 @@ void MagSensor::Sample(float raw) {
 void MagSensor::Normalize() {
     if (SaveMaxEnabled)
         return;
-    //    CAR_ERROR_CHECK(MaxRaw > MinRaw);
+    // CAR_ERROR_CHECK(MaxRaw > MinRaw);
     CRITICAL_REGION_ENTER();
-    fValue = RESCALE_VALUE((float)RawData, 255, MaxRaw - MinRaw);
+    fValue = RESCALE_VALUE((float)RawData, 255, MaxRaw);
     LIMITING(fValue, 0, 255);
     CRITICAL_REGION_EXIT();
 }
@@ -40,24 +40,24 @@ __STATIC_INLINE void DerailProtect() {
 
 __STATIC_INLINE bool IsRing() {
     static bool status;
-    if (Car.MagList[MagFrontM].GetNormalized() > Car.RingLoader.island)
+    if (Car.MagList[MagMiddleM].GetNormalized() > Car.RingLoader.island)
         status = true;
-    if (Car.MagList[MagFrontM].GetNormalized() < Car.RingLoader.island - 5)
+    if (Car.MagList[MagMiddleM].GetNormalized() < Car.RingLoader.island - 5)
         status = false;
     return status;
 }
 
 static void UpdateGUI() {
     static int cnt;
-    if (++cnt %= 26) // 12分频
+    if (++cnt %= 26) // 分频
         return;
-    gui_steering.err_curve.AppendValue(MagErrorForPID * 9);
+    gui_steering.err_curve.AppendValue(MagErrorForPID);
     gui_magadcDat.UpdateValue();
-    gui_ring.UpdateValue(0, RingStatus);
+    // gui_ring.UpdateValue(0, RingStatus);
     // gui_debug.UpdateValue(
-    //     1, std::to_string(Car.MagList[MagL_FRONT].GetNormalized() +
-    //                       Car.MagList[MagM_FRONT].GetNormalized() +
-    //                       Car.MagList[MagR_FRONT].GetNormalized()));
+    //     1, std::to_string(Car.MagList[MagLeftL].GetNormalized() +
+    //                       Car.MagList[MagMiddleM].GetNormalized() +
+    //                       Car.MagList[MagRightR].GetNormalized()));
 }
 
 void AnalysePackage() {
@@ -72,25 +72,29 @@ void AnalysePackage() {
 }
 
 void CalcErr() {
-    float left, middle(Car.MagList[MagMiddleM].GetNormalized()), right;
-    switch (RingStatus) {
-    case 1: //第一种情况为即将进入环岛时的偏差计算
-        left = Car.MagList[MagLeftL].GetNormalized() - Car.RingLoader.straightL;
-        right =
-            Car.MagList[MagRightR].GetNormalized() - Car.RingLoader.straightR;
-        middle -= Car.RingLoader.island;
-        break;
-    case 3: //第二种出环岛时的偏差计算，即让车按照直线行驶
-        left = Car.RingLoader.straightL;
-        right = Car.RingLoader.straightR;
-        break;
-    default:
-        left = Car.MagList[MagLeftL].GetNormalized();
-        right = Car.MagList[MagRightR].GetNormalized();
-        break;
-    }
-    MagErrorForPID = 10 * (left - right + Car.Steer3010.steerOffset) /
-                     (left + middle + right);
+    float left, middle(Car.MagList[MagFrontM].GetNormalized()), right;
+    // switch (RingStatus) {
+    // case 1: //第一种情况为即将进入环岛时的偏差计算
+    //     left = Car.RingLoader.K * Car.MagList[MagLeftL].GetNormalized() +
+    //            Car.RingLoader.Q * Car.MagList[MagLeftY].GetNormalized();
+    //     right = Car.RingLoader.K * Car.MagList[MagRightR].GetNormalized() +
+    //             Car.RingLoader.Q * Car.MagList[MagRightY].GetNormalized();
+    //     MagErrorForPID = (left - right + Car.Steer3010.steerOffset) /
+    //                      (Car.MagList[MagLeftL].GetNormalized() +
+    //                       Car.MagList[MagLeftY].GetNormalized() +
+    //                       Car.MagList[MagRightR].GetNormalized() +
+    //                       Car.MagList[MagRightY].GetNormalized());
+    //     break;
+    // case 3: //第二种出环岛时的偏差计算，即让车按照直线行驶
+    //     left = Car.RingLoader.straightL;
+    //     right = Car.RingLoader.straightR;
+    //     break;
+    // default:
+        left = Car.MagList[MagFrontL].GetNormalized();
+        right = Car.MagList[MagFrontR].GetNormalized();
+    //     break;
+    // }
+        MagErrorForPID = 100*(left - right) / (left + middle + right);
 }
 
 __STATIC_INLINE void DetectRingIsland() {
@@ -98,7 +102,7 @@ __STATIC_INLINE void DetectRingIsland() {
     CRITICAL_REGION_ENTER();
     if (flag != IsRing()) {
         flag = IsRing();
-        ++RingStatus %= 4;
+        ++RingStatus %= 2;
     }
     CRITICAL_REGION_EXIT();
 }

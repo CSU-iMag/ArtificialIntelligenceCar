@@ -7,7 +7,7 @@
 struct SoftTimer {
     friend void timer_tick();
     
-    SoftTimer(sched_event_handler_t EventHandler, uint8_t Repeat = 0)
+    explicit SoftTimer(sched_event_handler_t EventHandler, uint8_t Repeat = 0)
         : repeat(Repeat), handler(EventHandler) {}
 
     /**

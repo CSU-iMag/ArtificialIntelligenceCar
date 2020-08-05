@@ -15,13 +15,23 @@ class PID {
   public:
     arm_pid_instance_f32 instance = {0x0};
 
-    PID(std::pair<float, float> OutMinMax);
+    explicit PID(std::pair<float, float> OutMinMax);
     PID &operator=(const pid_coefficient_t &coeff);
-    
+    float Realize(float err);
     void SetPID(float Kp, float Ki, float Kd);
     void SetK(char index,float32_t varia);
     void Reset();
+};
+
+class PosPID {
+    float now, last, integral;
+
+  public:
+    pid_coefficient_t coeff;
     float Realize(float err);
+    void SetPID(float Kp, float Ki, float Kd);
+    void SetK(char index,float32_t varia);
+    PosPID &operator=(const pid_coefficient_t &coeff);
 };
 
 #endif

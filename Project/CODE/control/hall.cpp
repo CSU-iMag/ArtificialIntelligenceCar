@@ -1,13 +1,27 @@
-#include "fsl_gpio.h"
+#include "car.hpp"
+#include "communication.hpp"
 #include "peripherals.h"
-#include "zf_gpio.h"
 
-void GPIO3_GPIO_COMB_0_15_IRQHANDLER(void) {
-    // if (GPIO_GetPinsInterruptFlags(C16)) {
-    //     CLEAR_GPIO_FLAG(C16); //清除中断标志位
-    // }
+/* GPIO3_Combined_0_15_IRQn interrupt handler */
+extern "C" void GPIO3_GPIO_COMB_0_15_IRQHANDLER(void) {
+    /* Get pins flags */
+    uint32_t pins_flags = GPIO_GetPinsInterruptFlags(GPIO3);
+
+    Car.Machine.Halt();
+    com_log("gpio3\n\r");
+
+    /* Clear ins flags */
+    GPIO_ClearPinsInterruptFlags(GPIO3, pins_flags);
 }
 
-void GPIO1_GPIO_COMB_0_15_IRQHANDLER(void) {
-/*  Place your code here */
+/* GPIO1_Combined_16_31_IRQn interrupt handler */
+extern "C" void GPIO1_GPIO_COMB_16_31_IRQHANDLER(void) {
+    /* Get pins flags */
+    uint32_t pins_flags = GPIO_GetPinsInterruptFlags(GPIO1);
+
+    Car.Machine.Halt();
+    com_log("gpio1\n\r");
+
+    /* Clear ins flags */
+    GPIO_ClearPinsInterruptFlags(GPIO1, pins_flags);
 }

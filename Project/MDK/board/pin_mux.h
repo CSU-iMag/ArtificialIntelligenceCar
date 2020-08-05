@@ -165,6 +165,15 @@ void BOARD_InitBootPins(void);
 
 /* GPIO_AD_B0_12 (coord K14), CON */
 
+/* GPIO_AD_B0_13 (coord L14), CON */
+
+/* GPIO_AD_B1_05 (coord K12), HAL */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_HAL1_GPIO                                           GPIO1   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_HAL1_GPIO_PIN                                         21U   /*!< GPIO pin number */
+#define BOARD_INITPINS_HAL1_GPIO_PIN_MASK                            (1U << 21U)   /*!< GPIO pin mask */
+
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.

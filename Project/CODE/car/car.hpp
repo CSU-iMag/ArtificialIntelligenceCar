@@ -3,19 +3,16 @@
 
 #include "car_config.h"
 #include "deep.hpp"
+#include "encoder.hpp"
+#include "beep.hpp"
+#include "key.hpp"
+#include "led.hpp"
 #include "machine.hpp"
 #include "magnet.hpp"
 #include "motor.hpp"
 #include "peripherals.h"
-#include "pid.hpp"
 #include "steer.hpp"
 #include "timer.hpp"
-#pragma region bsp
-#include "encoder.hpp"
-#include "key.hpp"
-#include "led.hpp"
-#include "route.h"
-#pragma endregion
 
 #define SW_STEER 0u
 #define SW_SPEED 1u
@@ -38,9 +35,9 @@
 
 //! @brief 运行状态判定
 #define IS_DERAIL                                                              \
-    (Car.MagList[MagFrontL].GetNormalized() +                                  \
-         Car.MagList[MagFrontM].GetNormalized() +                              \
-         Car.MagList[MagFrontR].GetNormalized() <                              \
+    (Car.MagList[MagLeftL].GetNormalized() +                                  \
+         Car.MagList[MagMiddleM].GetNormalized() +                              \
+         Car.MagList[MagRightR].GetNormalized() <                              \
      MAG_DERAIL_THRESHOLD)
 
 //! @warning need critial region protect
@@ -80,10 +77,7 @@ class iMagCar { // 什么时候该用friend？什么时候public？
     ControlMode CtrlMode;
 
     //! @brief 转向时减速
-    float Deceleration = 0.26;
-
-    //! @brief 转向时差速
-    float MotorDiffer = 0;
+    float Deceleration = 0;
 
     //! @brief 状态机
     CarMachine Machine;
@@ -112,10 +106,16 @@ class iMagCar { // 什么时候该用friend？什么时候public？
     //! @brief 核心板蓝灯
     HardLED CoreLED;
 
+    Beep Buzzer;
+
     //! @brief 4个ADC结构体阈值
-    RingThreshold RingLoader = {
-        .island = 150, .straightR = 51, .straightL = 57, .straightM = 50};
-    
+    RingThreshold RingLoader = {.island = 150,
+                                .straightR = 51,
+                                .straightL = 57,
+                                .straightM = 50,
+                                .K = 1,
+                                .Q = 10};
+
     //! @warning 这里不能有任何操作硬件的代码！
     iMagCar()
         : TargetSpeed(69), MotorL(MOTOR_L, MOTOR_MIN, MOTOR_MAX),
@@ -124,7 +124,7 @@ class iMagCar { // 什么时候该用friend？什么时候public？
           EncoderR(PULSEENCODER_CHANNEL_0_CHANNEL),
           Steer3010(S3010_PWM, STEER_MIN - STEER_CENTER,
                     STEER_MAX - STEER_CENTER),
-          LaunchTimer(LaunchDelaySchedule, 1), CoreLED(B9, 0) {}
+          LaunchTimer(LaunchDelaySchedule, 3), CoreLED(B9, 0) {}
     ~iMagCar();
 
     //! @brief 开机

@@ -49,6 +49,7 @@
                <pin_label pin_num="G13" pin_signal="GPIO_AD_B0_10" label="MOTOR" identifier="INT1_COMBO;RIGHT"/>
                <pin_label pin_num="G10" pin_signal="GPIO_AD_B0_11" label="MOTOR" identifier="INT2_COMBO;LEFT"/>
                <pin_label pin_num="K14" pin_signal="GPIO_AD_B0_12" label="CON" identifier="UART1_TXD;HAL1"/>
+               <pin_label pin_num="L14" pin_signal="GPIO_AD_B0_13" label="CON" identifier="UART1_RXD"/>
                <pin_label pin_num="H14" pin_signal="GPIO_AD_B0_14" label="KEY" identifier="CAN2_TX;AD_CH2;K4;DOWN;K_DOWN"/>
                <pin_label pin_num="L10" pin_signal="GPIO_AD_B0_15" label="KEY" identifier="CAN2_RX;AD_CH3;K5;OKEY;K_OK"/>
                <pin_label pin_num="J11" pin_signal="GPIO_AD_B1_00" label="IIC" identifier="I2C_SCL_FXOS8700CQ;CSI_I2C_SCL;AD_CH4;SCL"/>
@@ -69,7 +70,7 @@
                <pin_label pin_num="M4" pin_signal="GPIO_SD_B1_03" label="FlexSPI_D0_B" identifier="FlexSPI_D0_B;SCL;SW4"/>
                <pin_label pin_num="P2" pin_signal="GPIO_SD_B1_04" label="HAL" identifier="HAL2"/>
                <pin_label pin_num="L12" pin_signal="GPIO_AD_B1_04" label="BAT" identifier="CSI_PIXCLK;AD_CH8;BAT"/>
-               <pin_label pin_num="K12" pin_signal="GPIO_AD_B1_05" label="CSI_MCLK/J35[12]/J23[4]" identifier="CSI_MCLK;AD_CH9"/>
+               <pin_label pin_num="K12" pin_signal="GPIO_AD_B1_05" label="HAL" identifier="CSI_MCLK;AD_CH9;HAL1"/>
                <pin_label pin_num="J12" pin_signal="GPIO_AD_B1_06" label="CSI_VSYNC/J35[18]/J22[2]/UART_TX" identifier="CSI_VSYNC;AD_CH10"/>
             </pin_labels>
          </pins_profile>
@@ -359,11 +360,22 @@
                   <pin peripheral="PWM2" signal="A, 3" pin_num="C11" pin_signal="GPIO_B1_02">
                      <pin_features>
                         <pin_feature name="identifier" value="BEEP"/>
+                        <pin_feature name="direction" value="OUTPUT"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="LPUART1" signal="TX" pin_num="K14" pin_signal="GPIO_AD_B0_12">
                      <pin_features>
                         <pin_feature name="identifier" value="UART1_TXD"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="LPUART1" signal="RX" pin_num="L14" pin_signal="GPIO_AD_B0_13"/>
+                  <pin peripheral="GPIO1" signal="gpio_io, 21" pin_num="K12" pin_signal="GPIO_AD_B1_05">
+                     <pin_features>
+                        <pin_feature name="identifier" value="HAL1"/>
+                        <pin_feature name="direction" value="INPUT"/>
+                        <pin_feature name="gpio_interrupt" value="kGPIO_IntFallingEdge"/>
+                        <pin_feature name="hysteresis_enable" value="Enable"/>
+                        <pin_feature name="pull_keeper_enable" value="Disable"/>
                      </pin_features>
                   </pin>
                </pins>
@@ -967,9 +979,9 @@
                   <instance name="DebugConsole" uuid="aac256ce-70ed-44eb-a049-eb46482da2ce" type="debug_console" type_id="debug_console_51864e4f3ac859dae7b603e07bc4ae33" mode="general" enabled="true" comment="" custom_name_enabled="false">
                      <config_set name="fsl_debug_console">
                         <struct name="config">
-                           <setting name="SDK_DEBUGCONSOLE" value="DEBUGCONSOLE_REDIRECT_TO_TOOLCHAIN"/>
+                           <setting name="SDK_DEBUGCONSOLE" value="DEBUGCONSOLE_DISABLE"/>
                            <setting name="SDK_DEBUGCONSOLE_UART" value="semihost"/>
-                           <setting name="DEBUG_CONSOLE_RX_ENABLE" value="false"/>
+                           <setting name="DEBUG_CONSOLE_RX_ENABLE" value="true"/>
                            <setting name="DEBUG_CONSOLE_PRINTF_MAX_LOG_LEN" value="128"/>
                            <setting name="DEBUG_CONSOLE_SCANF_MAX_LOG_LEN" value="20"/>
                            <setting name="DEBUG_CONSOLE_ENABLE_ECHO" value="false"/>
@@ -988,7 +1000,7 @@
                   </instance>
                   <instance name="GPIO1" uuid="45a757a7-91fc-46c5-81a3-0ea217764f97" type="igpio" type_id="igpio_b1c1fa279aa7069dca167502b8589cb7" mode="GPIO" peripheral="GPIO1" enabled="true" comment="" custom_name_enabled="false">
                      <config_set name="fsl_gpio">
-                        <setting name="enable_irq_comb_0_15" value="true"/>
+                        <setting name="enable_irq_comb_0_15" value="false"/>
                         <struct name="gpio_interrupt_comb_0_15">
                            <setting name="IRQn" value="GPIO1_Combined_0_15_IRQn"/>
                            <setting name="enable_interrrupt" value="enabled"/>
@@ -996,7 +1008,7 @@
                            <setting name="priority" value="0"/>
                            <setting name="enable_custom_name" value="false"/>
                         </struct>
-                        <setting name="enable_irq_comb_16_31" value="false"/>
+                        <setting name="enable_irq_comb_16_31" value="true"/>
                         <struct name="gpio_interrupt_comb_16_31">
                            <setting name="IRQn" value="GPIO1_Combined_16_31_IRQn"/>
                            <setting name="enable_interrrupt" value="enabled"/>

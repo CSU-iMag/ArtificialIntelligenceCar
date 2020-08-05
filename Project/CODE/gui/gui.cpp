@@ -67,7 +67,7 @@ HomePage::HomePage()
                      "方向控制",
                      "通信使能",
                      "模型选择",
-                     "ADC raw",
+                     "电磁传感器",
                  }) {
     tree.Children = {
         (LayoutBase *)&gui_debug,    (LayoutBase *)&gui_control,
@@ -76,8 +76,7 @@ HomePage::HomePage()
         (LayoutBase *)&gui_model,    (LayoutBase *)&gui_magadcDat};
 }
 
-//! @brief
-//! 闂傚倷鑳堕幊鎾绘倶濮樿泛绠伴柛婵勫劜椤?鏇㈡煙鐎电?啃涢柛瀣?鎸搁埥澶娾枎韫囨搩娼欓柣鐔哥矋濠㈡?肩矓閻熸壆鏆﹂柨鐔哄У閺呮悂鏌ㄩ悤鍌涘??
+//! @brief打开子菜单
 void HomePage::KeyEnterPush() {
     if (tree.Children.size() <= ListObject.stItems.iSelection)
         return;
@@ -113,19 +112,19 @@ void MagadcDat::KeyEnterPush() {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void SteeringConfig::UpdateValue(uint8_t row, int8_t inc) {
+void SteeringConfig::UpdateValue(uint8_t row, float inc) {
     switch (row) {
     case 0:
         Car.Steer3010.steerCtrl.SetK('p', inc);
-        Items[0].UpdateValue(std::to_string(STEER_K(p)));
+        Items[0].UpdateValue(std::to_string(Car.Steer3010.steerCtrl.coeff.Kp));
         break;
     case 1:
         Car.Steer3010.steerCtrl.SetK('i', 0.02f * inc);
-        Items[1].UpdateValue(std::to_string(STEER_K(i)));
+        Items[1].UpdateValue(std::to_string(Car.Steer3010.steerCtrl.coeff.Ki));
         break;
     case 2:
         Car.Steer3010.steerCtrl.SetK('d', inc);
-        Items[2].UpdateValue(std::to_string(STEER_K(d)));
+        Items[2].UpdateValue(std::to_string(Car.Steer3010.steerCtrl.coeff.Kd));
         break;
     case 3:
         Car.Steer3010.steerOffset += inc;
@@ -150,11 +149,11 @@ void SteeringConfig::UpdateValue(uint8_t row, int8_t inc) {
 }
 
 void SteeringConfig::KeyLeftPush() {
-    UpdateValue(ListObject.stItems.iSelection, +1);
+    UpdateValue(ListObject.stItems.iSelection, +0.05);
 }
 
 void SteeringConfig::KeyRightPush() {
-    UpdateValue(ListObject.stItems.iSelection, -1);
+    UpdateValue(ListObject.stItems.iSelection, -0.05);
 }
 
 void SteeringConfig::KeyEnterPush() {
@@ -176,10 +175,8 @@ void SteeringConfig::KeyEnterPush() {
         break;
 
     case 4:
-        UpdateValue(
-            4,
-            (STEER_CENTER - pulse_width) /
-                5); //!< 闂佽崵鍠愮划搴㈡櫠濡ゅ啯鏆滃┑鐘叉处閸ゅ牓鏌ㄩ悤鍌涘??
+        UpdateValue(4,
+                    (STEER_CENTER - pulse_width) / 5); //!< 归中
         break;
 
     default:
@@ -201,7 +198,7 @@ ControlPanel::ControlPanel()
 void ControlPanel::KeyEnterPush() {
     switch (ListObject.stItems.iSelection) {
     case 0:
-        Car.LaunchTimer.Start(1200);
+        Car.LaunchTimer.Start(999);
         ActiveLayout = &gui_background;
         break;
 
@@ -300,7 +297,7 @@ void MotorConfig::KeyRightPush() {
         Car.TargetSpeed -= 10;
         break;
     case 6:
-        UpdateDuty(-5);
+        UpdateDuty(-3);
     case 7:
         Car.Deceleration -= 0.05;
         break;
@@ -313,7 +310,7 @@ void MotorConfig::KeyLeftPush() {
         Car.TargetSpeed += 10;
         break;
     case 6:
-        UpdateDuty(5);
+        UpdateDuty(3);
     case 7:
         Car.Deceleration += 0.05;
         break;
@@ -371,6 +368,14 @@ void RingLoad::UpdateValue(uint8_t row, uint8_t val) {
         gui_ring.Items[4].UpdateValue(
             std::to_string(Car.RingLoader.straightM += val));
         break;
+    case 5:
+        gui_ring.Items[5].UpdateValue(
+            std::to_string(Car.RingLoader.K += val));
+        break;
+    case 6:
+        gui_ring.Items[6].UpdateValue(
+            std::to_string(Car.RingLoader.Q += val));
+        break;
 
     default:
         break;
@@ -378,10 +383,10 @@ void RingLoad::UpdateValue(uint8_t row, uint8_t val) {
     gui_ring.Repaint();
 }
 
-void RingLoad::KeyLeftPush() { UpdateValue(ListObject.stItems.iSelection, 2); }
+void RingLoad::KeyLeftPush() { UpdateValue(ListObject.stItems.iSelection, 1); }
 
 void RingLoad::KeyRightPush() {
-    UpdateValue(ListObject.stItems.iSelection, -2);
+    UpdateValue(ListObject.stItems.iSelection, -1);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -3,12 +3,12 @@
 
 // <<< Use Configuration Wizard in Context Menu >>>
 
-// <h> ä¸Šä½æœºé€šä¿¡
+// <h> ÉÏÎ»»úÍ¨ĞÅ
 
-// <o> æ–¹å‘ (ms)
+// <o> ·½Ïò (ms)
 #define DIR_PD_PERIOD 30
 
-// <o> é€Ÿåº¦ (ms)
+// <o> ËÙ¶È (ms)
 #define SPEED_PD_PERIOD 23
 
 // <o> AI (ms)
@@ -16,93 +16,97 @@
 
 // </h> ///////////////////////////////
 
-// <h> ç”µç£ä¼ æ„Ÿå™¨
+// <h> µç´Å´«¸ĞÆ÷
 
 // <o> Signal Count <3-12>
 #define ADC_CNT 12
 
-// <o> å‰ç»å·¦ <0-11>
-#define MagFrontL 11
+// <o> Ç°Õ°×ó <0-11>
+#define MagFrontL 10
 
-// <o> å‰ç»ä¸­ <0-11>
-#define MagFrontM 4
+// <o> Ç°Õ°ÖĞ <0-11>
+#define MagFrontM 3
 
-// <o> å‰ç»å³ <0-11>
-#define MagFrontR 10
+// <o> Ç°Õ°ÓÒ <0-11>
+#define MagFrontR 11
 
-// <o>è½¦å¤´æœ€å·¦è¾¹<0-11>
-#define MagLeftL 3
+// <o>³µÍ·×î×ó±ß<0-11>
+#define MagLeftL 1
 
-// <o>è½¦å¤´å·¦ç«–<0-11>
-#define MagLeftX 9
-
-// <o>è½¦å¤´å·¦æ¨ª<0-11>
+// <o>³µÍ·×óÊú<0-11>
 #define MagLeftY 0
 
-// <o>è½¦å¤´ä¸­é—´<0-11>
+// <o>³µÍ·×óºá<0-11>
+#define MagLeftX 8
+
+// <o>³µÍ·ÖĞ¼ä<0-11>
 #define MagMiddleM 7
 
-// <o>è½¦èº«å·¦<0-11>
-#define MagMiddleL 1
+// <o>³µÉí×ó<0-11>
+#define MagMiddleL 4
 
-// <o>è½¦èº«å³<0-11>
-#define MagMiddleR 2
+// <o>³µÉíÓÒ<0-11>
+#define MagMiddleR 5
 
-// <o>è½¦å¤´æœ€å³<0-11>
-#define MagRightR 6
+// <o>³µÍ·×îÓÒ<0-11>
+#define MagRightR 2
 
-// <o>è½¦å¤´å³ç«–<0-11>
-#define MagRightX 8
+// <o>³µÍ·ÓÒÊú<0-11>
+#define MagRightY 6
 
-// <o>è½¦å¤´å³æ¨ª<0-11>
-#define MagRightY 5
+// <o>³µÍ·ÓÒºá<0-11>
+#define MagRightX 9
 
-// <o> å‡ºè½¨åˆ¤å®šé˜ˆå€¼ <0-300>
-#define MAG_DERAIL_THRESHOLD 52
+// <o> ³ö¹ìÅĞ¶¨ãĞÖµ <0-300>
+#define MAG_DERAIL_THRESHOLD 120
 
 // </h> ///////////////////////////////
 
-// <h> èˆµæœºæ§åˆ¶
+// <h> ¶æ»ú¿ØÖÆ
 
-// <o> èˆµæœºä¸­å€¼ <0-10000>
+// <o> ¶æ»úÖĞÖµ <0-10000>
 //  <i>Default: 1500
 #define STEER_CENTER 1275
 
-// <o> æœ€å³è¾¹ <0-10000>
+// <o> ×îÓÒ±ß <0-10000>
 //  <i>Default: 400
 #define STEER_MIN 1120
 
-// <o> æœ€å·¦è¾¹ <0-10000>
+// <o> ×î×ó±ß <0-10000>
 //  <i>Default: 400
 #define STEER_MAX 1435
 
-// <o> èˆµæœºPWMé¢‘ç‡ <50-200>
+// <o> ¶æ»úPWMÆµÂÊ <50-200>
 //  <i>Default: 150
 #define STEER_FREQ 60
 
 // </h> ////////////////////////////////
 
-// <h> åè½®ç”µæœºé…ç½®
+// <h> ºóÂÖµç»úÅäÖÃ
 
-// <c>Auto Stop
+// <o>³ö¹ìÍ£³µ
 #define AUTO_STOP
-// </c>
-// <i> å¤±æ§è‡ªåŠ¨åœè½¦
 
-// <o>ç”µæœºPWMé¢‘ç‡(Hz)<13000-17000>
+// <o>²îËÙĞ±ÂÊ
+#define SPEED_DIFFER_K (-0.18f)
+
+// <o>²îËÙ½Ø¾à
+#define SPEED_DIFFER_B (229.3f)
+
+// <o>µç»úPWMÆµÂÊ(Hz)<13000-17000>
 #define MOTOR_FREQ 16661
 
-// <o>æœ€å¤§å ç©ºæ¯”<0-100>
+// <o>×î´óÕ¼¿Õ±È<0-100>
 //  <i>Default: 72
-#define MOTOR_MAX 36
+#define MOTOR_MAX 52
 
-// <o>æœ€å°å ç©ºæ¯”<0-100>
+// <o>×îĞ¡Õ¼¿Õ±È<0-100>
 //  <i>Default: 26
-#define MOTOR_MIN 26
+#define MOTOR_MIN 3
 
 // </h> ////////////////////////////////
 
-// <h> CPUå ç”¨ç‡
+// <h> CPUÕ¼ÓÃÂÊ
 
 // <o>Sample period<1-9999>
 //  <i>(ms)
@@ -112,14 +116,14 @@
 
 // <h>Filter Configuration
 
-// <o> ç¼–ç å™¨
+// <o> ±àÂëÆ÷
 #define FILTER_SPEED_SIZE 3
 
-// <o> ç”µç£
+// <o> µç´Å
 #define FILTER_MAGNET_SIZE 3u
 
-// <o> ä¸­å€¼æ»¤æ³¢å–å€¼
-// <i> é”Ÿæ–¤æ‹·å€¼é”Ÿå‰¿è¯§æ‹·å…ƒé”Ÿæˆªé©æ‹·é”Ÿæ–¤æ‹·
+// <o> ÖĞÖµÂË²¨È¡Öµ
+// <i> ï¿½ï¿½Öµï¿½Ë²ï¿½Ôªï¿½Ø¸ï¿½ï¿½ï¿½
 #define FILTER_MEDIAN_SIZE 5
 
 // </h> //////////////////////////////
@@ -133,10 +137,10 @@
 
 // <h> Flash Configuration
 
-// <o> è°ƒè¯•å‚æ•°-æ‰‡åŒº <512-1024>
-// <i> ä»¥åå†å¤šæå‡ å¥—æ–¹æ¡ˆ
+// <o> µ÷ÊÔ²ÎÊı-ÉÈÇø <512-1024>
+// <i> ÒÔºóÔÙ¶à¸ã¼¸Ì×·½°¸
 #define SLN_DEBUG_SECTOR 977
-// <o> è°ƒè¯•å‚æ•°-é¡µ <0-16>
+// <o> µ÷ÊÔ²ÎÊı-Ò³ <0-16>
 #define SLN_DEBUG_PAGE 0
 
 // </h> ////////////////////////////

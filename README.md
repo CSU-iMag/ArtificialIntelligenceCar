@@ -71,8 +71,9 @@
 - [MCUXpressoSDK](https://mcuxpresso.nxp.com/api_doc/dev/1406/modules.html)
 - [DSP](https://github.com/ARM-software/CMSIS_5/tree/develop/CMSIS/DSP/Source)
 # :pushpin:DEPENDENCE
-- 开发环境：Keil 5.30
+- 开发环境：Keil 5.31
 - 编译器：ArmClang V6.14
 - 使用MCUXpresso Config Tool初始化时钟和外设
 - 请使用Keil打开`car_config.h`
+
 # 十五届必胜 :tada: :tada: :tada:

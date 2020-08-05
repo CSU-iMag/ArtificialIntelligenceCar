@@ -311,10 +311,6 @@ static __INLINE uint8_t uint32_big_encode(uint32_t value,
 }
 
 //! @warning 参数会被调用多次
-#if !defined(MIN) && !defined(MAX)
-#define min(a, b) ((a) < (b) ? (a) : (b))
-#define max(a, b) ((a) > (b) ? (a) : (b))
-#endif
 #define lim(_val, _min, _max) MAX(_min, MIN(_max, _val))
 
 #define LIMITING(_val, _min, _max) (_val = lim(_val, _min, _max))

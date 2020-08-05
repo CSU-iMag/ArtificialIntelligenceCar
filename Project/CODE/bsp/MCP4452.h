@@ -19,8 +19,8 @@
 // A1.A0=00	A1.A0=10
 // Write：0	Read：1
 #define MCP4452_ADDR_0 0x2C // 0101 100
-#define MCP4452_ADDR_1 0x2E // 0101 110
-#define MCP4452_ADDR_2 0x2D // 0101 101
+// #define MCP4452_ADDR_1 0x2E // 0101 110
+// #define MCP4452_ADDR_2 0x2D // 0101 101
 
 #define Res1234 (MCP4452_ADDR_0)
 #define Res5678 (MCP4452_ADDR_1)

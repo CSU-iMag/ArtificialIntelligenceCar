@@ -25,7 +25,7 @@ __INLINE void Encoder::CalSpeed() {
     //读取编码器计数值
     speed = PULSE_TO_CM_S(static_cast<int16_t>(TMR_CNTR));
     TMR_CNTR = 0;
-//    speed = filter_moving.Moving(speed);
+    speed = filter_moving.Moving(speed);
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -43,9 +43,9 @@ void pulse_encoder_schedule() {
     CRITICAL_REGION_ENTER();
     Car.EncoderL.CalSpeed();
     Car.EncoderR.CalSpeed();
-	
-//    filter_fir_speedL.filter_fir();
-//    filter_fir_speedR.filter_fir();
+
+    //    filter_fir_speedL.filter_fir();
+    //    filter_fir_speedR.filter_fir();
     CRITICAL_REGION_EXIT();
 
     Car.EncoderL.speed = -Car.EncoderL.speed;

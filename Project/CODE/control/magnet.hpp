@@ -33,7 +33,9 @@ struct RingThreshold {
     uint8_t island, //进入环岛的阈值
         straightR,  //平道右瞻ADC
         straightL,  //平道左瞻ADC
-        straightM;  //平道中瞻ADC
+        straightM,  //平道中瞻ADC
+        K,          //极左电感比例
+        Q;          //竖直电感比例
 };
 
 //! @brief 平移电感记录归一化用的最大值

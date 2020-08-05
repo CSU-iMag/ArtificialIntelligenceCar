@@ -18,10 +18,10 @@
 /****************Debug console configuration********************/
 
 /* Debug console configuration check */
-#if ((defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE != 1)))
-    #error SDK_DEBUGCONSOLE has already been defined and the value is not 1 as value in the DebugConsole component instance setting.
+#if ((defined(SDK_DEBUGCONSOLE) && (SDK_DEBUGCONSOLE != 0)))
+    #error SDK_DEBUGCONSOLE has already been defined and the value is not 0 as value in the DebugConsole component instance setting.
 #elif (!defined(SDK_DEBUGCONSOLE))
-    #error SDK_DEBUGCONSOLE is not defined. Define SDK_DEBUGCONSOLE=1 at the project setting.
+    #error SDK_DEBUGCONSOLE is not defined. Define SDK_DEBUGCONSOLE=0 at the project setting.
 #endif
 
 #if (defined(SDK_DEBUGCONSOLE_UART))
@@ -30,16 +30,6 @@
 
 #if (defined(DEBUG_CONSOLE_TRANSFER_NON_BLOCKING))
     #error DEBUG_CONSOLE_TRANSFER_NON_BLOCKING should not be defined. Remove DEBUG_CONSOLE_TRANSFER_NON_BLOCKING from the project setting or defines.
-#endif
-
-#if ((defined(SERIAL_PORT_TYPE_UART) && (SERIAL_PORT_TYPE_UART != 1)))
-    #error SERIAL_PORT_TYPE_UART define value is not 1 as value in the DebugConsole component instance setting.
-#elif (!defined(SERIAL_PORT_TYPE_UART))
-    #error SERIAL_PORT_TYPE_UART is not defined. Define SERIAL_PORT_TYPE_UART=1 at the project setting.
-#endif
-
-#if ((defined(SERIAL_PORT_TYPE_SWO) && (SERIAL_PORT_TYPE_SWO != 0)))
-    #error The SERIAL_PORT_TYPE_SWO define value is not 0 as value in the DebugConsole component instance setting.
 #endif
 
 /*! @brief If Non-blocking mode is needed, please define it at project setting,

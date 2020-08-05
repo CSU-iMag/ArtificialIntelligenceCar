@@ -147,7 +147,7 @@ static SGUI_SIZE GB2312_GetFontData(SGUI_SIZE sStartAddr,
     /*----------------------------------*/
     /* Variable Declaration				*/
     /*----------------------------------*/
-    SGUI_SIZE sReadCount;
+    SGUI_SIZE sReadCount = 0;
     volatile const SGUI_BYTE *pSrc = GB2312_H12 + sStartAddr;
     SGUI_BYTE *pDest = pDataBuffer;
 

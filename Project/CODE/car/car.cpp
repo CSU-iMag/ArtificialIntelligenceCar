@@ -28,6 +28,7 @@ void iMagCar::Startup() {
     MotorL.Init();
     MotorR.Init();
     Steer3010.Init();
+    Buzzer.Init();
     bat_init();
     deep_init();
     magnet_init();
@@ -40,6 +41,7 @@ void iMagCar::Startup() {
     com_init();
     gui_motor.upd_tmr.Start(62);
     com_log("Startup Successfully!\n", LogGreen);
+    Buzzer.BeepFreqDelay(6666, 233);
 }
 
 void iMagCar::Run() {
@@ -56,7 +58,7 @@ void iMagCar::Pause() {
     Car.MotorL.Stop();
     Car.MotorR.Stop();
     pit_close(PIT_MOTOR_CH);
-    // pit_close(PIT_STEER_CH);
+    pit_close(PIT_STEER_CH);
 }
 
 iMagCar::~iMagCar() {
@@ -65,11 +67,11 @@ iMagCar::~iMagCar() {
 }
 
 void LaunchDelaySchedule(sched_event_data_t dat) {
-    // static uint8_t cnt;
-    // Car.beep0.BeepFreq(++cnt * 1000);
-    // if (cnt < 3)
-    //     return;
+    static uint8_t cnt;
+    Car.Buzzer.BeepFreq(++cnt * 1000);
+    if (cnt < 3)
+        return;
     // SongOfJoy.Start();
-    // cnt = 0;
+    cnt = 0;
     Car.Machine.Start();
 }
